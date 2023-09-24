@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Grayman.re</title>
+
+  <meta name="author" content="Grayman.re">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <meta name="description" content="Grayman.re Portfolio Showcase">
+
+  <link rel="shortcut icon" href="https://grayman.re/assets/images/favicon.png" type="image/x-icon">
+
+  <!-- CSS Plugins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit&family=Work+Sans:wght@500;600&display=swap"
+    rel="stylesheet">
+  <link href="/css/css2.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/plugins/tabler-icons.min.css">
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Code Stylesheet -->
+  <link rel="stylesheet" href="/css/github-dark.min.css">
+  <script src="/js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <script type="module">
+    import { CustomHeaderGerman } from '/js/CustomHeaderDE.js'
+    import { CustomFooter } from '/js/CustomFooter.js'
+    customElements.define('custom-header', CustomHeaderGerman);
+    customElements.define('custom-footer', CustomFooter);
+  </script>
+
+</head>
+
+<body>
+<!-- Start of Header -->
+<div class="header-height-fix"></div>
+<header class="header-nav header-nav-pinned">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav class="navbar navbar-expand-lg navbar-light p-0">
+          <!-- Start of Logo -->
+          <a class="navbar-brand font-weight-bold mb-0" href="https://grayman.re" title="Grayman.re">
+            <img class="img-fluid" width="150" height="35" src="/img/logo.png" alt="Grayman.re">
+          </a>
+          <!-- End of Logo -->
+
+          <button class="search-toggle d-inline-block d-lg-none ms-auto me-1 me-sm-3" data-toggle="search"
+            aria-label="Search Toggle">
+            <span>Search</span>
+            <svg width="22" height="22" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.5 15.5L19 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path
+                d="M5 11C5 14.3137 7.68629 17 11 17C12.6597 17 14.1621 16.3261 15.2483 15.237C16.3308 14.1517 17 12.654 17 11C17 7.68629 14.3137 5 11 5C7.68629 5 5 7.68629 5 11Z"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navHeader"
+            aria-controls="navHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="ti ti-menu-2 menu-open"></i>
+            <i class="ti ti-x menu-close"></i>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navHeader">
+            <ul class="navbar-nav mx-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="https://grayman.re/de/index.html">Home</a>
+              </li>
+              <li class="nav-item @@about">
+                <a class="nav-link" href="https://grayman.re/de/cve-disclosures.html">CVE Veröffentlichungen</a>
+              </li>
+              <li class="nav-item @@elements">
+                <a class="nav-link" href="https://grayman.re/de/ctf-writeups.html">CTF Reportagen</a>
+              </li>
+              <li class="nav-item @@archive">
+                <a class="nav-link" href="https://grayman.re/de/archive.html">Archiv</a>
+              </li>
+            </ul>
+
+            <a class="language navbar-brand mb-0" href="https://grayman.re/index.html"
+              title="Language-UK">
+              <div>
+                <img class="rounded" src="/img/united-kingdom-flag-icon-16.png" alt="English" width="20" height="15">
+              </div>
+            </a>
+            <a class="language navbar-brand" href="https://grayman.re/de/index.html"
+              title="Language-German">
+              <div>
+                <img class="rounded" src="/img/germany-flag-icon-16.png" alt="German" width="20" height="15">
+              </div>
+            </a>
+
+            <div class="navbar-right d-none d-lg-inline-block">
+              <ul class="social-links list-unstyled list-inline">
+                <li class="list-inline-item ms-4 d-none d-lg-inline-block">
+                  <button class="search-toggle" data-toggle="search" aria-label="Search Toggle">
+                    <span>Suchen</span>
+                    <svg width="22" height="22" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M15.5 15.5L19 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                      </path>
+                      <path
+                        d="M5 11C5 14.3137 7.68629 17 11 17C12.6597 17 14.1621 16.3261 15.2483 15.237C16.3308 14.1517 17 12.654 17 11C17 7.68629 14.3137 5 11 5C7.68629 5 5 7.68629 5 11Z"
+                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- End of Header -->
+  <!-- Start of search block -->
+  <div class="search-block">
+
+    <div data-toggle="search-close">
+      <span class="ti ti-x text-primary"></span>
+    </div>
+
+    <input type="text" id="js-search-input" placeholder="Type to search..." aria-label="search-query">
+
+    <div class="mt-4 card-meta">
+      <p class="h4 mb-3">Suche Beitrage pro Tag</p>
+      <ul class="card-meta-tag list-inline">
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/tag/cve.html">CVE</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/tag/ctf.html">CTF</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/tag/flare-on.html">Flare-ON</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/tag/htb.html">HackTheBox</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/tag/disclosure.html">Veröffentlichungen</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/tag/writeup.html">Reportagen</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mt-4 card-meta">
+      <p class="h4 mb-3">See posts by categories</p>
+      <ul class="card-meta-tag list-inline">
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/category/cve.html">CVE</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/category/ctf.html">CTF</a>
+        </li>
+        <li class="list-inline-item me-1 mb-2">
+          <a class="small" href="https://grayman.re/de/archive.html">Archiv</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- End of search block -->
+
+  <!-- Start of custom content -->
+  <section class="section-sm pb-0">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="mb-5">
+            <h3 class="h1 mb-4 post-title">02 - Pixel Poker - Flare-On9 Writeup</h3>
+            <ul class="card-meta list-inline mb-2">
+              <li class="list-inline-item mt-2"><a class="card-meta-author" href="https://grayman.re">
+                  <span><span class="d-inline-block ms-2 ps-1 fst-normal"><span>by Grayman.re</span></i></a></li>
+              <li class="list-inline-item mt-2">—</li>
+              <li class="list-inline-item mt-2"><i class="me-2"><svg xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-clock" width="18" height="18" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <polyline points="12 7 12 12 15 15"></polyline>
+                  </svg></i><span>2 min read</span></li>
+              <li class="list-inline-item mt-2">—</li>
+              <li class="list-inline-item mt-2"><i class="me-2"><svg xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-calendar-event" width="18" height="18" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                    <line x1="16" y1="3" x2="16" y2="7"></line>
+                    <line x1="8" y1="3" x2="8" y2="7"></line>
+                    <line x1="4" y1="11" x2="20" y2="11"></line>
+                    <rect x="8" y="15" width="2" height="2"></rect>
+                  </svg></i><span>Dec 11, 2022</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-12">
+        </div>
+        <div class="col-lg-2 post-share-block order-1 order-lg-0 mt-5 mt-lg-0">
+          <div class="position-sticky" style="top: 150px;"><span class="d-inline-block mb-3 small">SHARE</span>
+            <ul class="social-share icon-box">
+              <li class="d-inline-block d-lg-block me-2 mb-2"><a
+                  href="https://twitter.com/intent/tweet?text=Bastion%20-%20HTB%20Writeup&amp;url=https://grayman.re/writeups/htb-bastion-writeup.html"
+                  target="_blank" rel="noopener noreferrer"><i><svg xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-brand-twitter" width="18" height="18" viewBox="0 0 24 24"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z">
+                      </path>
+                    </svg></i></a></li>
+              <li class="d-inline-block d-lg-block me-2 mb-2"><a
+                  href="https://www.linkedin.com/sharing/share-offsite/?url=https://grayman.re/writeups/htb-bastion-writeup.html"
+                  target="_blank" rel="noopener noreferrer"><i><svg xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-brand-linkedin" width="18" height="18" viewBox="0 0 24 24"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                      <line x1="8" y1="11" x2="8" y2="16"></line>
+                      <line x1="8" y1="8" x2="8" y2="8.01"></line>
+                      <line x1="12" y1="16" x2="12" y2="11"></line>
+                      <path d="M16 16v-3a2 2 0 0 0 -4 0"></path>
+                    </svg></i></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-8 post-content-block order-0 order-lg-2">
+          <div class="content">
+            <h3 id="the-agi-hype-train-has-hit-some-heavy-traffic">Shall we play another game?</h3>
+            <pre><code class="plaintext">I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. 
+Now the real work begins. Shall we play another game?</code></pre>
+            <h3 id="it-is-healing">Challenge Reportage</h3>
+            <p>
+              Die Zipfile die zu dieser Challenge gehört, enthält zwei Dateien: <code class="hljs">PixelPoker.exe</code>
+              und <code class="hljs">README.txt</code></p>
+            </p>
+            <p>
+              Die README beschreibt wie das Spiel funktioniert und wir können einen kleinen Hint ableiten:
+            </p>
+            <pre><code class="plaintext">Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!
+Your goal is simple: find the correct pixel and click it
+Good luck!</code></pre>
+
+            <p>
+              Wenn wir das Programm starten, sehen wir ein verpixeltes Feld. In der Titelliste des Programms, sehen wir
+              das durch
+              <code class="hljs">x</code> und <code class="hljs">y</code> die Koordinaten angezeigt werden, an welcher
+              Stelle unsere Maus zich befindet.
+              Zur Probe, klicken wir auf verschiedene Koordinaten, bis nach ein paar Mal die Meldung: <code
+                class="hljs">"Please play again!"</code> erscheint.
+              Da unserer Auftrag ist, heraus zu finden ob wir die korrekte Pixel gefunden haben, laden wir das Programm
+              in IDA ein, fur weitere Analyse.
+            </p>
+
+            <p>
+              Da wir uns noch ganz am Anfang von die Flare-On challenges befinden, werden wir unsere Analyse erstmal
+              anfangen durch nach hilfreiche Wörter zu suchen.
+              Wir suchen durch alle Ergebnisse und uns fallt den Satz <code class="hljs">"Please play again!"</code>
+              auf, denn wir schon Mal gesehen haben. Wenn wir
+              den Satz in die Disassembly nachsuchen, der Satz fast am Ende von einer Funktion. Wir sehen das kurz davor
+              Zwei Vergleichungen ausgeführt werden, dazu
+              kommt das einen Counter verfolgt wird. Wenn beide Vergleichungen nicht erfolgreich sind, wir der Counter
+              subtrahiert und endet die bei unserem Satz.
+              Bisher scheint das übereinzukommen, mit was wir am Anfang ausgeführt haben. In die Abbildung sehen wir ein
+              teil der Disassembly, und im besonderen, die
+              zwei Vergleichungen. Kurz nachdem der Satz <code class="hljs">FLARE-On</code> in <code
+                class="hljs">eax</code> eingeladen wird, findet die erste Vergleichung
+              statt.
+            </p>
+            <div class="post-image position-relative">
+              <img class="rounded" src="/img/pp-ida-view.png" alt="Pixel Poker IDA view" width="561" height="346">
+            </div>
+            </p>
+            <p>
+              Während das debugging erschien es das wir als User kontrolle haben über den Wert in <code
+                class="hljs">edi</code> und
+              das der Wert übereinstimmt mit de <code class="hljs">x</code>-Koordinate im Spielfeld. Dieser Wert wird
+              zunächst verglichen mit
+              <code class="hljs">0x5F</code> oder deutlicher: die Nummer<code class="hljs">95</code>. Einen
+              Disassembly-block später, sehen wir die zweite Vergleichung.
+              Dieses Mal wird der Wert von der <code class="hljs">y</code>-Koordinate in ein user-kontrollierten
+              Register verglichen mit den Wert in <code class="hljs">edx</code>.
+              Der Wert kommt uberein mit <code class="hljs">0x139</code> oder deutlicher: die Nummer <code
+                class="hljs">313</code>.
+            </p>
+            <p>
+              Aufgrund dieser Information, können wir davon ausgehen das wenn wir den Pixel an steller <code
+                class="hljs">95,313</code> anclicken,
+              wir den korrekten Pixel gefunden haben
+              Wenn wir das Spiel erneut starten, und den Pixel anclicken, kommt die Flag heraus:
+            <pre><code class="plaintext hljs">w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
+            Und damit haben wir die zweite Flare-On Challenge gelöst!
+            </p>
+          </div>
+          <ul class="post-meta-tag list-unstyled list-inline mt-5">
+            <li class="list-inline-item">Tags: </li>
+            <li class="list-inline-item"><a class="bg-white text-dark"
+                href="https://grayman.re/tags/flare-on">Flare-On</a></li>
+            <li class="list-inline-item"><a class="bg-white text-dark"
+                href="https://grayman.re/tags/Writeups">Writeups</a></li>
+            <li class="list-inline-item"><a class="bg-white text-dark"
+                href="https://grayman.re/tags/Challenges">Challenges</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of custom content -->
+
+  <!-- Start of footer -->
+  <custom-footer></custom-footer>
+  <!-- End of Footer -->
+
+  <!-- JS Plugins -->
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/lightense.min.js"></script>
+
+  <!-- Main Script -->
+  <script src="/js/script.js"></script>
+</body>
+
+</html>
