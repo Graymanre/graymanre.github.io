@@ -4305,55 +4305,41 @@
               <pre class="highlight"><code>I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall we play another game?</code></pre>
             </div>
           </div>
-
           <h3 id="it-is-healing">Challenge Writeup</h3>
           <p>The challenge zipfile contains 2 unique files: <pre class="highlight-inline"><code>PixelPoker.exe</code></pre> and a <pre class="highlight-inline"><code>README.txt</code></pre></p>
           <p>The README shortly explains how the game works and we can derive some information from it:</p>
           <div class="language-plaintext highlighter-rouge">
-            <div class="highlight"><pre class="highlight"><code>Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!<br>Your goal is simple: find the correct pixel and click it <br>Good luck!</code></pre>
-        </div>
-      </div>
+            <div class="highlight">
+              <pre class="highlight"><code>Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!<br>Your goal is simple: find the correct pixel and click it <br>Good luck!</code></pre>
+            </div>
+          </div>
           <p>When we launch the 'game', we are presented with a field that contains pixels. The title bar of the
             application shows the <pre class="highlight-inline"><code>x</code></pre> and <pre class="highlight-inline"><code>y</code></pre>
             locations when we move over the playing field. When we click several times on random pixels, we are
             presented with the message: <pre class="highlight-inline"><code>"Please play again!"</code></pre>.
             As we are tasked with finding the correct pixel, which will likely present us with the flag, we load the
             game into IDA for further analysis.
-          </p>
-          <p>
-            As this is still an early level within the Flare-On game, we start by searching for helpful strings. We
-            come across the string <pre class="highlight-inline"><code>"Please play again!"</code></pre>,
-            which we saw earlier when clicking on random pixels. Locating the strings in the disassembly, they
-            appear
-            near the end of a function and execution flow will end up in this
+            <br><br>
+            As this is still an early level within the Flare-On game, we start by searching for helpful strings. We come across the string <pre class="highlight-inline"><code>"Please play again!"</code></pre>, which we saw earlier when clicking on random pixels. Locating the strings in the disassembly, they appear near the end of a function and execution flow will end up in this
             section if a certain counter reaches zero. This corresponds our initial attempts of clicking several
-            times
-            on random pixels.
-            Underneath the section that contains the counter, as displayed in the image below, we see that the
-            string
+            times on random pixels. Underneath the section that contains the counter, as displayed in the image below, we see that the string
             <pre class="highlight-inline"><code>FLARE-On</code></pre> is loaded into <pre class="highlight-inline"><code>eax</code></pre> after which a
             <pre class="highlight-inline"><code>cmp</code></pre> operation takes places.
-          <p>
+            <br><br>
             <img class="rounded" src="../img/pp-ida-view.png" alt="Pixel Poker IDA view" width="561" height="346">
-          </p>
-          </p>
-          <p>
+            <br><br>
             During debugging, it appeared that we control the value in the <pre class="highlight-inline"><code>edi</code></pre> register,
-            as
-            it corresponds to the location of <pre class="highlight-inline"><code>x</code></pre> on the playing field. That value is
-            compared
+            as it corresponds to the location of <pre class="highlight-inline"><code>x</code></pre> on the playing field. That value is compared
             to <pre class="highlight-inline"><code>0x5F</code></pre> or <pre class="highlight-inline"><code>95</code></pre>.
             A block later, we see another <pre class="highlight-inline"><code>cmp</code></pre> taking place, this time user-controlled
-            register <pre class="highlight-inline"><code>ebx</code></pre> is compared with the value
-            <pre class="highlight-inline"><code>0x139</code></pre> in register <pre class="highlight-inline"><code>edx</code></pre> which corresponds to <code
+            register <pre class="highlight-inline"><code>ebx</code></pre> is compared with the value <pre class="highlight-inline"><code>0x139</code></pre> in register <pre class="highlight-inline"><code>edx</code></pre> which corresponds to <code
               class="highlight-inline">313</code></pre>.
-          </p>
-          <p>
-            Based on this information, we can assume that if we click the pixel at location <code
-              class="highlight-inline">95,313</code></pre> we will have found the correct pixel.
+            <br><br>
+            Based on this information, we can assume that if we click the pixel at location <code class="highlight-inline">95,313</code></pre> we will have found the correct pixel.
             Rerunning the game and clicking that specific pixel, will then result in the flag:
+            <br><br>
             <pre class="highlight"><code>w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
-          And with that, we have completed the second Flare-On challenge!
+            And with that, we have completed the second Flare-On challenge!
           </p>
         </div>
     </article>
