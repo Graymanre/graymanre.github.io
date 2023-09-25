@@ -11,9 +11,9 @@
     } ,
   
     {
-      "title"    : "HEVD on Win10 22H2 - Arbitrary Overwrite",
+      "title"    : "Automating a M365 Tenant Security Maturity Assessment",
       "category" : "",
-      "tags"     : "KERNEL and POC",
+      "tags"     : "Blue Team Projects",
       "url"      : "/blue_team_projects/automating_tenant_assessments.html",
       "date"     : "Sep 25, 2023",
       "content"  : "",
