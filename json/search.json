@@ -1,0 +1,23 @@
+[
+  
+    {
+      "title"    : "Flare-On22 - Pixel Poker Writeup",
+      "category" : "",
+      "tags"     : "CTF and Writeups",
+      "url"      : "/writeups/flareon22-pixelpoker-writeup.html",
+      "date"     : "Dec 11, 2022",
+      "content"  : "",
+      "article"  : ""
+    } ,
+  
+    {
+      "title"    : "HEVD on Win10 22H2 - Arbitrary Overwrite",
+      "category" : "",
+      "tags"     : "KERNEL and POC",
+      "url"      : "/blue_team_projects/automating_tenant_assessments.html",
+      "date"     : "Sep 25, 2023",
+      "content"  : "",
+      "article"  : ""
+    } 
+  
+]
