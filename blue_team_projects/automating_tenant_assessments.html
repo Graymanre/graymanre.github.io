@@ -3,7 +3,7 @@
 
 <head>
   <title>GraymanRe</title>
-  <meta name='description' content='Vulnerability Research & Exploitation'>
+  <meta name='description' content='Personal Portfolio & Project Website'>
   <link rel="canonical" href="/">
   <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
   <!-- Fonts -->
@@ -4314,7 +4314,14 @@
           clients to gain an insight into their security posture based on the complete landscape of security settings
           that can be enabled and tuned to an organization's needs or requirements. During one of those early
           engagements, it appeared that the process of performing such an assessment could be automated to a certain
-          extent. Research showed that Microsoft provides multiple APIs for the settings that were thus far checked
+          extent. Currently, <b>63 global settings were checked manually</b>, and with lacking documentation, each individual
+          performing a security assessment had to perform already-performed research into the location of most of these
+          settings. Furthermore, each of these "global" settings has <b>one or more subsettings, resulting in around 500
+          unique settings that are checked during the security assessment</b>.<br><br>
+          It needs no explanation that the assessment process requires a lot of time and effort. In an attempt to
+          maximize my output, I researched other avenues to perform the security assessment that would drastically lower
+          the amount of manual labor required. Research showed that Microsoft provides multiple APIs for the settings
+          that were thus far checked
           manually, requiring teams to document how to access every single setting in multiple Microsoft products.
           <br><br>
           The challenge in automating this process lays in finding the right balance between automating the decision if
@@ -4334,13 +4341,12 @@
           granted a limited subset of permissions to perform its task. The permissions to perform the automated tenant
           assessment only require "read" rights, further limiting the privileges that are obtained by the application
           registration. Furthermore, the organization can then on a as-needed basis add users to the application
-          registration. As a result, only a single instance exists where users obtain limited permissions to read
-          configurations and when the application registration is removed, no privileges are inherited by users.
-          Combining the Graph API and PowerShell
-          The chosen framework to build the automated tenant assessment in is PowerShell. It is natively supported by
-          Windows and provides the most versatile solution for the multiple APIs and Graph SDK that are used.
+          registration. <b>As a result, only a single instance exists where users obtain limited permissions to read
+          configurations and when the application registration is removed, no privileges are inherited by users.</b>
           <br><br>
           <h3 id="post__content__title4">A short demonstration</h3>
+          The chosen framework to build the automated tenant assessment in is PowerShell. It is natively supported by
+          Windows and provides the most versatile solution for the multiple APIs and Graph SDK that are used.<br>
           An example of lowering the manual labor required for obtaining all security-related settings can be
           demonstrated through the Endpoint DLP Settings in the Microsoft Purview Compliance Center. The Endpoint DLP
           Settings contain 14 main configurable settings of which multiple have subsettings that can be configured
@@ -4380,7 +4386,7 @@
           HTML template. A significant portion of the template is built on Javascript, which performs parsing of the
           results and building of HTML elements to provide a sleek and low-latency locally-hosted dashboard. The HTML
           template is a single file which allows for easy portability and sharing. The screenshot below shows a small
-          preview of how the dashboard looks like.
+          preview of what the dashboard looks like.
           </p>
           <img class="rounded" src="/img/entra_tenant_assessment_dashboard.png" alt="Entra Tenant Assessment Dashboard"
             width="561" height="346">
