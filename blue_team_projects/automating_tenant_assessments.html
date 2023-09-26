@@ -4269,7 +4269,8 @@
           <div class="col col-8 col-t-12">
             <div class="post-head__box">
               <div class="post__meta">
-                <span class="post__minutes">8 min read <time class="post__date" datetime="2023-09-25T00:00:00+02:00">Sep 25, 2023</time>
+                <span class="post__minutes">8 min read <time class="post__date" datetime="2023-09-25T00:00:00+02:00">Sep
+                    25, 2023</time>
                 </span>
               </div>
               <h2 class="post__title">Automating a M365 Tenant Security Maturity Assessment</h2>
@@ -4295,38 +4296,94 @@
     <!-- begin post -->
     <div class="container">
       <article class="post animate">
-        <div class="post__content"> 
-            <h3 id="post__content__title">Microsoft Entra</h3>
-            <p>
-                Microsoft has recently renamed their Microsoft Azure AD to Microsoft Entra ID. Although this is only a minor name change, the Entra platform federates all existing identity and access management functions of Microsoft and integrates the new capabilities delivered through Cloud Infrastructure Entitlement Management (CIEM) and Decentralized Identity. 
-                <br><br>
-                The vastness of the Entra platform ensures that customers can use, enable, and implement a broad range of security settings and features. This allows for fine-grained control over the Microsoft Tenant whilst simultaneously resulting in the need for experienced administrators that are intricately familiar with the platform. 
-                <br>
-            </p>
-            <h3 id="post__content__title2">The need for automation</h3>
-            <p>
-                During multiple client engagements, I have performed M365 Tenant Security Maturity Assessments allowing clients to gain an insight into their security posture based on the complete landscape of security settings that can be enabled and tuned to an organization's needs or requirements. During one of those early engagements, it appeared that the process of performing such an assessment could be automated to a certain extent. Research showed that Microsoft provides multiple APIs for the settings that were thus far checked manually, requiring teams to document how to access every single setting in multiple Microsoft products. 
-                <br>
-                The challenge in automating this process lays in finding the right balance between automating the decision if a specific toggle should be on or off based on security good practices and knowing the organization, its challenges and the general environment and threat landscape to be able to account for exceptions. Solving this challenge will be indirectly discussed during the upcoming insight into how the assessment of an organization's security maturity was automated.
-                <br><br>
-                The Microsoft Graph API is the ideal candidate to use in this case as it provides an SDK that allows for querying the Microsoft Entra environment. To widen the scope of the assessment, not only Entra, but additionally Microsoft SharePoint, Microsoft OneDrive, Microsoft Defender for Endpoint, Microsoft Teams, Exchange Online and Microsoft Intune are included in the assessment. 
-            </p>
-            <h3 id="post__content__title3">Adhering to Zero Trust and the principle of least privilege</h3>
-            <p>
-                The usage of the Microsoft Graph API allows the creation of an application registration within the Microsoft Tenant. By creating an application registration, a single application, in this case Microsoft Graph API can be granted a limited subset of permissions to perform its task. The permissions to perform the automated tenant assessment only require "read" rights, further limiting the privileges that are obtained by the application registration. Furthermore, the organization can then on a as-needed basis add users to the application registration. As a result, only a single instance exists where users obtain limited permissions to read configurations and when the application registration is removed, no privileges are inherited by users. 
-                Combining the Graph API and PowerShell
-                The chosen framework to build the automated tenant assessment in is PowerShell. It is natively supported by Windows and provides the most versatile solution for the multiple APIs and Graph SDK that are used. The code snippet below shows a focused example of using the application registration ID, known as the Client ID and the Tenant ID which represents the specific Tenant to connect the Graph API and obtain the settings related to the Conditional Access policies.
-            </p>
-            <div class="language-plaintext highlighter-rouge">
-                <div class="highlight">
-                  <pre class="highlight"><code>$ClientId = "a0a0a0a0-0000-aaaa-0a0a-a0a0a0a0a0a0"<br>$TenantId = "f9f9f9f9-9999-ffff-9f9f-f9f9f9f9f9f9"<br><br>Connect-MgGraph -ClientId $ClientId -TenantId $TenantId<br><br>$CAPolicies = Get-MgIdentityConditionalAccessPolicy</code></pre>
+        <div class="post__content">
+          <h3 id="post__content__title">Microsoft Entra</h3>
+          <p>
+            Microsoft has recently renamed their Microsoft Azure AD to Microsoft Entra ID. Although this is only a minor
+            name change, the Entra platform federates all existing identity and access management functions of Microsoft
+            and integrates the new capabilities delivered through Cloud Infrastructure Entitlement Management (CIEM) and
+            Decentralized Identity.
+            <br><br>
+            The vastness of the Entra platform ensures that customers can use, enable, and implement a broad range of
+            security settings and features. This allows for fine-grained control over the Microsoft Tenant whilst
+            simultaneously resulting in the need for experienced administrators that are intricately familiar with the
+            platform.
+            <br>
+          <h3 id="post__content__title2">The need for automation</h3>
+          During multiple client engagements, I have performed M365 Tenant Security Maturity Assessments allowing
+          clients to gain an insight into their security posture based on the complete landscape of security settings
+          that can be enabled and tuned to an organization's needs or requirements. During one of those early
+          engagements, it appeared that the process of performing such an assessment could be automated to a certain
+          extent. Research showed that Microsoft provides multiple APIs for the settings that were thus far checked
+          manually, requiring teams to document how to access every single setting in multiple Microsoft products.
+          <br><br>
+          The challenge in automating this process lays in finding the right balance between automating the decision if
+          a specific toggle should be on or off based on security good practices and knowing the organization, its
+          challenges and the general environment and threat landscape to be able to account for exceptions. Solving this
+          challenge will be indirectly discussed during the upcoming insight into how the assessment of an
+          organization's security maturity was automated.
+          <br><br>
+          The Microsoft Graph API is the ideal candidate to use in this case as it provides an SDK that allows for
+          querying the Microsoft Entra environment. To widen the scope of the assessment, not only Entra, but
+          additionally Microsoft SharePoint, Microsoft OneDrive, Microsoft Defender for Endpoint, Microsoft Teams,
+          Exchange Online and Microsoft Intune are included in the assessment.
+          <br><br>
+          <h3 id="post__content__title3">Adhering to Zero Trust and the principle of least privilege</h3>
+          The usage of the Microsoft Graph API allows the creation of an application registration within the Microsoft
+          Tenant. By creating an application registration, a single application, in this case Microsoft Graph API can be
+          granted a limited subset of permissions to perform its task. The permissions to perform the automated tenant
+          assessment only require "read" rights, further limiting the privileges that are obtained by the application
+          registration. Furthermore, the organization can then on a as-needed basis add users to the application
+          registration. As a result, only a single instance exists where users obtain limited permissions to read
+          configurations and when the application registration is removed, no privileges are inherited by users.
+          Combining the Graph API and PowerShell
+          The chosen framework to build the automated tenant assessment in is PowerShell. It is natively supported by
+          Windows and provides the most versatile solution for the multiple APIs and Graph SDK that are used.
+          <br><br>
+          <h3 id="post__content__title4">A short demonstration</h3>
+          An example of lowering the manual labor required for obtaining all security-related settings can be
+          demonstrated through the Endpoint DLP Settings in the Microsoft Purview Compliance Center. The Endpoint DLP
+          Settings contain 14 main configurable settings of which multiple have subsettings that can be configured
+          additionally.
+          By manually going through every setting, a lot of clicking and opening of subviews etc. is required.
+          Additionally, one needs to properly document where these settings are located and doing that for every single
+          setting requires a lot of documentation.
+          Furthermore, as Microsoft continuously improves and changes the layout of their products, it is likely that
+          locations of these settings may change, which requires that the documentation on where each setting is located
+          needs to be checked and updated in the documentation.
+          <br><br>
+          On the other hand, Microsoft provides through the Security & Compliance PowerShell a single cmdlet
+          <pre class="highlight-inline"><code>Get-PolicyConfig</code></pre>, to obtain the details on all 14 settings
+          and their respective subsettings, which can then be looped over and the results printed or stored as required.
+          A simple solution for implementing the cmdlet is demonstrated below:
+          <br><br>
+          <div class="container">
+            <div class="row">
+              <div class="col col-4" style="padding-left:8px;padding-right:8px;">
+                <img src="/img/entra_tenant_assessment_dplsettings.png" alt="Entra Tenant Assessment Dashboard">
+              </div>
+              <div class="col col-8" style="padding-left:8px;padding-right:8px;">
+                <div class="language-plaintext highlighter-rouge">
+                  <div class="highlight">
+                    <pre class="highlight"
+                      style="padding-left: 10px; padding-right: 10px;"><code>$ClientId = "a0a0a0a0-0000-aaaa-0a0a-a0a0a0a0a0a0"<br>$TenantId = "f9f9f9f9-9999-ffff-9f9f-f9f9f9f9f9f9"<br><br>Connect-MgGraph -ClientId $ClientId -TenantId $TenantId<br><br>$dlpSettingsObject = Get-PolicyConfig<br>$dlpSettings = $dlpSettingsObject.EndpointDlpGlobalSettings<br>if ($dlpSettings) { <br>&emsp;foreach($dlpSetting in $dlpSettings) { <br>&emsp;&emsp;if ($null -ne $dlpSetting.Value and $null -ne $dlpSetting.Setting) { <br>&emsp;&emsp;&emsp;&emsp;Write-Host "$($dlpSetting.Setting): $($dlpSetting.Value)" <br>&emsp;&emsp;} <br>&emsp;} <br>}</code></pre>
+                  </div>
                 </div>
+              </div>
             </div>
-            <h3 id="post__content__title3">Findings report</h3>
-            <p>
-                To ensure that anyone could have simple access to the findings without the need for understanding how the code works, or performing any form of parsing, the automated tenant assessment PowerShell script, reports all its findings in an HTML file. The results of the PowerShell queries are added into lists that are combined in an HTML template. A significant portion of the template is built on Javascript, which performs parsing of the results and building of HTML elements to provide a sleek and low-latency locally-hosted dashboard. The HTML template is a single file which allows for easy portability and sharing. The screenshot below shows a small preview of how the dashboard looks like.
-            </p>
-            <img class="rounded" src="/img/entra_tenant_assessment_dashboard.png" alt="Entra Tenant Assessment Dashboard" width="561" height="346">
+          </div>
+          <h3 id="post__content__title3">Findings report</h3>
+          To ensure that anyone could have simple access to the findings without the need for understanding how the
+          code
+          works, or performing any form of parsing, the automated tenant assessment PowerShell script, reports all its
+          findings in an HTML file. The results of the PowerShell queries are added into lists that are combined in an
+          HTML template. A significant portion of the template is built on Javascript, which performs parsing of the
+          results and building of HTML elements to provide a sleek and low-latency locally-hosted dashboard. The HTML
+          template is a single file which allows for easy portability and sharing. The screenshot below shows a small
+          preview of how the dashboard looks like.
+          </p>
+          <img class="rounded" src="/img/entra_tenant_assessment_dashboard.png" alt="Entra Tenant Assessment Dashboard"
+            width="561" height="346">
         </div>
       </article>
     </div>
