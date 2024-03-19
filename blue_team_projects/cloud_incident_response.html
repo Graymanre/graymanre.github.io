@@ -13,59 +13,19 @@
   <!-- Ionicons -->
   <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+      $("#header-content").load("https://graymanre.github.io/header.html");
+      $("#footer-content").load("https://graymanre.github.io/footer.html");
+    });
+  </script>
 </head>
 
 <body class="is-in">
   <!-- begin header -->
   <header class="header">
-    <div class="container">
-      <div class="row">
-        <div class="header__inner col col-12">
-          <div class="logo">
-            <a class="logo__link" href="/">GraymanRe</a>
-          </div>
-          <div class="menu-overlay">
-            <nav class="main-nav">
-              <div class="main-nav__box">
-                <div class="nav__icon-close">
-                  <i class="ion ion-md-close"></i>
-                </div>
-                <div class="nav-grid">
-                  <div class="nav-grid__item">
-                    <h2 class="nav-grid__title">Menu</h2>
-                    <div class="mobile-nav">
-                      <ul class="nav__list list-reset">
-                        <li class="nav__item"><a href="/" class="nav__link">Home</a></li>
-                        <li class="nav__item"><a href="/rev/" class="nav__link">Reverse Engineering Projects</a></li>
-                        <li class="nav__item"><a href="/blue" class="nav__link">Blue Team Projects</a></li>
-                        <li class="nav__item"><a href="/ctf/" class="nav__link">CTF Writeups</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </nav>
-          </div>
-          <div class="navigation">
-            <div class="top-nav">
-              <ul class="nav__list list-reset">
-                <li class="nav__item"><a href="/" class="nav__link">Home</a></li>
-                <li class="nav__item"><a href="/rev/" class="nav__link">Reverse Engineering Projects</a></li>
-                <li class="nav__item"><a href="/blue" class="nav__link">Blue Team Projects</a></li>
-                <li class="nav__item"><a href="/ctf/" class="nav__link">CTF Writeups</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="nav-buttons">
-            <i class="nav__icon nav__icon-menu ion ion-md-menu"></i>
-            <div class="search-button">
-              <i class="nav__icon nav__icon-search ion ion-md-search"></i>
-              <span>Search</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="header-content"></div>
   </header>
   <!-- end header -->
 
@@ -110,7 +70,7 @@
               <div class="post__bottom">
                 <div class="post__author">
                   <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
-                      src="/img/GraymanRe_banner.png" alt="GraymanRe's Picture"></a>
+                      src="/img/banner.png" alt="GraymanRe's Picture"></a>
                 </div>
                 <div class="post__bottom-meta">
                   <a href="/contact/" class="post__author-link">GraymanRe</a>
@@ -282,27 +242,7 @@
 
   <!-- begin footer -->
   <footer class="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col col-12">
-          <div class="footer__inner">
-            <div class="copyright">2023 &copy; <a href="/">GraymanRe</a>.</div>
-            <div class="social">
-              <ul class="social__list list-reset">
-                <li class="social__item">
-                  <a class="social__link" href="https://twitter.com/grayman_re" aria-label="social icon"><i
-                      class="ion ion-logo-twitter"></i></a>
-                </li>
-                <li class="social__item">
-                  <a class="social__link" href="https://github.com/GraymanRe" aria-label="social icon"><i
-                      class="ion ion-logo-github"></i></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="footer-content"></div>
   </footer>
   <!-- end footer -->
   <script src="/js/vendors/jquery-3.5.1.min.js"></script>
