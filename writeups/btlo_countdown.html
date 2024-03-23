@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+        //$("#header-content").load("https://graymanre.github.io/header.html");
+        //$("#footer-content").load("https://graymanre.github.io/footer.html");
+        $("#header-content").load("/header.html");
+        $("#footer-content").load("/footer.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">10 min read <time class="post__date" datetime="2024-03-23T00:00:00+02:00">Mar
+                    23, 2024</time>
+                </span>
+              </div>
+              <h2 class="post__title">Blue Team Labs Online - Countdown</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/blue" class="post__tag">Blue Team Projects</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content">
+          <h2 id="post__content__title">Introduction</h2>
+          <p>
+            Today we will be walking through one of the Blue Team Labs Online Investigations: Countdown. The Investigation is 
+            rated as <b>"Medium"</b> and will earn you <b>50 points</b>. To earn full points, you have to answer 7 questions in regard to
+            the following scenario:
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">NYC Police received information that a gang of attackers has entered the city and are planning to detonate an explosive device. Law enforcement have begun investigating all leads to determine whether this is true or a hoax.<br><br>Persons of interest were taken into custody, and one additional suspect named 'Zerry' was detained while officers raided his house. During the search they found one laptop, collected the digital evidence, and sent it to NYC digital forensics division.<br><br>Police believe Zerry is directly associated with the gang and are analyzing his device to uncover any information about the potential attack.<br><br>Disclaimer: The story, all names, characters, and incidents portrayed in this challenge are fictitious and any relevance to real-world events is completely coincidental.</pre>
+              </div>
+            </div>
+          </p>
+          <h2 id="post__content__title">Verify the Disk Image</h2>
+          <p>
+            The first question asks us to verify the disk image, and submit the sector count and MD5 hash corresponding to the disk image.
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) Verify the Disk Image. Submit SectorCount and MD5 (7 points)</pre>
+                </div>
+              </div> 
+            We are provided with a custom Windows Virtual Machine and we will find the main files we need on the Desktop after logging in. In the "Investigation Files"
+            folder, we browse to "Disk Image", go into the "Zerry" folder and we will find two specific files: <span id="inline-code">Zerry.E01</span> and <span id="inline-code">Zerry.E01.txt</span>. The E01 file extension
+            denotes that the file is an Encase Image File Format. When forensic experts acquire digital evidence, for example by taking a forensic copy ("Disk Imaging") of
+            the dark drive of a targeted computer, one of the most common format used is E01. Another common extension that is used is <span id="inline-code">.EWF</span> or "Expert Witness Format". 
+            These digital evidence files can be read using tools like FTK Imager or Autopsy. 
+            <br>
+            In most, if not all, cases E01 and EWF image files are accompanied by a secondary file in txt format which contains basic information pertaining to the disk image.
+            If we therefore open the <span id="inline-code">Zerry.E01.txt</span>, we are presented with the information that is requested to answer question 1. The Sector Count is: <span id="inline-code">25165824</span> and the 
+            MD5 hash that is calculated over the disk image is: <span id="inline-code">5c4e94315039f890e839d6992aeb6c58</span>
+            <img src="/img/countdown_q1.png" alt="q1_answer">
+          </p>
+          <h2 id="post__content__title">Finding the Decryption Key</h2>
+          <p>
+            The next question asks us to find the decryption key of the online messenger app that was used by Zerry. 
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) What is the decryption key of the online messenger app used by Zerry? (7 points)</pre>
+                </div>
+            </div>   
+            To be able to answer this question, we need to use Autopsy to analyze the disk image. We create a new case and add a new data source. Since we want Autopsy
+            to handle the E01 image in a way that will allow is to browse it like a file system, we select "Disk Image or VM File", in the next window, we add the specific
+            E01 image file from Zerry's computer and we leave all other settings over the following screen as they are. Then, Autopsy will import the disk image and analyze
+            it for us. Note that this might take some time due to the limited resources we have to our disposal within the Blue Team Labs Windows VM. 
+            <div class="container">
+                <div class="row">
+                    <div class="col col-4">
+                        <img src="/img/countdown_q2_1.png" alt="autopsy1">
+                    </div>
+                    <div class="col col-4">
+                        <img src="/img/countdown_q2_2.png" alt="autopsy2">
+                    </div>
+                    <div class="col col-4">
+                        <img src="/img/countdown_q2_3.png" alt="autopsy3">
+                    </div>
+                </div>
+            </div>
+            <br>
+            Once the image has been loaded, we expand the "Data Sources" tab as well as "Zerry.E01". Next, we are confronted with 6 volumes, of which 3 contain an underlying folder structure. 
+            Without looking into the specific folders, we can disregard volumes 1, 4, 5 and 6, since these are either <span id="inline-code">Unallocated</span> or of type <span id="inline-code">Unknown</span>. 
+            The remaining volumes are 2 and 3. Those familiar with Windows operating systems, will conclude that the main operating system is located in volume 3, since volume 2 starts at <span id="inline-code">0x2048</span>,
+            which for modern Windows systems, signals the bootloader section. Additionally, the size in bytes for volume 3 (24125556 - 104448) is significantly larger than that of volume 2: 104447 - 2048. 
+            <br>
+            <img src="/img/countdown_q2_0.png" alt="volume_structure">
+            <br><br>
+            Applications and programs on Microsoft Windows use three main folders to store their data. The first folder is likely familiar to everyone reading this, the
+            <span id="inline-code">C:\Program Files</span> folder, which should be used to store an application's read-only files. Applications that use persistent data that should be read and written
+            during application runtime are actively discouraged from using the <span id="inline-code">C:\Program Files</span> folder. Instead, Microsoft offers to alternatives where applications should
+            store this data. For files that the do not contain user-specific information related to the application, Microsoft advises to use <span id="inline-code">C:\ProgramData</span>. If the 
+            application handles user-specific information, then the application should use the users 'AppData' folder and often the subfolder 'Roaming' is used. This folder
+            can be found in a users personal folder, like: <span id="inline-code">C:\Users\*user*\AppData\Roaming</span>.
+            <br><br>
+            Based on this information, let's first analyze the <span id="inline-code">C:\Program Files</span> folders. Remember that we are looking for an "online messenger app". In both of the Program Files folders,
+            we don't find any clues. Note that applications might also install themselves directly in the <span id="inline-code">User's AppData</span> folder, specifically the <span id="inline-code">Local</span> subfolder.
+            In that folder, one specific folder attracts the attention <span id="inline-code">signal-desktop-updater</span>. A Google search reveals that Signal Desktop is an online messenger application. Let's continue
+            our analysis under the assumption that we have identified Signal Desktop to be the online messenger application in question. Note that Zerry's Downloads folder also contains an executable called <span id="inline-code">signal-desktop-win-1.39.5.exe</span>,
+            further confirming our assumption. 
+            <br><br>
+            Now that we have found an online messaging application, we have two potential locations where the application data, and subsequently likely the encryption key will be stored. 
+            Since we are talking about a encryption key that should be unique for each user, the first location we will follow up will be Zerry's AppData folder. In <span id="inline-code">C:\Users\ZerryD\AppData\Roaming</span>
+            we do find the Signal folder. Inside the main Signal folder, we identify multiple files, one of which is named <span id="inline-code">config.json</span>. If we open this file, we
+            see that it contains a single line entry: <span id="inline-code">{"key": "c2a0e8d6f0853449cfcf4b75176c277535b3677de1bb59186b32f0dc6ed69998"}</span>. A quick Google search for the <span id="inline-code">config.json</span>
+            file in combination with the keyword "Signal", brings us to <a href="https://www.reddit.com/r/privacy/comments/fwux29/signal_desktop_stores_the_encryption_key_in_a/">this Reddit post</a>, claiming suggesting that we have found the encryption key.
+            <br>
+            <img src="/img/countdown_q2.png" alt="q2_answer">
+            <br>
+          </p>
+          <h2 id="post__content__title">Discovering Zerry's profile information</h2>
+          <p>
+            Now that we have figured out the decryption key, we can look for additional details within the Signal folder pertaining to Zerry's profile name and registered phone number, to solve question 3.
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) What is the registered phone number and profile name of Zerry in the messenger application used? (7 points)</pre>
+                </div>
+            </div>  
+            Applications often use databases to store large volumes of data so that they can be easily queried and reduce the amount of storage required. The Signal AppData folder contains two obvious folders 
+            to continue our search: <span id="inline-code">databases</span> and <span id="inline-code">sql</span>, and the observant reader will claim that the folders <span id="inline-code">blob_storage</span>,
+            <span id="inline-code">sql</span>and <span id="inline-code">Local Storage</span> might also hold valuable information. During my research, I discovered <a href="https://www.linkedin.com/pulse/signal-desktop-digital-forensics-perspective-surya-teja-masanam/">this post</a>
+            detailing how to perform digital forensic analysis on Signal. It denotes that the main Signal database is <span id="inline-code">C:\Users\ZerryD\AppData\Roaming\Signal\sql\db.sqlite</span>.
+            <img src="/img/countdown_q3.png" alt="db.sqlite">
+            Therefore, we extract this file from Autopsy and open it in the SQLite viewer that's included in the Tools folder on the desktop. When trying to open the database, we are met with a prompt for a password.
+            To be able to decrypt the contents of the database, we will need the encryption key we have discovered earlier. In the menu, set the authentication method from Password to Raw Key. Notice that it prompts
+            to add <span id="inline-code">0x</span> in front of the key, meaning that the actual decryption key is <span id="inline-code">0xc2a0e8d6f0853449cfcf4b75176c277535b3677de1bb59186b32f0dc6ed69998</span>.
+            <br>
+            <img src="/img/countdown_q3_2.png" alt="sqlite_decrypt">
+            <br>
+            Now that we have obtained access to the database, we can browse through the tables. Specifically in the <span id="inline-code">conversations</span> table, we find a single entry containing both
+            the profile name and the telephone number that were used by Zerry: <span id="inline-code">ZerryThe</span> and <span id="inline-code">+13026482364</span>.
+            <br>
+            <img src="/img/countdown_q3_3.png" alt="q3_answer">
+            <br>
+          </p>
+          <h2 id="post__content__title">Looking for Zerry's email address</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What is the email id found in the chat? (7 points)</pre>
+                </div>
+            </div>  
+            Since we have obtained access to the main Signal database, we continue our search to find the email address that was in use by Zerry to receive additional details pertaining to the attack, 
+            in order to solve question 4. Still browsing through the SQLite database, my eye falls on the <span id="inline-code">messages</span> table. If we go into this table, we see the beginning of a chat
+            conversation. The specific messages that were sent are stored in the column <span id="inline-code">body</span>. In this column, we can search for the <span id="inline-code">@</span> sign, since
+            this is quite a unique indicator of an email address. Here we find one result: <span id="inline-code">eekurk@baybabes.com</span>
+            <br>
+            <img src="/img/countdown_q4.png" alt="q4_answer">
+            <br>
+          </p>
+          <h2 id="post__content__title">Identifying the email attachment</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) What is the filename(including extension) that is received as an attachment via email? (7 points)</pre>
+                </div>
+            </div>
+            In the messages we already discovered the email address and we discovered that Zerry used TOR to download the attachment that was sent to him. We build upon this information to answer question 5.
+            Those that followed along have seen that in the top level directory, a folder called <span id="inline-code">Tor Browser</span> exists. I have spent quite some time investigating the files in this folder,
+            and researching Google where to find indicators of files that were downloaded using the TOR Browser. I could not find any indicators that led to the discovery of the file that was downloaded. Therefore,
+            after some time, I decided to leave the TOR lead for what it was. Autopsy provides multiple valuable features, amongst others its automated way of extracting potentially interesting information. I decided to
+            scroll through the <span id="inline-code">Web Downloads</span>, <span id="inline-code">Web History</span> and <span id="inline-code">Web search</span> but could not find any further leads. Per accident,
+            after disregarding it previously, I looked into the <span id="inline-code">Recent Documents</span> and found <span id="inline-code">⏳📅.lnk</span> pointing to <span id="inline-code">C:\Users\ZerryD\ud83d\udca3\ud83d\udd25\Downloads\*icon*\ud83d\udcc5.PNG</span>.
+            Submitting this as the filename of the file that was downloaded appeared to be the correct answer. 
+            <img src="/img/countdown_q5.png" alt="q5_answer">  
+          </p>
+          <h2 id="post__content__title">Attack date and time</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) What is the Date and Time of the planned attack? (7 points)</pre>
+                </div>
+              </div>
+            Since we found the email attachment, and based on its ".png" extension, we should be able to answer question 6 if we gain access to the original file. The original image is not present anymore
+            on the operating system, which means we have to resort to alternative solutions to figure out what the image specifically displays that was downloaded by Zerry. Those familiar with forensics will know
+            that Windows stores thumbnails of images on the operating system in a dedicated database. This feature allows Windows to display thumbnails and cache it which eliminates the need for reloading
+            of the thumbnail every time a user opens a folder containing images. The thumbnail cache is located in the folder <span id="inline-code">C:\Users\ZerryD\AppData\Local\Microsoft\Windows\Explorer\</span>.
+            Since the folder contains multiple thumbcaches, I decided to primarily focus on the thumbcache databases that are larger than the 24 bytes that some of these caches are, hoping for a higher chance of success.
+            We hit the figurative jackpot when analyzing <span id="inline-code">thumbcache_256.db</span>. We identify two filenames ending in <span id="inline-code">png</span> and specifically filename <span id="inline-code">e61cb36b1bc62fb5.png</span>
+            appears to contain a date and time. The date, 01-02-2021, is straightforward, however the time threw a small obstacle. It shows 09:00 and a sun, which can be interpreted as 09:00 in the morning, which
+            woud rule out 21:00 as the potential answer. However, <span id="inline-code">01-02-2021 09:00</span> is incorrect. I then tried <span id="inline-code">01-02-2021 09:00AM</span>, before discovering that
+            the correct answer should be: <span id="inline-code">01-02-2021 9:00AM</span>.
+            <img src="/img/countdown_q6.png" alt="q6_answer">  
+          </p>
+          <h2 id="post__content__title">Attack GPS Location</h2>
+          <p>
+            Now that we have obtained most of the details pertaining to the attack, one main challenge remains: figuring out where the attack will take place:
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) What is the GPS location of the blast? The format is the same as found in the evidence . [Hint: Encode(XX Degrees,XX Minutes, XX Seconds)] (8 points)</pre>
+              </div>
+            </div>
+            So my first idea was that the location was maybe hidden as text in the image data, instead of in the actual picture. However, I could not find it. Then I went on a rabbit hole tour, until I decided
+            to peruse the the Hints file that was left in the Investigation Files folder. Here we can read the following "hint" for this challenge.
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Hint: It is possible this information was stored in a Sticky Note. Find this in /Users/Zerry/AppData/Local/Packages and export it. Open the plum.sqlite database file in the /LocalState/ directory using SQLiteDatabaseBrowser. Find which table the notes are stored in. We can work out how to decrypt the encoded result by checking recent sites visited via Tor in Autopsy by looking at /Tor Browser/Browser/TorBrowser/Data/Browser/proile.default/places.sqlite.</pre>
+                </div>
+            </div>   
+            In my honest opinion, this is not a hint, but quite a huge spoiler of how to solve this last part of the challenge. Additionally, it is quite a detour from the original storyline so far.
+            There are no logical dots that connect the storyline so far to the usage of StickyNotes, the Desktop of ZerryD is void of any such hints and it hasn't been mentioned elsewhere. I was surprised
+            to see that the answer was spoiled this easily, and it takes away any requirement of understanding how the operating systems and specific applications work, and subsequently where
+            any relevant artificats for a forensic process are stored.
+            <br><br>
+            Building upon these hints, we browse to <span id="inline-code">C:\Users\ZerryD\AppData\Local\Packages\Microsoft\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\LocalState\plum.sqlite</span>.
+            Next we extract the database, open it in the SQLite browser and notice that it contains one entry for the table "Note" with text: <span id="inline-code">40 qrterrf 45 zvahgrf 28.6776 frpbaqf A, 73 qrterrf 59 zvahgrf 7.944</span>.
+            Downloading the places.sqlite database from the location <span id="inline-code">C:\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default</span> and analyzing its entries, we notice that
+            the website "rot13.com" was visited. Those familiar know it also as the Caesars Cipher, which substitues a letter with the 13th letter after it. As such, we can decode the value we found on 
+            the sticky note. Decoding it with ROT13 using Cyberchef gets us the result: "40 degrees 45 minutes 28.6776 seconds N, 73 degrees 59 minutes 7.994 seconds W".
+          </p>
+      </article>
+    </div>
+    <!-- end post -->
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h2 class="widget__title">Explore Tags</h2>
+            </div>
+            <div class="tag__cloud">
+              <a href="/blue/" class="set-1">Blue Team</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div id="footer-content"></div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>
