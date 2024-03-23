@@ -1,0 +1,28 @@
+Q1) Verify the Disk Image. Submit SectorCount and MD5 (7 points)
+Open the investigation folder, and open the Zerry.E01 txt file with the details of the image: 25165824,5c4e94315039f890e839d6992aeb6c58 - add image
+
+Q2) What is the decryption key of the online messenger app used by Zerry? (7 points)
+C:\Users\Zerry\AppData\Roaming\Signal\config.json
+c2a0e8d6f0853449cfcf4b75176c277535b3677de1bb59186b32f0dc6ed69998
+
+Q3) What is the registered phone number and profile name of Zerry in the messenger application used? (7 points)
+You will find that the main database storing all Signal data is located in C:\Users\Zerry\AppData\Roaming\Signal\sql\db.sqlite
+Referencing this post: https://www.reddit.com/r/signal/comments/9y595b/is_there_a_way_to_pull_messages_from_the_desktop/
+we learn that we can use the decryption key we discovered in Q2, can be used to read the data. We need to set the password type to "raw key" and add "0x" in front of the key to decrypt the database. We can then browse to the conversations table and find the phone number and profile name: +13026482364,ZerryThe
+
+Q4) What is the email id found in the chat? (7 points)
+We can browse to the conversations table. This table holds all the messages that were sent/received.
+The table has a column "body" and in this body we can search for the "@" and find: eekurk@baybabes.com
+
+Q5) What is the filename(including extension) that is received as an attachment via email? (7 points)
+Autopsy -> Recent Documents -> ⏳📅.lnk -> /img_Zerry.E01/vol_vol3/ZerryD💣🔥/AppData/Local/Microsoft/Windows/Explorer/thumbcache_256.db
+Thumbcache Viewer -> ⏳📅.png
+
+Q6) What is the Date and Time of the planned attack? (7 points)
+Autopsy -> Recent Documents -> ⏳📅.lnk -> /img_Zerry.E01/vol_vol3/ZerryD💣🔥/AppData/Local/Microsoft/Windows/Explorer/thumbcache_256.db
+Thumbcache Viewer -> 01-02-2021 9:00AM
+
+Q7) What is the GPS location of the blast? The format is the same as found in the evidence . [Hint: Encode(XX Degrees,XX Minutes, XX Seconds)] (8 points)
+Sticky Notes:
+/img_Zerry.E01/vol_vol3/ZerryD💣🔥/AppData/Local/Packages/Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe/LocalState/plum.sqlite
+ROT13 encoding: 40 degrees 45 minutes 28.6776 seconds N, 73 degrees 59 minutes 7.994 seconds W

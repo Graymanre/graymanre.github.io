@@ -138,7 +138,7 @@
           <br>
           <h3 id="post__content__title">Initial Access</h3>
           <p>
-
+            
           </p>
           <br>
           <h3 id="post__content__title">Privilege Escalation - Part 1</h3>
@@ -150,11 +150,13 @@
             I will then run hashcat using: <span id="inline-code">hashcat -m 11600 -a 0 -o backup.clear backup.hash /usr/share/wordlists/rockyou.txt</span>.
             After a while, hashcat has succeeded and the password appears to be "delete". Now, the 7ZIP file can be extracted and I remain with multiple PHP files.
             Analyzing the PHP files results in the discovery of the credentials for ldapuser1 in the contents.php file. The credentials are: <span id="inline-code">ldapuser1:f3ca9d298a553da117442deeb6fa932d</span>.
-            Using the <span id="inline-code">su ldapuser1</span> command, I can authenticate
-            and obtain the privileges of ldapuser1. 
+            Using the <span id="inline-code">su ldapuser1</span> command, I can authenticate and obtain the privileges of ldapuser1. 
           </p>
           <br>
           <h3 id="post__content__title">Privilege Escalation - Part 2</h3>
+          <p>
+            With the privileges of ldapuser1, I change the directory to the home directory of that user, and enumerate the files. I see ...
+          </p>
         </div>
       </article>
     </div>

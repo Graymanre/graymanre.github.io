@@ -1,0 +1,90 @@
+Blue Team Labs Investigation - Sukana 
+
+Q1) What is the SHA256 hash value for the malware file? (Format: SHA256) (1 points)
+Infection chain starts with email, so open the email in Thunderbird. Attachment is included. We can download the attachment, as well as open the 
+Intezer Malware report. We will see that both have the same hash: a879d2c1608c4b5cf801c2ab49b54b4139aa13f636fc6495fcaf940591713905
+
+Q2) What is the file size of the malware in bytes? (Format: XXXXXX) (1 points)
+Disable Windows Defender, download the file from the email. Execute: $file = Get-File .\scanner.exe && file.length: 445485
+
+Q3) Utilizing Cisco Talos, what is the “Cisco Secure Endpoint Detection Name” for the given malware? (Format: Name) (1 points)
+Insert screenshot
+Go to: https://www.talosintelligence.com/sha_searches
+W32.Auto:a879d2.in03.Talos
+
+Q4) Utilizing Cisco Talos, what is the file reputation of the given malware? (Format: String) (1 points)
+Insert screenshot
+Go to: https://www.talosintelligence.com/sha_searches
+File reputation: Malicious
+
+Q5) With Windows Defender enabled, launch the malware. What is the name of the threat according to Microsoft Defender Antivirus? (Format: Name) (1 points)
+Insert screenshot
+VirTool:Win32/PoshC2.G
+
+Q6) What scripting language is this C2 Framework primarily written in? (Format: Language) (1 points)
+From Q5 we see that Windows calls this sample "PoshC2", we can Google for that name, and stumble upon the original Github page, which says the framework
+is primarly written in Python: https://github.com/nettitude/PoshC2
+
+Q7) What was the sending email address in question? (Format: mailbox@domain.tld) (1 points)
+We open the email once again in Thunderbird and see: secretsociety2023@protonmail.com
+
+Q8) What is the email subject name? (Format: Subject) (1 points)
+TurnOffAV&Run
+
+Q9) Utilize CyberChef. After uploading the Base64 contents of the email into CyberChef, what is the defanged output of the href? (Format: hxxps[://]domain[.]tld/) (1 points)
+We first open the eml file in notepad. This will show us two Base64 sections of the email. As these sections are clearly denoted, we can assess that the first section has content-type "text/hmtl" whilst the second section has not only a specific content-type but also additional information: `Content-Type: application/x-ms-dos-executable; filename="scanner.exe"; name="scanner.exe"`. As such, we can conclude that the second Base64 section is the executable itself. Based on the question, asking for the contents of the email, we need the first section.
+Decoding the Base64 in CyberChef will give us the result: https://proton.me
+However, the question explicitely states "defanged", which means the "rendered harmless" version of the href URL: `hxxps[://]proton[.]me/`
+
+Q10) A memory dump is a snapshot of a computer's memory that contains data about any running processes at the time the capture was taken. What is the size, in GB, of the memory dump of the infected Windows machine? Round to the nearest hundredth (Format: X.XX) 
+5.37 - insert screenshot
+
+Q11) Utilize Volatility. Looking at the network connection of the memory dump, what is the ISP for the frequent foreign address ending in .181? (Format: ISP) (1 points)
+We can either utilize the GUI interface "Volatility Workbench" in or utilize vol.py in 
+
+Q12) On the topic of Volatility, what kind of digital evidence does it analyze from computers. Keep in mind, this volatile memory very common within computers (Format: XXX) (1 points)
+https://github.com/volatilityfoundation/volatility
+RAM
+
+Q13) Utilize Wireshark. What is the destination port for the Network IOC on the Intezer File Scan Report? (Format: Port) (1 points)
+The Intezer File Scan report notes the IP address: 13.42.49.148 - insert screenshot
+We can then open wireshark and set a filter for ip.addr == 13.42.49.148. There we see that the destination port is 443 - insert screenshot
+
+Q14) According to the Intezer File Scan Report, what is the MITRE ID and severity for the first TTPs? (Format: TXXXX, Severity) (1 points)
+For this we need to correlate the Intezer File Scan HTML report with the TTPS-mitre-attack.csv file. We see that the first TTP is "Code injection with CreateRemoteThreat in a remote process". The second TTP is "Behavioural detection: injection (inter-process)" and the third TTP is "Behavioural detection: injection with CreateRemoteThreat in a remote process". All of these severities are set to "high". Subsequently, if we analyze the TTPs recorded in the csv file, only one specific TTP matches the description: T1055: Process Injection. 
+
+Q15) Utilize Timeline Explorer. Let us look at the related sample CSV file we got from Intezer. This is an additional file sample known to be related to the main sample. When was this Generic Malware first seen? (Format: XXX, XX Month YYYY HH:MM:SS XXX)) (1 points)
+We open the Timeline Explorer and click File -> Open -> "related-samples-5ba7730a-5bdd-425d-8676-e5207407b98a.csv". We see only one entry and the value for the "First Seen" column is: "Fri, 08 May 2020 02:39:58 GMT"
+
+Q16) Using Virus Total, the malware is clearly related to the Trojan family. An adversary may rely upon a user opening this malicious file in order to gain execution. What is the MITRE ID that corresponds to this tactic? (Format: TXXXX.xxx) (2 points)
+So even if we open the VirusTotal report, we will not be able to find the answer. Instead, to solve this question, we will peruse the MITRE ATTACk website. User Execution -> Malicious File: T1204.002
+
+Q17) Utilize Timeline Explorer (TE). After using MFTECmd, the command line MFT parser, to upload the CSV $MFT in TE. Locate the FileName (FN) (0x10) creation timestamp for the malware file (Format: YYYY-MM-DD HH:MM:SS) (2 points)
+We copy the $MFT from and remove the $ to make our lives easier. We then launch the MFTECmd tool in PowerShell, which we run with the command: `C:.\MFTECmd.exe -f "C:\temp\MFT" --csv "C:\temp\out"`. Next, we open Timeline Explorer and read in the CSV file.
+We know that the malware file name is "scanner.exe". So we can search for that term in the search field to decrease the amount of results. 
+We see three results, the top one is the one we need
+Answer: 2023-01-31 09:33:41
+
+Q18) $Boot. As easily guessed, this file is related to the booting process and contains the NTFS boot sector. Utilizing the same process above, find the cluster size (Format: XXXX) (2 points)
+4096
+
+Q19) With the last answer in mind, we can tell the victim’s drive is quite large. If this was a legacy system, what sector size, in bytes, would be required to boot the system? (Format: XXX) (2 points)
+512 bytes
+
+Q20) Utilize Autopsy. We are going to examine another memory dump provided by Sam Bowne, an instructor at City College San Francisco. This will give us more practice with the tool. What is Waldo’s password? (Format: Password) (2 points)
+
+Instructions:
+From the Autopsy menu bar, click Tools, Plugins. Click the Installed tab. Check the box next to "Experimental", as shown below.
+Click the Activate button. Click the Activate Button. Click the Finish button. In the Plugins window, click the Close button.
+From the Autopsy menu bar, click Case, "New Case". Enter a Case Name of memory. Click the Next Button. Click the Finish Button.
+In the Add Data Source, at step 1. Select Host, and click the Next button. At step 2, select Data Source Type, and click "Memory Image File (Volatility)".
+Click the Next button. If you want to speed up the process, clear all the plugins except these:
+    consoles
+    hashdump
+    lsadump
+    netscan
+    pslist
+    shellbags
+    userassist
+
+The user hashes are part of hashdump, we see the hash cfeac129dc5e61b2eb9b2e7131fc7e2b for the user Waldo. If we perform a quick Google search we will find this github (https://github.com/awesome-cyber-sec/Wordlists/blob/master/words_nov_1.txt) with the answer: Apple123
