@@ -51,12 +51,11 @@ When you look at a single row, this is the result:
 "2021-08-25 19:39:55", "195343", "https://cdn.discordapp.com/attachments/879330911290798092/879331804488802314/22.dll, "url","payload_delivery","win.dridex","None","Dridex","2021-08-25" 19:40:27", "75", "None","2220x,dll,dridex","0","Cryptolaemus1" 
 Answer: Dridex
 
-Q15) We can proactively use indicators from threat feeds for detection, or for prevention via blocking. When it comes to blocking indicators, it is crucial that they are from a reputable source and have a high level of confidence to prevent blocking legitimate entities. How many rows in the full_urls.csv have a confidence rating of 100, and would likely be safe to block on the web proxy? (1 points)
-
+Q14) We can proactively use indicators from threat feeds for detection, or for prevention via blocking. When it comes to blocking indicators, it is crucial that they are from a reputable source and have a high level of confidence to prevent blocking legitimate entities. How many rows in the full_urls.csv have a confidence rating of 100, and would likely be safe to block on the web proxy? (1 points)
 cat full_urls.csv | grep -c "\"100\"," --> 39993
 
-Q16) An analyst has reported activity coming from an IP address using source port 8001, but they don't understand what this IP is trying to achieve. Looking at full_ip-port.csv in Gnumeric, filter on malware_printable = Unknown malware, and find an IP that is using port 8001. What is the IP address value? (1 points)
+Q15) An analyst has reported activity coming from an IP address using source port 8001, but they don't understand what this IP is trying to achieve. Looking at full_ip-port.csv in Gnumeric, filter on malware_printable = Unknown malware, and find an IP that is using port 8001. What is the IP address value? (1 points)
 cat full_ip-port.csv | grep "Unknown malware" | grep "8001" --> 107.172.214.23
 
-Q17) Investigating the reference material, what is the CVE ID of the vulnerability that this IP has been trying to exploit? And what is the industry nickname for this vulnerability? (1 points)
+Q16) Investigating the reference material, what is the CVE ID of the vulnerability that this IP has been trying to exploit? And what is the industry nickname for this vulnerability? (1 points)
 CVE-2021-44228, log4shell
