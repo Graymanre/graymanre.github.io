@@ -4,15 +4,15 @@
 <head>
   <title>GraymanRe</title>
   <meta name='description' content='Personal Portfolio & Project Website'>
-  <link rel="canonical" href="../">
-  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="../feed.xml">
-  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <!-- Ionicons -->
   <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="/css/main.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $(function() {
@@ -69,14 +69,14 @@
               <h2 class="post__title">Blue Team Labs Online - Cozy Bear</h2>
               <div class="post__bottom">
                 <div class="post__author">
-                  <a href="../contact/" aria-label="GraymanRe"><img class="post__author-image"
-                      src="../img/logo.png" alt="GraymanRe's Picture"></a>
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
                 </div>
                 <div class="post__bottom-meta">
-                  <a href="../contact/" class="post__author-link">GraymanRe</a>
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
                   <span>in</span>
                   <span class="post-tags">
-                    <a href="../blue" class="post__tag">Blue Team Projects</a>
+                    <a href="/ctf" class="post__tag">CTF</a>
                   </span>
                 </div>
               </div>
@@ -111,7 +111,7 @@
             of the field <span id="inline-code">User</span>. When we filter on this field, we are presented with some of the values, amongst which <span id="inline-code">DMEVALS\\pbeesly</span>.
             This is likely the user account of the "pbeesly" user, however, to ensure we hit all records, we add a second filter with wildcards around the username. Eventually,
             we end up with a total of <span id="inline-code">790 log records</span>.
-            <img src="../img/cozybear_q1.png" alt="q1_answer">
+            <img src="/img/cozybear_q1.png" alt="q1_answer">
           </p>
           <h2 id="post__content__title">Malicious Binary Name</h2>
           <p>
@@ -123,13 +123,13 @@
             When we stay within the previous view, displaying only the logs corresponding to the "pbeesly" user, and we sort the logs ascending, starting with a view
             of the oldest logs, we see that the first log contains a SYSMON command line log, for the file <span id="inline-code">C:\ProgramData\Victim\â\u20ac®cod.3aka3.scr"</span>.
             Since this seems rather suspicious, especially if we then analyze the logs that follow which sees the creation of multiple processes involving <span id="inline-code">cmd.exe</span> and <span id="inline-code">powershell.exe</span>
-            <img src="../img/cozybear_q2.png" alt="q2_answer">
+            <img src="/img/cozybear_q2.png" alt="q2_answer">
 
             Note that due to the keyword "downloaded" in the question, one might have used the Downloads folder of the user "pbeesly". However, only two entries exists
             where the keyword "Downloads" is used in a CommandLine argument. Neither contribute to solving the question. Although the first log entry, shown below,
             might be relevant to answer a future question as it seems, based on a quick analysis, that it takes bytes from an image and converts it to a string hinting
             at a form of steganography.
-            <img src="../img/cozybear_q2_1.png" alt="q2_alternative">
+            <img src="/img/cozybear_q2_1.png" alt="q2_alternative">
           </p>
           <h2 id="post__content__title">Process GUID</h2>
           <p>
@@ -139,7 +139,7 @@
                 </div>
             </div> 
             Subsequently, if we analyze the first logfile and look for the ProcessGuid field, we obtain the answer to question 3: <span id="inline-code">{47ab858c-e13c-5eac-a903-000000000400}</span>.
-            <img src="../img/cozybear_q3.png" alt="q3_answer">
+            <img src="/img/cozybear_q3.png" alt="q3_answer">
           </p>
           <h2 id="post__content__title">C2 Communications</h2>
           <p>
@@ -153,7 +153,7 @@
             which logs any network connection. To filter as specific as possible we set the ImageName to the malicious binary, the username to that of the pbeesly user and filter for the EventID. We are
             then left with one single log file for which we add the fieldnames <span id="inline-code">DestinationIp</span> and <span id="inline-code">DestinationPort</span>,
             giving us the answer: 192.168.0.5, 1234.
-            <img src="../img/cozybear_q4.png" alt="q4_answer">
+            <img src="/img/cozybear_q4.png" alt="q4_answer">
           </p>
           <h2 id="post__content__title">Timestamp identification</h2>
           <p>
@@ -164,7 +164,7 @@
             </div> 
             Since we were only left with one single log entry, this question can be answered quite easily, since it is the timestamp that corresponds to the previously identified logfile:
             <span id="inline-code">May 1, 2020 @ 22:56:00.000</span>.
-            <img src="../img/cozybear_q4.png" alt="q4_answer">
+            <img src="/img/cozybear_q4.png" alt="q4_answer">
           </p>
           <h2 id="post__content__title">Hunting for Defense Evasion</h2>
           <p>
@@ -181,7 +181,7 @@
             reveals <a href="https://pentestlab.blog/2017/06/09/uac-bypass-sdclt/">this blogpost</a> detailing that sdclt is used to perform backup and restoration operations
             and simultaneously can be used to bypass User Account Control ensuring privilege escalation. Therefore, we can conclude that the next binary that was launched was:
             <span id="inline-code">C:\windows\system32\sdclt.exe</span>.
-            <img src="../img/cozybear_q6.png" alt="q6_answer">
+            <img src="/img/cozybear_q6.png" alt="q6_answer">
           </p>
           <h2 id="post__content__title">Malware Child Process</h2>
           <p>
@@ -193,7 +193,7 @@
             Based on the blogpost that was mentioned during the previous question, we know that by performing this UAC bypass utilizing, the Control Panel will be launched
             as well. We can confirm if this also happens by using the ProcessGuid of <span id="inline-code">sdclt.exe</span> ({47ab858c-e1e3-5eac-b503-000000000400}) to search
             for child process, and we discover that indeed the control panel is launched: <span id="inline-code">C:\Windows\System32\control.exe</span>
-            <img src="../img/cozybear_q7.png" alt="q7_answer">
+            <img src="/img/cozybear_q7.png" alt="q7_answer">
           </p>
           <h2 id="post__content__title">Original Binary Name</h2>
           <p>
@@ -208,7 +208,7 @@
             does not exist. However, no indication of creation of this registry key can be found. If we follow the log flow in chronological order, we see however that 
             <span id="inline-code">powershell.exe</span> is launched. Based on this, my hunch was that this is likely what is meant with the "original name of the binary" 
             that was launched through the UAC bypass. <span id="inline-code">PowerShell.exe</span>
-            <img src="../img/cozybear_q8.png" alt="q8_answer">
+            <img src="/img/cozybear_q8.png" alt="q8_answer">
           </p>
           <h2 id="post__content__title">Hidden Payload File</h2>
           <p>
@@ -224,7 +224,7 @@
             If we analyze the full command, we can conclude that bytes from the image are read, stored in a variable and then executed using the abbreviation <span id="inline-code">IEX</span> 
             which is short for <span id="inline-code">Invoke-Expression</span> which can be used to execute a string as a PowerShell command. Furthermore, through our filter, we additionally
             observe the CommandInvocation log for the <span id="inline-code">Invoke-Expression</span> command which points to a secondary payload.
-            <img src="../img/cozybear_q9.png" alt="q9_answer">
+            <img src="/img/cozybear_q9.png" alt="q9_answer">
           </p>
           <h2 id="post__content__title">.NET Framework</h2>
           <p>
@@ -235,7 +235,7 @@
             </div> 
             As we discovered, the payload is located in <span id="inline-code">monkey.png</span>. In the screenshot for question 9, we see that in order to read(/execute) the payload in the image,
             the data needs to be read from the image. This is done using the .NET framework class <span id="inline-code">System.Drawing.Bitmap</span>.
-            <img src="../img/cozybear_q9.png" alt="q10_answer">
+            <img src="/img/cozybear_q9.png" alt="q10_answer">
           </p>
           <h2 id="post__content__title">Process creation</h2>
           <p>
@@ -246,7 +246,7 @@
             </div> 
             Since the payload resided inside of "monkey.png" we can continue our hunt using this as a filter. If we apply the filter <span id="inline-code">Message: "monkey.png*" and "Invoke-Expression*"</span> we are left with 2 distinct events.
             The first is the payload transformation itself, and the second is the follow-on payload execution. 
-            <img src="../img/cozybear_q11.png" alt="q11_subanswer">
+            <img src="/img/cozybear_q11.png" alt="q11_subanswer">
             Those familiar with the shown result, immediately alert to the combined use of <span id="inline-code">VirtualAlloc</span> and <span id="inline-code">CreateThread</span>, which is peak malicious behaviour,
             especially from within a PowerShell process aimed at <a href="https://stmxcsr.com/win-shellcode-launching.html">lauching shellcode on Windows systems</a>. The launching of the shellcode
             happened at <span id="inline-code">May 1, 2020 @ 22:58:45.000</span>. We are going to use this timestamp as a starting point, and end about 20 seconds later at <span id="inline-code">May 1, 2020 @ 22:59:10</span>.
@@ -255,7 +255,7 @@
             <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/">A quick Google search</a>, reveals that CSC is the C# compiler. Furthermore, if we combine
             that with a search for the ".cmdline" file, we discover that this is a <a href="https://isc.sans.edu/diary/New+Tool+to+Add+to+Your+LOLBAS+List+cvtresexe/27892">known "living-off-the-land" technique</a>.
             Based on this information, we can conclude that the process/binary that was created after the hidden payload was executed, was <span id="inline-code">csc.exe</span>.
-            <img src="../img/cozybear_q11_1.png" alt="q11_subanswer">
+            <img src="/img/cozybear_q11_1.png" alt="q11_subanswer">
           </p>
           <h2 id="post__content__title">Associated CommandLine</h2>
           <p>
@@ -267,7 +267,7 @@
             Based on the information provided by <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/">Microsoft</a> we know that csc is the C# compiler
             on Windows and it takes a file as its input to determine what to do. This file, in the logs, is called "qkbkqqbs.cmdline". However, since the question explicitely states ".commandline",
             I assume that this is a slight oversight and the correct answer is: <span id="inline-code">qkbkqqbs.commandline</span>.
-            <img src="../img/cozybear_q11_1.png" alt="q12_answer">
+            <img src="/img/cozybear_q11_1.png" alt="q12_answer">
           </p>
           <h2 id="post__content__title">Hunting for Privilege Escalation</h2>
           <p>
@@ -283,7 +283,7 @@
             chooses to start the program using "Run as Administrator". Additionally, the log file added more details under the "Mandatory Label" section, namely: "S-1-16-12288". Since this is a short
             SID, I was under the impression this must signal something relevant. As expected, <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab">S-1-16-12288</a> is the value for a high integrity level process.
             Based on this, we can conclude that the attacker obtained elevation type %%1937 as the Administrator: <span id="inline-code">%%1937,Administrator</span>.
-            <img src="../img/cozybear_q13.png" alt="q13_answer">
+            <img src="/img/cozybear_q13.png" alt="q13_answer">
           </p>
           <h2 id="post__content__title">Hunting for Indicator Removal</h2>
           <p>
@@ -295,7 +295,7 @@
             For this question, refer back to our findings for question 9, we discovered that the PowerShell commands involving the file <span id="inline-code">monkey.png</span> used a specific
             registry key. Let's search for any DeleteKey operations involving the location <span id="inline-code">HKU\S-1-5-21-1830255721-3727074217-2423397540-1107_Classes\Folder\shell\open\command</span>. Through this, we find out that the key was deleted at 
             <span id="inline-code">May 1, 2020 @ 22:59:15.0</span>.
-            <img src="../img/cozybear_q14.png" alt="q14_answer">
+            <img src="/img/cozybear_q14.png" alt="q14_answer">
           </p>
           <h2 id="post__content__title">Hunting for Persistence</h2>
           <p>
@@ -308,7 +308,7 @@
             <a href="https://github.com/mitre-attack/attack-arsenal/blob/master/adversary_emulation/APT29/Emulation_Plan/Day%201/payload_configs.md">A MITRE-ATTACK overview of the attack plan</a>
             demonstrates that we are only missing the creation of <span id="inline-code">hostui.exe</span> in the Startup Folder. By searching for all events containing 
             <span id="inline-code">C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\</span>
-            <img src="../img/cozybear_q15.png" alt="q15_answer">
+            <img src="/img/cozybear_q15.png" alt="q15_answer">
           </p>
           <h2 id="post__content__title">Associated Files</h2>
           <p>
@@ -318,7 +318,7 @@
                 </div>
             </div> 
             <span id="inline-code">powershell.exe, hostui.lnk</span>
-            <img src="../img/cozybear_q15.png" alt="q16_answer">
+            <img src="/img/cozybear_q15.png" alt="q16_answer">
           </p>
           <h2 id="post__content__title">Malware Services</h2>
           <p>
@@ -332,7 +332,7 @@
             action happened under the account of pbeesly. When logging this event, Microsoft additionally logs several details, amongst others the "Account Name", which we add to our filter. We
             remain with 5 events. If we closely examine these events, we notice that four of these are exactly the same, potentially hinting to multiple (re-)installs of the service. Regardless,
             two specific services got installed: <span id="inline-code">javamtsup.exe, PSEXESVC.exe</span>
-            <img src="../img/cozybear_q17.png" alt="q17_answer">
+            <img src="/img/cozybear_q17.png" alt="q17_answer">
           </p>
       </article>
     </div>
@@ -351,7 +351,7 @@
               <h2 class="widget__title">Explore Tags</h2>
             </div>
             <div class="tag__cloud">
-              <a href="../blue/" class="set-1">Blue Team</a>
+              <a href="/blue/" class="set-1">Blue Team</a>
             </div>
           </div>
         </div>
@@ -365,13 +365,13 @@
     <div id="footer-content"></div>
   </footer>
   <!-- end footer -->
-  <script src="../js/vendors/jquery-3.5.1.min.js"></script>
-  <script src="../js/vendors/simple-jekyll-search.min.js"></script>
-  <script src="../js/vendors/jquery.fitvids.js"></script>
-  <script src="../js/vendors/lazyload.min.js"></script>
-  <script src="../js/vendors/transition.js"></script>
-  <script src="../js/vendors/zoom.min.js"></script>
-  <script src="../js/common.js"></script>
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
   <script>
     var base_url = "",
       pagination_next_url = base_url + '/page2',
