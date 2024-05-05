@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+        $("#header-content").load("https://graymanre.github.io/header.html");
+        $("#footer-content").load("https://graymanre.github.io/footer.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">10 min read <time class="post__date" datetime="2024-03-23T00:00:00+02:00">Mar
+                    23, 2024</time>
+                </span>
+              </div>
+              <h2 class="post__title">Blue Team Labs Online - Foxy</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/ctf" class="post__tag">CTF Writeups</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content">
+          <h2 id="post__content__title">Introduction</h2>
+          <p>
+            Today we will be walking through one of the Blue Team Labs Online Investigations: Foxy. The Investigation is 
+            rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 18 questions in regard to
+            the following scenario:
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">In the dawn of the new year, Chris, a dedicated IoT Engineer, embarked with optimism, fueled by aspirations of both learning and earning. Despite years of loyalty to iotXYZ Company, Chris felt undervalued due to an uncompetitive salary. Demonstrating commitment, Chris successfully executed pivotal projects such as Smart Parking and Asset Tracking, even going beyond expectations by performing threat modeling and security assessments, culminating in a comprehensive report on potential attacks. However, the lack of recognition left Chris disheartened, transforming into a disgruntled employee. Seeking revenge, Chris began supporting a competitor on tenders and contemplated selling the security assessment results to hackers, aiming to monetize the hard work invested in every conceivable way. iotXYZ Company's legal team initiated an investigation on Chris. Investigate and reveal the facts.</pre>
+              </div>
+            </div>
+          </p>
+          <h2 id="post__content__title">Threat Activity</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) The SOC recently observed network connections from 3 internal hosts towards hxxp://45.63.126[.]199/dot.gif (URL has been sanitized). What is this activity likely related to? (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q1.png" alt="q1_answer">
+          </p>
+          <h2 id="post__content__title">Shared IOC</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) How many URLs are using the same endpoint 'dot.gif', across all export files? (include duplicates) (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q2.png" alt="q2_answer">
+          </p>
+          <h2 id="post__content__title">Another malware?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) The SHA256 hash of a file was detected and quarantined on one of the Executives old android phones. We are trying to work out what this file does so we can take next steps. The hash value is 6461851c092d0074150e4e56a146108ae82130c22580fb444c1444e7d936e0b5. Is this file associated with malware? If so, what is the malware name? (as stated by Malware Bazaar) (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q3.png" alt="q3_answer">
+          </p>
+          <h2 id="post__content__title">Threat Actor</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) Investigate the reference link for this SHA256 hash value. Submit the threat name (acronym only), the C2 domain, IP, and the domain registrar. (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q4.png" alt="q4_answer">
+          </p>
+          <h2 id="post__content__title">JoeSandbox Analysis</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) View the bazaar.abuse.ch link in the Tweet and navigate to the JoeSandbox analysis link. Download the report, choosing the Reduced Reports - HTML Report Light. Investigate the MITRE ATT&CK Matrix to understand the Collection activities this file can take, and what the potential impact is to the Executives work mobile phone. Submit the Technique names in alphabetical order. (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q5.png" alt="q5_answer">
+          </p>
+          <h2 id="post__content__title">IOCs - Network Ports</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) A junior analyst was handling an event that involved outbound connections to a private address and didn't perform any further analysis on the IP. What are the two ports used by the IP 192.236.198.236? (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q6.png" alt="q6_answer">
+          </p>
+          <h2 id="post__content__title">IOCs - C2 Domain</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) Use the reference to help you further research the IP. What is the C2 domain? (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q7.png" alt="q7_answer">
+          </p>
+          <h2 id="post__content__title">MITRE ATT&CK</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q8) What is the likely delivery method into our organization? Provide the Technique name and Technique ID from ATT&CK. (1 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q8.png" alt="q8_answer">
+          </p>
+          <h2 id="post__content__title">Weaponized DOC</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) Investigate further and try to find the name of the weaponized Word document, so we can use our EDR to check if it is present anywhere else within the organization. (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q9.png" alt="q9_answer">
+          </p>
+          <h2 id="post__content__title">Weaponized JAR</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What is the name of the .JAR file dropped by the Word document? (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q10.png" alt="q10_answer">
+          </p>
+          <h2 id="post__content__title">Discord Delivery</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q11) Executives have expressed concern about allowing employees to visit Discord on the corporate network because of online reports that it can be used for malware delivery and data exfiltration. Investigate how Discord can be abused for malicious file storage/distribution! What is the URL of the Discord CDN, ending with /attachments/? (1 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q11.png" alt="q11_answer">
+          </p>
+          <h2 id="post__content__title">Attack method reuse</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) Looking at all export files, how many rows reference this URL? (include duplicates)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q12.png" alt="q12_answer">
+          </p>
+          <h2 id="post__content__title">Discord Malware Name</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q13) Based on this information, what is the name of the malware family that is being widely distributed via Discord? (1 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q13.png" alt="q13_answer">
+          </p>
+          <h2 id="post__content__title">Are we confident?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q14) We can proactively use indicators from threat feeds for detection, or for prevention via blocking. When it comes to blocking indicators, it is crucial that they are from a reputable source and have a high level of confidence to prevent blocking legitimate entities. How many rows in the full_urls.csv have a confidence rating of 100, and would likely be safe to block on the web proxy? (1 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q14.png" alt="q14_answer">
+          </p>
+          <h2 id="post__content__title">Which IP?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q15) An analyst has reported activity coming from an IP address using source port 8001, but they don't understand what this IP is trying to achieve. Looking at full_ip-port.csv in Gnumeric, filter on malware_printable = Unknown malware, and find an IP that is using port 8001. What is the IP address value? (1 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q15.png" alt="q15_answer">
+          </p>
+          <h2 id="post__content__title">Vulnerability CVE ID</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q16) Investigating the reference material, what is the CVE ID of the vulnerability that this IP has been trying to exploit? And what is the industry nickname for this vulnerability? (1 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q16.png" alt="q16_answer">
+          </p>
+      </article>
+    </div>
+    <!-- end post -->
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h2 class="widget__title">Explore Tags</h2>
+            </div>
+            <div class="tag__cloud">
+              <a href="/ctf/" class="set-1">CTF Writeups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div id="footer-content"></div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>

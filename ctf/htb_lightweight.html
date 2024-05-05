@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+      $("#header-content").load("/header.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+    </div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">5 min read <time class="post__date" datetime="2022-12-11T00:00:00+02:00">Dec
+                    11, 2022</time>
+                </span>
+              </div>
+              <h2 class="post__title">HTB - LightWeight Writeup</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/ctf" class="article__tag">CTF Writeups</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content">
+          <h3 id="post__content__title">Machine Details</h3>
+          <div class="container">
+            <div class="row col-hsep">
+              <div class="col col-1 col-vsep">
+                <ion-icon name="person-outline" style="margin-left: 10px; margin-top: 15px; margin-bottom: 10px;"></ion-icon>
+              </div>
+              <div class="col col-2 col-vsep">
+                <p style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Lightweight</p>
+              </div>
+            </div>
+            <div class="row col-hsep">
+              <div class="col col-1 col-vsep">
+                <ion-icon name="pin-outline" style="margin-left: 10px; margin-top: 15px; margin-bottom: 10px;"></ion-icon>
+              </div>
+              <div class="col col-2 col-vsep">
+                <p style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">10.10.10.119</p>
+              </div>
+            </div>
+            <div class="row col-hsep">
+              <div class="col col-1 col-vsep">
+                <ion-icon name="flash-outline" style="margin-left: 10px; margin-top: 15px; margin-bottom: 10px;"></ion-icon>
+              </div>
+              <div class="col col-2 col-vsep">
+                <p style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Medium</p>
+              </div>
+            </div>
+            <div class="row col-hsep">
+              <div class="col col-1 col-vsep">
+                <ion-icon name="laptop-outline" style="margin-left: 10px; margin-top: 15px; margin-bottom: 10px;"></ion-icon>
+              </div>
+              <div class="col col-2 col-vsep">
+                <p style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Linux</p>
+              </div>
+            </div>
+          </div>
+          <br>
+          <h3 id="post__content__title">Recon</h3>
+          <p>
+            As usual, we will start of with the reconnaissance phase by launching the NMAP scanner to identify open ports and any services that
+            are running on the machine. For this, we will use quite a noisy nmap command: <span id="inline-code">nmap -sC -sV -oA initial-scan 10.10.10.119</span>.
+            The output of the NMAP scan will be stored in the "initial-scan" file, which makes it easy for later referencing. The results show that three ports are
+            open on the machine, including the identified services: port 22 (SSH), port 80 (HTTP) and port 389 (LDAP). Since SSH is almost never an actual in-scope
+            vulnerability, I will leave that port for what it is, and continue the reconnaissance phase by identifying what is running on the other two ports.
+          </p>
+          <br>
+          <h3 id="post__content__title">Initial Access</h3>
+          <p>
+            
+          </p>
+          <br>
+          <h3 id="post__content__title">Privilege Escalation - Part 1</h3>
+          <p>
+            On the home drive of the ldapuser2 user, we find multiple PDF files, as well as a 7ZIP file. Since the PDFs do not display any relevant information,
+            I focus on the 7ZIP file. First, I extract the file from the target and try to unzip it locally: <span id="inline-code">7z x backup.7z</span>.
+            Since I am prompted for a password, I will be using the 7z2john pearl script which will extract the password hash from the 7ZIP file so that I can
+            use hashcat to crack the hash: <span id="inline-code">/opt/john/run/7z2john.pl backup.7z > backup.hash</span>.
+            I will then run hashcat using: <span id="inline-code">hashcat -m 11600 -a 0 -o backup.clear backup.hash /usr/share/wordlists/rockyou.txt</span>.
+            After a while, hashcat has succeeded and the password appears to be "delete". Now, the 7ZIP file can be extracted and I remain with multiple PHP files.
+            Analyzing the PHP files results in the discovery of the credentials for ldapuser1 in the contents.php file. The credentials are: <span id="inline-code">ldapuser1:f3ca9d298a553da117442deeb6fa932d</span>.
+            Using the <span id="inline-code">su ldapuser1</span> command, I can authenticate and obtain the privileges of ldapuser1. 
+          </p>
+          <br>
+          <h3 id="post__content__title">Privilege Escalation - Part 2</h3>
+          <p>
+            With the privileges of ldapuser1, I change the directory to the home directory of that user, and enumerate the files. I see ...
+          </p>
+        </div>
+      </article>
+    </div>
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h3 class="widget__title">Explore Tags</h3>
+            </div>
+            <div class="tag__cloud">
+              <a href="/rev/" class="set-1">Reverse Engineering</a>
+              <a href="/projects/" class="set-1">Projects</a>
+              <a href="/ctf/" class="set-5">CTF Writeups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="footer__inner">
+            <div class="copyright">2023 &copy; <a href="/">GraymanRe</a>.</div>
+            <div class="social">
+              <ul class="social__list list-reset">
+                <li class="social__item">
+                  <a class="social__link" href="https://twitter.com/grayman_re" aria-label="social icon"><i
+                      class="ion ion-logo-twitter"></i></a>
+                </li>
+                <li class="social__item">
+                  <a class="social__link" href="https://github.com/GraymanRe" aria-label="social icon"><i
+                      class="ion ion-logo-github"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>

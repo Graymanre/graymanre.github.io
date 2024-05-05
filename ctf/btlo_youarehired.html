@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+        $("#header-content").load("https://graymanre.github.io/header.html");
+        $("#footer-content").load("https://graymanre.github.io/footer.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">10 min read <time class="post__date" datetime="2024-03-23T00:00:00+02:00">Mar
+                    23, 2024</time>
+                </span>
+              </div>
+              <h2 class="post__title">Blue Team Labs Online - Foxy</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/ctf" class="post__tag">CTF</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content">
+          <h2 id="post__content__title">Introduction</h2>
+          <p>
+            Today we will be walking through one of the Blue Team Labs Online Investigations: You're Hired. The Investigation is 
+            rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 13 questions in regard to
+            the following scenario:
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">While performing proactive hunting at one of our corporate customers, the threat hunting team escalated some cyclic, beaconing-like, network activity originating from one of their endpoints. Your job is to analyze the provided forensic artifact sources for evidence of compromise, analyze the initial infection vector, confirm the extent of the threat actor activity on the endpoint, and leverage your threat intelligence skills to learn more about the TTPs of the observed threat actor.</pre>
+              </div>
+            </div>
+          </p>
+          <h2 id="post__content__title">Malware Download</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) What was the name of the first malicious file downloaded, and where was it downloaded from? (Format: Filename.extension, https://subdomain.domain.tld) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q1.png" alt="q1_answer">
+          </p>
+          <h2 id="post__content__title">Malicious Activity</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) What is the drive letter that the user mounted the malicious disk image to, and what time did the user open the folder within the malicious disk image? (Format: Drive Letter, YYYY-MM-DD HH-MM-SS) (7 points)</pre>
+                </div>
+            </div> 
+            E, 2022-11-15 02:47:18
+            <img src="/img/foxy_q2.png" alt="q2_answer">
+          </p>
+          <h2 id="post__content__title">Registry Activity</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) What is the UserAssist key and text corresponding to the execution of the malicious executable found within the registry? (Use the executable name exactly as it appears in the UserAssist Key) (Format: Full path of UserAssist Key, executable name) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q3.png" alt="q3_answer">
+          </p>
+          <h2 id="post__content__title">MD5 Hash</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What is the MD5 hash of the malicious executable contained within the malicious disk image? (Format: MD5Hash) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q4.png" alt="q4_answer">
+          </p>
+          <h2 id="post__content__title">PDB Path</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) What is the PDB Path stored within the malicious executable? (Format: Drive:\Path\To\Symbols.pdb) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q5.png" alt="q5_answer">
+          </p>
+          <h2 id="post__content__title">AES Payload</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) The malicious executable is a decryptor and in memory loader for an encrypted backdoor payload. What is the URL it downloads the encrypted payload from, the AES encryption key and initialization vector (IV)? (Format: https://domain.tld/resource, AES key, AES IV) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q6.png" alt="q6_answer">
+          </p>
+          <h2 id="post__content__title">IOCs - Network Ports</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) A junior analyst was handling an event that involved outbound connections to a private address and didn't perform any further analysis on the IP. What are the two ports used by the IP 192.236.198.236? (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q6.png" alt="q6_answer">
+          </p>
+          <h2 id="post__content__title">C2 Framework</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) What was the C2 framework from which this in memory loader code was taken? (Hint: use OSINT) (Format: C2 Framework) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q7.png" alt="q7_answer">
+          </p>
+          <h2 id="post__content__title">C2 Protocol</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q8) What is the protocol and domain used for the backdoor’s C2 communication? (Format: Network protocol, FQDN) (8 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q8.png" alt="q8_answer">
+          </p>
+          <h2 id="post__content__title">Malware Command Line</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) What is the command line of the first process executed by the threat actor through the backdoor session? (Copy and paste the full command line as it appears in the log) (Format: binary.exe arguments) (7 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q9.png" alt="q9_answer">
+          </p>
+          <h2 id="post__content__title">Process Injection Details</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What process name and PID does the malware inject itself into? (Format: Process name, PID) (8 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q10.png" alt="q10_answer">
+          </p>
+          <h2 id="post__content__title">Interactive Shell</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q11) After injecting into the new process, the threat actor spawns an interactive shell for the host. What is the command line for this interactive shell? (Copy and paste the full command line as it appears in the log) (Format: C:\Path\To\Binary.exe arguments) (10 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q11.png" alt="q11_answer">
+          </p>
+          <h2 id="post__content__title">Enumeration Command Line</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) What is the command-line used for listing the domain controllers in the environment, and what Active Directory security group was queried? (Copy and paste the full command line as it appears in the log) (Format: Command line, security group name) (8 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q12.png" alt="q12_answer">
+          </p>
+          <h2 id="post__content__title">Overlapping threat actors</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q13) Based on open-source intelligence, are there any known threat actors whose techniques and infrastructure overlap with the activity observed on this host? If so, what is the name of this group and which nation-state nexus do they belong to? (Hint: Google dorks are your friend) (Format: Threat group name, Country) (10 points)</pre>
+                </div>
+            </div> 
+            UNC4034, North Korea
+            <img src="/img/foxy_q13.png" alt="q13_answer">
+          </p>
+      </article>
+    </div>
+    <!-- end post -->
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h2 class="widget__title">Explore Tags</h2>
+            </div>
+            <div class="tag__cloud">
+              <a href="/ctf" class="set-1">CTF Writeups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div id="footer-content"></div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>
