@@ -66,7 +66,7 @@
                     11, 2022</time>
                 </span>
               </div>
-              <h2 class="post__title">02 - Pixel Poker - Flare-On9 Writeup</h2>
+              <h2 class="post__title">04 - Darn Mice - Flare-On9 Writeup</h2>
               <div class="post__bottom">
                 <div class="post__author">
                   <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
@@ -93,47 +93,34 @@
           <h3 id="post__content__title">Shall we play another game?</h3>
           <div class="language-plaintext highlighter-rouge">
             <div class="highlight">
-              <pre
-                class="highlight"><code>I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall we play another game?</code></pre>
+              <pre class="highlight"><code>I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall we play another game?</code></pre>
             </div>
           </div>
           <h3 id="post__content__title2">Challenge Writeup</h3>
-          <p>The challenge zipfile contains 2 unique files: <span id="inline-code">PixelPoker.exe</span> and <span id="inline-code">README.txt</span>
-          The README shortly explains how the game works and we can derive some information from it:
-          <br><br>
-          <div class="language-plaintext highlighter-rouge">
-            <div class="highlight">
-              <pre
-                class="highlight"><code>Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!<br>Your goal is simple: find the correct pixel and click it <br>Good luck!</code></pre>
+          <p>
+            When examining the executable in IDA, you will see that the `main` function calls one argument at 
+            <span id="inline-code">darn_mice+011e8</span>. Jumping into this function, the rather long sequential <span id="inline-code">mov</span>
+            instructions are rather curious and deserve closer analysis. We see that a page is allocated and the VirtualAlloc is used to write data
+            to that page. Combining static and dynamic analysis, we see that for each byte that we input, the byte will be transformed using the mov 
+            operations, and then writing to the newly created page. This page will become part of the program and if it contains invalid opcodes
+            the program will crash. So we have to come up with an ingenious way of ensuring this page does not crash. We could try to write
+            some form of small function but this might be complicated and hamper our progress. 
+
+            Instead, we could ensure that the result of the operations on our input, always result in opcode <span id="inline-code">0xC3</span>,
+            which is the RET instruction and will not throw any errors. Based on the input constraints and length check, we determine
+            that the maximum length of the input string is 30. So we can sort of brute force our way to ensure the output byte is always C3.
+
+            Eventually, you will end up with the following bytes, which all appear within ASCII range.
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight">
+                  <code>input = "\x73\x65\x65\x20\x74\x68\x72\x65\x65\x2x\x20\x43"<br>input += "\x33\x20\x43\x33\x20\x43\x33\x20\x43\x33\x20\x43"<br>input += "\x33\x20\x43\x33\x20\x43\x33\x21\x20\x58\x44"</code>
+                </pre>
+              </div>
             </div>
-          </div>
-          When we launch the 'game', we are presented with a field that contains pixels. The title bar of the
-          application shows the <span id="inline-code">x</span> and <span id="inline-code">y</span> locations 
-          when we move over the playing field. When we click several times on random pixels, we are presented 
-          with the message: <span id="inline-code">"Please play again!</span>. As we are tasked with finding the
-          correct pixel, which will likely present us with the flag, we load the game into IDA for further analysis.
-          <br><br>
-          As this is still an early level within the Flare-On game, we start by searching for helpful strings. We come
-          across the string <span id="inline-code">"Please play again!"</span>, which we saw earlier when clicking on
-          random pixels. Locating the strings in the disassembly, they appear near the end of a function and execution
-          flow will end up in this section if a certain counter reaches zero. This corresponds our initial attempts of 
-          clicking several times on random pixels. Underneath the section that contains the counter, as displayed in the
-          image below, we see that the string <span id="inline-code">FLARE-ON</span> is loaded into <span id="inline-code">eax</span>
-          after which a <span id="inline-code">cmp</span> operation takes place.
-          <br><br>
-          <img class="rounded" src="/img/pp-ida-view.png" alt="Pixel Poker IDA view" width="561" height="346">
-          <br><br>
-          During debugging, it appeared that we control the value in the <span id="inline-code">edi</span> register,
-          as it corresponds to the location of <span id="inline-code">x</span> on the playing field. That value is compared to 
-          hex-value <span id="inline-code">0x5F</span> or integer <span id="inline-code">95</span>. 
-          A block later, we see another <span id="inline-code">cmp</span> taking place, this time for the value in user-controlled
-          register <span id="inline-code">ebx</span>. The value in that register is compared to hex <span id="inline-code">0x139</span>
-          or integer <span id="inline-code">313</span>.
-          Based on this information, we can assume that if we click the pixel at location <span id="inline-code">95,313</span>, we
-          will have found the correct pixel. Rerunning the game and clicking that specific pixel, will then result in the flag:
-          <br><br>
-          <pre class="highlight"><code>w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
-          And with that, we have completed the second Flare-On challenge!
+            Based on that we can conclude that the input string needs to be: <span id="inline-code">see three, C3 C3 C3 C3 C3 C3 C3! XD</span>.
+            Eventually we end up with the flag for this challenge <span id="inline-code">i_w0uld_l1k3_to_RETurn_this_joke@flare-on.com</span>. And with that, 
+            we have completed the fourth Flare-On challenge!
           </p>
         </div>
       </article>

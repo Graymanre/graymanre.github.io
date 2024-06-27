@@ -119,10 +119,11 @@
                 <div class="highlight">
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) Can you identify the name of the malicious binary downloaded? (Format: string.string.ext) (6 points)</pre>
                 </div>
-            </div> 
-            When we stay within the previous view, displaying only the logs corresponding to the "pbeesly" user, and we sort the logs ascending, starting with a view
-            of the oldest logs, we see that the first log contains a SYSMON command line log, for the file <span id="inline-code">C:\ProgramData\Victim\â\u20ac®cod.3aka3.scr"</span>.
-            Since this seems rather suspicious, especially if we then analyze the logs that follow which sees the creation of multiple processes involving <span id="inline-code">cmd.exe</span> and <span id="inline-code">powershell.exe</span>
+            </div>
+            For now, we will keep the User filter, assuming that Q2 is related to any download activity conducted by the <span id="inline-code">DMEVALS\\pbeesly</span> user.
+            Since we have no clear leads, we sort the logs ascending and start investigating from the earliest starting date. Based on this we analyze the first log entry which
+            raises suspicion based on the <span id="inline-code">Image</span> field containing <span id="inline-code">"C:\ProgramData\Victim\â\u20ac®cod.3aka3.scr"</span>.
+            If we then analyze the logs that follow which sees the creation of multiple processes involving <span id="inline-code">cmd.exe</span> and <span id="inline-code">powershell.exe</span>
             <img src="/img/cozybear_q2.png" alt="q2_answer">
 
             Note that due to the keyword "downloaded" in the question, one might have used the Downloads folder of the user "pbeesly". However, only two entries exists
@@ -138,7 +139,9 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) What is the binary's ProcessGuid? (Format: {string}) (6 points)</pre>
                 </div>
             </div> 
-            Subsequently, if we analyze the first logfile and look for the ProcessGuid field, we obtain the answer to question 3: <span id="inline-code">{47ab858c-e13c-5eac-a903-000000000400}</span>.
+            Assuming that Q3 is building on top of our answer in Q2, we add a filter for the specific image <span id="inline-code">"C:\ProgramData\Victim\â\u20ac®cod.3aka3.scr"</span>
+            and add a specific filter for <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=90001">Sysmon Event ID 1</a>, which captures Process Creation events. 
+            Based on this capture filter, we identify the corresponding log entry, indicating that the binary's ProcessGuid is: <span id="inline-code">{47ab858c-e13c-5eac-a903-000000000400}</span>.
             <img src="/img/cozybear_q3.png" alt="q3_answer">
           </p>
           <h2 id="post__content__title">C2 Communications</h2>
@@ -148,11 +151,9 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What IP address and Port does the victim machine communicate with after the binary executes? (Format: X.X.X.X, port) (6 points)</pre>
                 </div>
             </div> 
-            Now that we know that <span id="inline-code">C:\ProgramData\Victim\â\u20ac®cod.3aka3.scr"</span> is the malicious binary and it was executed from the user account of <span id="inline-code">DMEVALS\\pbeesly</span>,
-            we can continue our hunt for network connections. Since we have access to the SYSMON logs, we can search for <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=90003">Sysmon Event ID 3</a>
-            which logs any network connection. To filter as specific as possible we set the ImageName to the malicious binary, the username to that of the pbeesly user and filter for the EventID. We are
-            then left with one single log file for which we add the fieldnames <span id="inline-code">DestinationIp</span> and <span id="inline-code">DestinationPort</span>,
-            giving us the answer: 192.168.0.5, 1234.
+            We build out our filter based on the filter we applied for question 3. Instead of searching for Sysmon Event ID 1, we now search for <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=90003">Sysmon Event ID 3</a>, which captures Network Connection events.
+            So we filter as specific as possible by setting the ImageName to the malicious binary, the username to the pbeesly user and filter for the EventID 3. We are then left with one single log file for which we
+            add the fieldnames <span id="inline-code">DestinationIp</span> and <span id="inline-code">DestinationPort</span>, giving us the answer: <span id="inline-code">192.168.0.5, 1234</span>.
             <img src="/img/cozybear_q4.png" alt="q4_answer">
           </p>
           <h2 id="post__content__title">Timestamp identification</h2>
@@ -162,7 +163,7 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) Can you identify the exact timestamp that this communication happened? (Format: MMM D, YYYY @ HH:MM:SS.SSS) (6 points)</pre>
                 </div>
             </div> 
-            Since we were only left with one single log entry, this question can be answered quite easily, since it is the timestamp that corresponds to the previously identified logfile:
+            Since we were only left with one single log entry, this question can be answered quite easily, since it is the timestamp that corresponds to the previously identified logfile from Q4:
             <span id="inline-code">May 1, 2020 @ 22:56:00.000</span>.
             <img src="/img/cozybear_q4.png" alt="q4_answer">
           </p>
@@ -174,13 +175,16 @@
                 </div>
             </div> 
             We know that the malicious binary that was launched had ProcessGuid <span id="inline-code">{47ab858c-e13c-5eac-a903-000000000400}</span>. We can filter for all processes that were created using
-            this ProcessGuid as ParentProcessGuid filter, which would leave us with all child processes. This leaves us with four results. Twice, <span id="inline-code">conhost.exe</span>
-            is called, and twice <span id="inline-code">cmd.exe</span> is called. If we follow the execution flow using the ProcessGuid from the first <span id="inline-code">cmd.exe</span>
-            process, we discover that it then opens a <span id="inline-code">powershell</span> session, no subsequent processes seem to be created. If we follow the execution flow
-            of the second <span id="inline-code">cmd.exe</span> process, we discover that <span id="inline-code">sdclt.exe</span> is called. A quick Google Search
-            reveals <a href="https://pentestlab.blog/2017/06/09/uac-bypass-sdclt/">this blogpost</a> detailing that sdclt is used to perform backup and restoration operations
-            and simultaneously can be used to bypass User Account Control ensuring privilege escalation. Therefore, we can conclude that the next binary that was launched was:
-            <span id="inline-code">C:\windows\system32\sdclt.exe</span>.
+            this ProcessGuid as a ParentProcessGuid filter, which would leave us with all child processes. This leaves us with four results. Twice, <span id="inline-code">conhost.exe</span>
+            is called, and twice <span id="inline-code">cmd.exe</span> is called. Focussing on both the of <span id="inline-code">cmd.exe</span> processes, we follow the flow of execution by applying each
+            ProcessGuid as a ParentProcessGuid. We see that for the <span id="inline-code">cmd.exe</span> with ProcessGuid <span id="inline-code">{47ab858c-e188-5eac-b003-000000000400}</span> we are led to the 
+            following piece of the puzzle. In chronological order, PowerShell has been executed, then three times <span id="inline-code">sdclt.exe</span> and then once again PowerShell gets executed.
+
+            Once again, we aim to follow the flow of execution, by using each ProcessGuid of each of the five processes as the ParentProcessGuid filter. Based on this, we discover that only the sdclt process
+            with ProcessGuid <span id="inline-code">{47ab858c-e1e3-5eac-b503-000000000400}</span> has subprocesses. 
+            As the usage of sdclt is unclear at this stage, we discover through Google that it can be used as a living-off-the-land binary used legitimately for backup and restoration operations,
+            with a known privilege escalation/uac bypass according to <a href="https://pentestlab.blog/2017/06/09/uac-bypass-sdclt/">this blogpost</a>.
+            Therefore, we can conclude that the next binary that was launched was: <span id="inline-code">C:\windows\system32\sdclt.exe</span>.
             <img src="/img/cozybear_q6.png" alt="q6_answer">
           </p>
           <h2 id="post__content__title">Malware Child Process</h2>
@@ -190,9 +194,12 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) What is the name of the child process created by this binary? Include the full path (Format: Drive:\path\to\file.ext) (6 points)</pre>
                 </div>
             </div> 
-            Based on the blogpost that was mentioned during the previous question, we know that by performing this UAC bypass utilizing, the Control Panel will be launched
-            as well. We can confirm if this also happens by using the ProcessGuid of <span id="inline-code">sdclt.exe</span> ({47ab858c-e1e3-5eac-b503-000000000400}) to search
-            for child process, and we discover that indeed the control panel is launched: <span id="inline-code">C:\Windows\System32\control.exe</span>
+            Based on the blogpost that was mentioned during the previous question, we can assume that the threat actor tried to perform a UAC bypass.
+            This UAC bypass has three distinct steps: first, <span id="inline-code">sdclt.exe</span> is launched. Then, the Control Panel <span id="inline-code">control.exe</span>
+            is launched and if a specific registry key is set, the binary set as the value of that key, will be executed with Administrative privileges.
+            As such, we are looking for the execution of the Control Panel. If we stick with the view from the previous question, we know the ProcessGuid of the sdclt process,
+            and can apply that Guid as a ParentProcessGuid filter. 
+            As we expected, the Control Panel is launched: <span id="inline-code">C:\Windows\System32\control.exe</span>
             <img src="/img/cozybear_q7.png" alt="q7_answer">
           </p>
           <h2 id="post__content__title">Original Binary Name</h2>
@@ -204,10 +211,9 @@
             </div> 
             This question is vaguely formulated and could be in relation to either <span id="inline-code">sdclt.exe</span> or <span id="inline-code">control.exe</span>.
             Either way, my assumption is that it is in connection to the UAC bypass chain and execution flow. If we focus our attention back on the blog post, it describes
-            that if the UAC bypass is possible because the registry key <span id="inline-code">HKCU\Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe</span>
-            does not exist. However, no indication of creation of this registry key can be found. If we follow the log flow in chronological order, we see however that 
-            <span id="inline-code">powershell.exe</span> is launched. Based on this, my hunch was that this is likely what is meant with the "original name of the binary" 
-            that was launched through the UAC bypass. <span id="inline-code">PowerShell.exe</span>
+            that by setting the non-existent registry key <span id="inline-code">HKCU\Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe</span> to a value
+            like "cmd.exe" or "powershell.exe", that process will be launched. Based on this, my hunch was that this is likely what is meant with the "original name of the binary" 
+            that was launched through the UAC bypass. If we use the ProcessGuid of the log entry for Q7 as a ParentProcessGuid filter, we see that <span id="inline-code">PowerShell.exe</span> got executed.
             <img src="/img/cozybear_q8.png" alt="q8_answer">
           </p>
           <h2 id="post__content__title">Hidden Payload File</h2>
@@ -217,13 +223,8 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) What is the file that contains the hidden payload? (Format: string.ext) (6 points)</pre>
                 </div>
             </div> 
-            If we retrace a couple of our steps, and we only filter for actions conducted by user "pbeesly", we know that already at question 2 discovered a potential hidden payload in an image.
-            If we scroll through the timeline, we identify that this command was called directly after the UAC bypass was executed using <span id="inline-code">sdclt.exe</span>. Therefore, it is
-            likely that the hidden payload is located in <span id="inline-code">monkey.png</span>. We filter specifically for any messages containing <span id="inline-code">monkey.png</span>
-            and end up with 33 log entries. We see the original full command in multiple log entries and also note that the threat actor uses the specific registry: <span id="inline-code">HKCU:\Software\Classes\Folder\shell\open\command</span>"
-            If we analyze the full command, we can conclude that bytes from the image are read, stored in a variable and then executed using the abbreviation <span id="inline-code">IEX</span> 
-            which is short for <span id="inline-code">Invoke-Expression</span> which can be used to execute a string as a PowerShell command. Furthermore, through our filter, we additionally
-            observe the CommandInvocation log for the <span id="inline-code">Invoke-Expression</span> command which points to a secondary payload.
+            Based on our answer for Q8, we identify that the PowerShell process reads data from an image. Based on the specific command line indicating the retrieval of pixels in the image,
+            and subsequent mathetical operations on these pixels, and final storing of the decoded pixels, we can conclude that <span id="inline-code">monkey.png</span> contains the hidden payload.
             <img src="/img/cozybear_q9.png" alt="q9_answer">
           </p>
           <h2 id="post__content__title">.NET Framework</h2>
@@ -233,7 +234,7 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What is the .NET framework class used to execute the payload? (Format: string.string.string) (6 points)</pre>
                 </div>
             </div> 
-            As we discovered, the payload is located in <span id="inline-code">monkey.png</span>. In the screenshot for question 9, we see that in order to read(/execute) the payload in the image,
+            As we discovered, the payload is located in <span id="inline-code">monkey.png</span>. In the screenshot for Q9, we see that in order to read(/execute) the payload in the image,
             the data needs to be read from the image. This is done using the .NET framework class <span id="inline-code">System.Drawing.Bitmap</span>.
             <img src="/img/cozybear_q9.png" alt="q10_answer">
           </p>
@@ -264,8 +265,8 @@
                   <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) What is the associated CommandLine for this binary? (Format: string.commandline) (6 points)</pre>
                 </div>
             </div> 
-            Based on the information provided by <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/">Microsoft</a> we know that csc is the C# compiler
-            on Windows and it takes a file as its input to determine what to do. This file, in the logs, is called "qkbkqqbs.cmdline". However, since the question explicitely states ".commandline",
+            Based on the information provided by <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/">Microsoft</a> we discover that csc is the C# compiler
+            on Windows and it takes a file as its input to determine what to do. This file, in the logs, is called <span id="inline-code">qkbkqqbs.cmdline</span>. However, since the question explicitely states ".commandline",
             I assume that this is a slight oversight and the correct answer is: <span id="inline-code">qkbkqqbs.commandline</span>.
             <img src="/img/cozybear_q11_1.png" alt="q12_answer">
           </p>
@@ -293,8 +294,8 @@
                 </div>
             </div> 
             For this question, refer back to our findings for question 9, we discovered that the PowerShell commands involving the file <span id="inline-code">monkey.png</span> used a specific
-            registry key. Let's search for any DeleteKey operations involving the location <span id="inline-code">HKU\S-1-5-21-1830255721-3727074217-2423397540-1107_Classes\Folder\shell\open\command</span>. Through this, we find out that the key was deleted at 
-            <span id="inline-code">May 1, 2020 @ 22:59:15.0</span>.
+            registry key. Let's search for any DeleteKey operations involving the location <span id="inline-code">HKU\S-1-5-21-1830255721-3727074217-2423397540-1107_Classes\Folder\shell\open\command</span>. 
+            Through this, we find out that the key was deleted at <span id="inline-code">May 1, 2020 @ 22:59:15.0</span>.
             <img src="/img/cozybear_q14.png" alt="q14_answer">
           </p>
           <h2 id="post__content__title">Hunting for Persistence</h2>

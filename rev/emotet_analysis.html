@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link href="../css/main.css" rel="stylesheet">  <!-- CHANGE ME -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+      $("#header-content").load("https://graymanre.github.io/header.html");
+      $("#footer-content").load("https://graymanre.github.io/footer.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">20 min read <time class="post__date" datetime="2024-06-30T00:00:00+02:00">June 30, 2024</time>
+                </span>
+              </div>
+              <h2 class="post__title">Reverse Engineering Emotet Malware: An In-Depth Analysis</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/rev" class="post__tag">Reverse Engineering</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content"> 
+          <h3 id="post__content__title">Introduction</h3>
+          <p>This post serves as a first installment of my personal reverse engineering portfolio aiming to demonstrate my technical capabilities.
+            Topics that will be covered focus on reverse engineering, detection engineering and threat hunting. The goal is to cover 4-5 different
+            malware families and document the process of analyzing, reverse engineering and documenting the functionality of each unique sample.
+          </p>
+        </div>
+
+        <div class="post__content"> 
+          <h3 id="post__content__title">Getting Started - Obtaining a sample</h3>
+          <p>For this first post, we will be focussing on the Emotet banking trojan malware family. Websites like VirusTotal and Abuse.ch offer
+             databases containing thousands to millions of malware samples that are uploaded by users from different backgrounds and occuptations.
+             Since a paid license is required for VirusTotal, we will be using the <a href="https://bazaar.abuse.ch/">MalwareBazaar Database</a> from Abuse.ch. 
+             By utilizing the search syntax, we can search for signatures containing the keyword "Emotet": <span id="inline-code">signature:Emotet</span>.
+             A total of 96 samples will be found, and after some cross-checking and referencing, we will choose the sample with SHA256 hash: <span id="inline-code">fd79e8fa5e3801101a1305b6aba7a5e7fdc852ed9036d6d9a5210be414a5cc5a</span>.
+
+             Each sample will be provided in a password-protected zip file, which should be a given within the malware community: <span id="inline-code">infected</span>.
+          </p>
+        </div>
+
+        <div class="post__content"> 
+            <h3 id="post__content__title">Static Properties Analysis</h3>
+            <p> Before diving into a debugger, we want to identify and analyse the static properties of the malware. In cases where initial triage and analysis is performed,
+              one needs to verify in the first instance, if the file under analysis is actually malware. In the case of the emotet sample, we will focus on potential packer
+              identification, embedded resources, imports and exports, and any other interesting artifacts. 
+
+              To perform this initial analysis, we will use <a href="https://www.winitor.com/download">PEStudio</a>, which is a Windows executable file analysis tool, which
+              we utilize to gain answers to most of the focus areas mentioned previously. Whilst utilizing PEStudio there are several things you would want to have a look at
+              in order to determine what kind of application/executable you are dealing with. The first thing that can be noticed, is the "indicators" section which contains
+              highlighted sections of the executable that are considered potentially malicious or suspicious. You will notice that the highest rated indicators revolve around
+              suspicious strings and functions as well as a suspicious timestamp and a seemingly invalid checksum. 
+              <br><br>
+              If we first concentrate on the strings, we can observe that PEStudio identified 23791 strings, or at least, letters that it determined could be a string. Filter 
+              the strings view by "blacklist" and we identify that the blacklisted strings are all functions. Some of them can be used in generic cases and by themselves are 
+              not by default malicious, like <span id="inline-code">SetEnvironmentVariable</span> and <span id="inline-code">TerminateProcess</span>. Moving on to the "functions"
+              view, we can conlude that the blacklisted strings are also the blacklisted functions that are imported from <span id="inline-code">kernel32.dll</span> and 
+              <span id="inline-code">ntdll.dll</span>
+              <br><br>
+              Malware often uses packers to simultaneously obfuscate the code and encrypt the executable. This hinders initial analysis as a reverse engineer is forced to invest
+              additional time in understanding which packer was used and how the executable can be unpacked. One of the most "famous" packers is UPX, which is used, amongst others
+              by AgentTesla, Gh0stRAT and Redline malware. 
+
+              We can identify potential usage of packers through using <span id="inline-code">Detect-It-Easy</span> and <span id="inline-code"></span>ExeInfo PE</span>. Since a
+              variety of packers exist, we can ultimately never rely on one single tool. Let's first look at <a href="https://github.com/horsicq/Detect-It-Easy">Detect-It-Easy (DIE)</a>. 
+              DIE is capable of detecting a multitude of packing mechanisms using a signature-based approach. DIE does not detect any packers used by the executable. We can identify that 
+              DIE states that the Microsoft Visual C/C++ 2017 compiler was used and the Microsoft Linker version 14.16. 
+              We can verify these findings by loading the executable into ExeInfo PE and scanning the executable. Here, we can conclude that no packers are present, as ExeInfo PE detects
+              the same results as DIE. 
+              <br><br><img src="../img/emotet_die.png" alt="emotet_die">
+              <br><br><img src="../img/emotet_exeinfo.png" alt="emotet_exeinfo">
+
+            </p>
+        </div>
+
+        <div class="post__content"> 
+          <h3 id="post__content__title">Static Analysis</h3>
+          <p> With the first analysis, focussing on the static properties, concluded, let's load the binary into a disassembler and figure out what it is doing. 
+          </p>
+      </div>
+      </article>
+    </div>
+    <!-- end post -->
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h3 class="widget__title">Explore Tags</h3>
+            </div>
+            <div class="tag__cloud">
+              <a href="/rev" class="set-1">Reverse Engineering</a>
+              <a href="/projects" class="set-1">Projects</a>
+              <a href="/ctf" class="set-5">CTF Writeups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div id="footer-content"></div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>

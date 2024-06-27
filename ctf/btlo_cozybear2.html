@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+        $("#header-content").load("https://graymanre.github.io/header.html");
+        $("#footer-content").load("https://graymanre.github.io/footer.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">10 min read <time class="post__date" datetime="2024-03-23T00:00:00+02:00">Mar
+                    23, 2024</time>
+                </span>
+              </div>
+              <h2 class="post__title">Blue Team Labs Online - Foxy</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/ctf" class="post__tag">CTF Writeups</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content">
+          <h2 id="post__content__title">Introduction</h2>
+          <p>
+            Today we will be walking through one of the Blue Team Labs Online Investigations: Cozy Bear 2. The Investigation is a follow on from Cozy Bear 1.
+            You can find my write-up on that challenge here: <a href="https://graymanre.github.io/ctf/btlo_cozybear.html">Cozy Bear 1</a>
+            The Investigation is rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 20 questions in regard to
+            the following scenario:
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">In the initial phase of the Cozy Bear investigation, the SOC team at TechGuard Solutions, led by Dan, was alerted to a phishing incident involving the "PBEESLY" account. Dan quickly uncovered that this incident was merely the surface-level indicator of a much larger breach. As the investigation deepened, it became evident that threat actors had not only infiltrated their network but had also been operating undetected within their environment for an extended period.
+
+                  Now assuming the role of John, you're the team lead for the TechGuard Solutions Threat Hunting Team. Your responsibility is to guide your team through a detailed investigation of this incident. Your objectives are to:
+                  
+                  - Piece together how the breach occurred
+                  - Determine the specific actions taken by the threat actors, identify what critical information has been compromised, and assess the impact on the organization.
+                  - Analyze the methods used by the threat actors to maintain their presence without detection, including any tools, techniques, and procedures (TTPs) they employed.
+                  
+                  A crucial piece of the puzzle was provided by a ticket from a user named "dschrute." He reported finding a suspicious "thumb drive" during a smoke break. Driven by curiosity, he connected the drive to his computer and copied its contents to his desktop, potentially triggering the series of events leading to the current situation.</pre>
+              </div>
+            </div>
+          </p>
+          <h2 id="post__content__title">Trojan Horse Identification</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) It is believed that dschrute was a victim of USB Drop Attack, What is the name of the file that was used as Trojan Horse for the payload? (Format: filename.ext) (2 points)</pre>
+                </div>
+            </div> 
+            With a clear indication that it is highly likely that a USB was connected to the system, we will start of by searching for events with EventID ...
+            However, no specific indication in these logs can be found that can lead us to answering this question. So, we will rely on a trusted technique, searching for Sysmon EventID 1, which represents the executing of a new process.
+            Since this will return a significant amount of matching logs, we will add a filter for <span id="inline-code">User: "dschrute"</span>, which results in 142 hits. Ensure, to view the events in a chronological order, that you
+            sort the logs ascending, thus viewing the oldest logs first. Already in log number 5 we see a suspicious process: <span id="inline-code">"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" Get-Content '.\2016_United_States_presidential_election_-_Wikipedia.html' -Stream schemas | IEX</span>.
+            Do note, that <span id="inline-code">IEX</span> is a common abbreviation for Invoke-Expression, which is used to execute PowerShell code. As such, it is suspicious that any legitimate HTML file would hold PowerShell code.
+            Since this is the first event, the name of the file that was used as a Trojan horse is: <span id="inline-code">2016_United_States_presidential_election_-_Wikipedia.html</span>.
+            <img src="/img/foxy_q1.png" alt="q1_answer">
+          </p>
+          <h2 id="post__content__title">Payload Identification</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) What is the name of the file that contains the actual payload? (Format: filename.ext) (2 points)</pre>
+                </div>
+            </div> 
+            Since we concluded that the HTML file contains PowerShell code, and is executed using Invoke-Expression, we are now interested in any child processes that were launched in our quest to identify the file that contained the actual payload.
+            We will stay within our previous view with filter: <span id="inline-code">EventID: 1 and User: "dschrute"</span>. We will add a new filter, taking the ProcessGuid of the PowerShell process, and applying it as the ParentProcessGuid filter:
+            <span id="inline-code">ParentProcessGuid: "{8320f18b-275a-5ead-7305-000000000400}"</span>. We are then left with 8 matching log entries. We will add the fields "CommandLine" and "ParentCommandLine" to the selected fields, so that we have a
+            clearer overview. As such, we can identify that the second log entry, <span id="inline-code">cerutil</span> is called with the <span id="inline-code">decode</span> argument and using the file <span id="inline-code">C:\Users\dschrute\AppData\Roaming\Microsoft\kxwn.lock</span> as an argument.
+            
+            Since <span id="inline-code">certutil.exe</span> got executed by the Trojan Horse, it is automatically suspicious, so let's understand what happens here.
+            The <span id="inline-code">certutil.exe</span> command is made up of three parameters: action, infile, outfile. Meaning in this case that the <span id="inline-code">action=decode</span>, the <span id="inline-code">infile=blob</span> and the 
+            <span id="inline-code">outfile=C:\Users\dschrute\AppData\Roaming\Microsoft\kxwn.lock</span>. 
+            CertUtil is display certification authority (CA) configuration information, configure Certificate Services, and back up and restore CA components, and <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil">Microsoft</a> explicitely states <b>Do not use in production code</b>.
+            The decode command is used to decode a base64 encoded file. So we can assume that the blob is a base64 blob in the HTML file that will be decoded and stored in <span id="inline-code">kxwn.lock</span>. 
+
+            However, we want to be sure that this file is actually used in an execution process. So, we clean our current filters and add the filter <span id="inline-code">EventID: 1 and CommandLine: "*kxwn.lock"</span>. This returns two results, of which
+            one is the certutil command, the other is the execution of <span id="inline-code">rundll32</span> with the <span id="inline-code">kxwn.lock</span> file as a argument. In summary, <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/rundll32">rundll32</a> is used to loads and run 32-bit dynamic-link libraries (DLLs).
+            Based on this information, the file that contains the actual payload is: <span id="inline-code">kxwn.lock</span>
+            <img src="/img/foxy_q2.png" alt="q2_answer">
+          </p>
+          <h2 id="post__content__title">Hunting for Persistence</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) Hunting for Persistence, What path was used by the attacker as persistence in order to survive reboot? (Format: XXXX:\path\to\folder) (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q3.png" alt="q3_answer">
+          </p>
+          <h2 id="post__content__title">Persistence Details</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What is the name and value attached to this entry? (Format: name, "value") (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q4.png" alt="q4_answer">
+          </p>
+          <h2 id="post__content__title">C2 Hunting</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) Hunting for Command and Control, What IP and Port was used by the attacker and what image was responsible for this communication? (Format: IP, Port, filename.ext) (2 points)</pre>
+                </div>
+            </div> 
+            
+            
+            192.168.0.4, 443, powershell.exe
+            <img src="/img/foxy_q5.png" alt="q5_answer">
+          </p>
+          <h2 id="post__content__title">Hunting for Defense Evasion</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) Hunting for Defense Evasion, What property was used by the attacker to bypass SSL/TLS certificate validation? (Format: String) (2 points)</pre>
+                </div>
+            </div> 
+            ServerCertificateValidationCallback
+            <img src="/img/foxy_q6.png" alt="q6_answer">
+          </p>
+          <h2 id="post__content__title">Download string</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) What is the download string associated with this bypass technique? (Format: https://something/something) (2 points)</pre>
+                </div>
+            </div> 
+            https://192.168.0.4:443/GoPro5/black/2018/_rp
+            <img src="/img/foxy_q7.png" alt="q7_answer">
+          </p>
+          <h2 id="post__content__title">Hunting for Credential Access</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q8) Hunting for Credential Access, what is the original filename, alias and parent image responsible for this tactic? (Format: original.ext, alias.ext, filename.ext) (2 points)</pre>
+                </div>
+            </div> 
+            mimikatz.exe, m.exe, powershell.exe
+            <img src="/img/foxy_q8.png" alt="q8_answer">
+          </p>
+          <h2 id="post__content__title">Golden Ticket Attack</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) What command was used to perform golden ticket attack? (Format: Full Command) (2 points)</pre>
+                </div>
+            </div> 
+            "C:\Windows\System32\m.exe" privilege::debug "lsadump::lsa /inject /name:krbtgt" exit
+            <img src="/img/foxy_q9.png" alt="q9_answer">
+          </p>
+          <h2 id="post__content__title">Credential dumping</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What command was used by the attacker to dump all users and computer credentials? (Format: Command) (3 points)</pre>
+                </div>
+            </div> 
+            privilege::debug sekurlsa::logonpasswords
+            <img src="/img/foxy_q10.png" alt="q10_answer">
+          </p>
+          <h2 id="post__content__title">Discord Delivery</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q11) Hunting for Domain Recon, What is the name of the tool and version that was used for enumeration? (Format: Tool X.X.) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q11.png" alt="q11_answer">
+          </p>
+          <h2 id="post__content__title">Attack method reuse</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) What specific function was used for this tactic? (Format: function) (2 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q12.png" alt="q12_answer">
+          </p>
+          <h2 id="post__content__title">Discord Malware Name</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q13) Hunting for Lateral Movement, What is the C2 framework and module that was used by the attacker to move laterally on the environment? (Format: framework, filename.ext) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q13.png" alt="q13_answer">
+          </p>
+          <h2 id="post__content__title">Are we confident?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q14) What credentials were used for lateral movement, and what is the IP address string associated with it? (Format: username, password, string) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q14.png" alt="q14_answer">
+          </p>
+          <h2 id="post__content__title">Which IP?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q15) Hunting for Information Gathering, what important information was gathered by the attacker? What specific command was used for this enumeration? (Format: xxxxx, command) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q15.png" alt="q15_answer">
+          </p>
+          <h2 id="post__content__title">Vulnerability CVE ID</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q16) Hunting for Data Collection, What is the full command was used to implement this tactic? (Format: Full Command) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q16.png" alt="q16_answer">
+          </p>
+          <h2 id="post__content__title">Vulnerability CVE ID</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q17) Identify the command used by the attacker for data exfiltration (Format: Full Command) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q16.png" alt="q16_answer">
+          </p>
+          <h2 id="post__content__title">Vulnerability CVE ID</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q18) Hunting for Indicator Removal, what command was performed by the attacker to remove its IOC in the endpoint? (Format: Full Command) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q16.png" alt="q16_answer">
+          </p>
+          <h2 id="post__content__title">Vulnerability CVE ID</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q19) Who's user was impersonated using the Golden Ticket Attack? (Format: Username) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q16.png" alt="q16_answer">
+          </p>
+          <h2 id="post__content__title">Vulnerability CVE ID</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q20) It is believed that the attacker created an account to maintain future persistence, identify the command, username and password assigned (Format: Command, Username, Password) (3 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q16.png" alt="q16_answer">
+          </p>
+      </article>
+    </div>
+    <!-- end post -->
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h2 class="widget__title">Explore Tags</h2>
+            </div>
+            <div class="tag__cloud">
+              <a href="/ctf/" class="set-1">CTF Writeups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div id="footer-content"></div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>

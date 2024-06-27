@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GraymanRe</title>
+  <meta name='description' content='Personal Portfolio & Project Website'>
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Ionicons -->
+  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function() {
+        $("#header-content").load("https://graymanre.github.io/header.html");
+        $("#footer-content").load("https://graymanre.github.io/footer.html");
+    });
+  </script>
+</head>
+
+<body class="is-in">
+  <!-- begin header -->
+  <header class="header">
+    <div id="header-content"></div>
+  </header>
+  <!-- end header -->
+
+  <!-- begin search -->
+  <div class="search">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+          <div class="search__box">
+            <div class="search__group">
+              <div class="search__close">
+                <i class="ion ion-md-close"></i>
+              </div>
+              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                placeholder="Type to search...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row search-results-list" id="js-results-container"></div>
+    </div>
+  </div>
+  <!-- end search -->
+
+  <!-- Start of custom content -->
+  <main class="content" aria-label="Content">
+    <div class="post-head">
+      <div class="container">
+        <div class="row">
+          <div class="col col-2"></div>
+          <div class="col col-8 col-t-12">
+            <div class="post-head__box">
+              <div class="post__meta">
+                <span class="post__minutes">10 min read <time class="post__date" datetime="2024-03-23T00:00:00+02:00">Mar
+                    23, 2024</time>
+                </span>
+              </div>
+              <h2 class="post__title">Blue Team Labs Online - Foxy</h2>
+              <div class="post__bottom">
+                <div class="post__author">
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
+                </div>
+                <div class="post__bottom-meta">
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
+                  <span>in</span>
+                  <span class="post-tags">
+                    <a href="/ctf" class="post__tag">CTF Writeups</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- begin post -->
+    <div class="container">
+      <article class="post animate">
+        <div class="post__content">
+          <h2 id="post__content__title">Introduction</h2>
+          <p>
+            Today we will be walking through one of the Blue Team Labs Online Investigations: Foxy. The Investigation is 
+            rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 18 questions in regard to
+            the following scenario:
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">In the dawn of the new year, Chris, a dedicated IoT Engineer, embarked with optimism, fueled by aspirations of both learning and earning. Despite years of loyalty to iotXYZ Company, Chris felt undervalued due to an uncompetitive salary. Demonstrating commitment, Chris successfully executed pivotal projects such as Smart Parking and Asset Tracking, even going beyond expectations by performing threat modeling and security assessments, culminating in a comprehensive report on potential attacks. However, the lack of recognition left Chris disheartened, transforming into a disgruntled employee. Seeking revenge, Chris began supporting a competitor on tenders and contemplated selling the security assessment results to hackers, aiming to monetize the hard work invested in every conceivable way. iotXYZ Company's legal team initiated an investigation on Chris. Investigate and reveal the facts.</pre>
+              </div>
+            </div>
+          </p>
+          <h2 id="post__content__title">Threat Activity</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) What is the TimeZone of Peter's Machine? [Hint: Find The Registry Key] (3 points)</pre>
+                </div>
+            </div> 
+            Extract SYSTEM hive from C:\Windows\System32\Config and open in the Forensic Registry EDitor (FRED). Then browse to ControlSet001\Control\TimeZoneInformation
+            There you will see the TimeZoneKeyName with value "Pacific Standard Time"
+            <img src="/img/foxy_q1.png" alt="q1_answer">
+          </p>
+          <h2 id="post__content__title">Shared IOC</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) Superhero stories were introduced to Peter at his school. What is the name of the Peter's School? (10 points)</pre>
+                </div>
+            </div> 
+            SecurityQuestionsView -> SAM file -> The Cambridge School of West Coast
+            Or using FRED -> SAM -> Domains -> Account -> Users -> Names -> PeterDProgrammer -> ResetData Key -> Decode From Hex
+            <img src="/img/foxy_q2.png" alt="q2_answer">
+          </p>
+          <h2 id="post__content__title">Another malware?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) What is Peter's Favourite Quote? (10 points)</pre>
+                </div>
+            </div> 
+            C:\Users\PeterDProgrammer\AppData\Roaming\Microsoft\Windows\Themes\CachedFiles -> CachedImage_1024_768_POS4 -> Empty Vessels Make The Most Noise
+            <img src="/img/foxy_q3.png" alt="q3_answer">
+          </p>
+          <h2 id="post__content__title">Threat Actor</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What is Peter's IP Address and Computer Name? (5 points)</pre>
+                </div>
+            </div> 
+            Extract SYSTEM hive from C:\Windows\System32\Config and open in the Forensic Registry EDitor (FRED). 
+            For the computer name, browse to the location: ControlSet001\Control\ComputerName\ComputerName. The computername is: DESKTOP-UU39QDI
+            For the IP address, browse to the location: "ControlSet001\Services\Tcpip\Parameters\Interfaces\{365e6613-b9c3-420f-86e0-c00cd3602733}"
+            <img src="/img/btlo_thekey_q4_0.png" alt="q4_answer0">
+            <img src="/img/btlo_thekey_q4_1.png" alt="q4_answer1">
+          </p>
+          <h2 id="post__content__title">JoeSandbox Analysis</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) What is the name of the programming language peter is learning? (2 points)</pre>
+                </div>
+            </div> 
+            We see in the Downloads folder that the executable "python-3.9.4-amd64.exe" is present. Additionally, in the Documents folder, a subfolder called "Programs" exists
+            which hosts multiple python files. Additionally, we discover in C:\Users\PeterDProgrammer\AppData\Roaming that Peter uses Notepad++. Here we can go to the backup folder,
+            and see that one notepad session has been stored, which contains the text: "starting my python journey".
+            As such, the assumption is that Peter is learning the Python programming language.
+            <img src="/img/btlo_thekey_q5.png" alt="q5_answer">
+          </p>
+          <h2 id="post__content__title">JoeSandbox Analysis</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) According to Peter's Day Plan, Which task is "In Progress"? (5 points)</pre>
+                </div>
+            </div> 
+            Based on Q5 we also see a reference to creating a dayplan in the Notepad++ backup. However, no other notes can be found. Since we also identify that Peter
+            uses Sublime Text 3, the next logical step was to look at the stored sublime session(s) in C:\Users\PeterDProgrammer\AppData\Roaming\Sublime Text 3\Local\.
+            Here, we identify the existence of the file: Session.sublime_session. This contains the tasks in Peter's Day Plan, of which "Code to Save the world" is still in progress.
+            <img src="/img/btlo_thekey_q6.png" alt="q5_answer">
+          </p>
+          <h2 id="post__content__title">IOCs - Network Ports</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) Peter connected with his partner using TeamViewer. What is the Peter partner's Teamviewer ID and Display Name? (5 points)</pre>
+                </div>
+            </div> 
+            Go the C:\Program Files\TeamViewer and open the "Connections_incoming.txt" file. The first field is the parnter's TeamViewer ID and the second field is the DisplayName.
+            Additionally, one could also check the TeamViewer15_Logfile in the same folder and search for "New Participant added" messages. Which is included in the screenshot below
+            989029790, IE11WIN8_1
+            <img src="/img/foxy_q7.png" alt="q6_answer">
+          </p>
+          <h2 id="post__content__title">IOCs - C2 Domain</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q8) What is Peter's TeamViewer ID and Display Name? (5 points)</pre>
+                </div>
+            </div> 
+            Same as Q6 but then for Peter, of whom we already know what his ComputerName is, so he was easier to identify.
+            984033617, DESKTOP-UU39QDI
+            <img src="/img/foxy_q7.png" alt="q7_answer">
+          </p>
+          <h2 id="post__content__title">MITRE ATT&CK</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) What is the Password Manager used by Peter? (5 points)</pre>
+                </div>
+            </div> 
+            After analyzing the Program Files and Program Files (x86) folder, as well as Peter's AppData folder and analyzing the Prefetch files that indicate which applications
+            were recently executed, I assume that since there are no indications of a locally installed password manager, any indication of a password manager would be found in the 
+            browsing history. Working with the assumption that since no additional browsers are installed, the default browser on Windows, Edge, was used. 
+            It's history location file is stored at C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User Data\Default\History.sqlite. Extracting this SQLite database and opening
+            it in DB Browser for SQLite, we browse to the urls table and find an entry for https://lastpass.com/automatic-login.
+
+            <img src="/img/btlo_thekey_q9.png" alt="q8_answer">
+          </p>
+          <h2 id="post__content__title">Weaponized DOC</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What is the VPN service used by Peter? (5 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q9.png" alt="q9_answer">
+          </p>
+          <h2 id="post__content__title">Weaponized JAR</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q11) What is the name of the Peter's 'Secret Project'? (5 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q10.png" alt="q10_answer">
+          </p>
+          <h2 id="post__content__title">Discord Delivery</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) According to the Peter's documentation, What is the theme of the project? (5 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q11.png" alt="q11_answer">
+          </p>
+          <h2 id="post__content__title">Attack method reuse</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q13) What are Peter's Cloud Credentials? (10 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q12.png" alt="q12_answer">
+          </p>
+          <h2 id="post__content__title">Discord Malware Name</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q14) Peter accessed some files from a remote machine using a file transfer service. What is the login name and IP address of the remote machine? (5 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q13.png" alt="q13_answer">
+          </p>
+          <h2 id="post__content__title">Are we confident?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q15) What is the Bitlocker Recovery Key? (10 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q14.png" alt="q14_answer">
+          </p>
+          <h2 id="post__content__title">Which IP?</h2>
+          <p>
+            <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q16) What is the Bitlocker Password? [Hint: Question 2] (10 points)</pre>
+                </div>
+            </div> 
+            Insert writeup here
+            <img src="/img/foxy_q15.png" alt="q15_answer">
+          </p>
+      </article>
+    </div>
+    <!-- end post -->
+  </main>
+  <!-- End of custom content -->
+
+  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+  <!-- begin footer-widgets -->
+  <section class="footer-widgets">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4 col-d-6 col-t-12">
+          <div class="widget widget-tag-cloud">
+            <div class="widget__head">
+              <h2 class="widget__title">Explore Tags</h2>
+            </div>
+            <div class="tag__cloud">
+              <a href="/ctf/" class="set-1">CTF Writeups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end footer-widgets -->
+
+  <!-- begin footer -->
+  <footer class="footer">
+    <div id="footer-content"></div>
+  </footer>
+  <!-- end footer -->
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    var base_url = "",
+      pagination_next_url = base_url + '/page2',
+      pagination_next_page_number = '',
+      pagination_available_pages_number = '1';
+  </script>
+</body>
+
+</html>
