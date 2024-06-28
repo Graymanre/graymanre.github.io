@@ -4,15 +4,15 @@
 <head>
   <title>GraymanRe</title>
   <meta name='description' content='Personal Portfolio & Project Website'>
-  <link rel="canonical" href="../">
-  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="../feed.xml">
-  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <!-- Ionicons -->
   <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-  <link href="../css/main.css" rel="stylesheet">
+  <link href="/css/main.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $(function() {
@@ -68,14 +68,14 @@
               <h2 class="post__title">04 - Darn Mice - Flare-On9 Writeup</h2>
               <div class="post__bottom">
                 <div class="post__author">
-                  <a href="../contact/" aria-label="GraymanRe"><img class="post__author-image"
-                      src="../img/logo.png" alt="GraymanRe's Picture"></a>
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
                 </div>
                 <div class="post__bottom-meta">
-                  <a href="../contact/" class="post__author-link">GraymanRe</a>
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
                   <span>in</span>
                   <span class="post-tags">
-                    <a href="../ctf" class="article__tag">CTF Writeups</a>
+                    <a href="/ctf" class="article__tag">CTF Writeups</a>
                   </span>
                 </div>
               </div>
@@ -96,7 +96,7 @@
             that argument will be used as a parameter for the function <span id="inline-code">sub_401000</span>. If we try executing the binary via the
             command line again, and supply an argument, we receive two strings and the application exits. Time to dive in deeper.
             <div>
-              <img src="../img/darnmice_test.png" alt="Darn Mice Testing" onclick="window.open(this.src, '_blank');"
+              <img src="/img/darnmice_test.png" alt="Darn Mice Testing" onclick="window.open(this.src, '_blank');"
               width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
             </div>
             Jumping into the function, the rather long sequential <span id="inline-code">mov</span> instructions are rather curious and deserve closer
@@ -109,7 +109,7 @@
             memory page. As this page is then executed, and becomes inherently part of the program, any invalid instructions will cause the program to crash. 
             So we have to come up with an ingenious way of ensuring this page does not crash. However, we are only limited to one specific byte for each iteration.
             <div>
-              <img src="../img/darnmice_memops.png" alt="Darn Mice Memory Operations" onclick="window.open(this.src, '_blank');"
+              <img src="/img/darnmice_memops.png" alt="Darn Mice Memory Operations" onclick="window.open(this.src, '_blank');"
               width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
             </div>
             <br>
@@ -126,7 +126,7 @@
             Eventually we end up with the flag for this challenge <span id="inline-code">i_w0uld_l1k3_to_RETurn_this_joke@flare-on.com</span>. And with that, 
             we have completed the fourth Flare-On challenge!
             <div>
-              <img src="../img/darnmice_flag.png" alt="Darn Mice Flag" onclick="window.open(this.src, '_blank');"
+              <img src="/img/darnmice_flag.png" alt="Darn Mice Flag" onclick="window.open(this.src, '_blank');"
               width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
             </div>
           </p>
@@ -147,9 +147,9 @@
               <h3 class="widget__title">Explore Tags</h3>
             </div>
             <div class="tag__cloud">
-              <a href="../rev/" class="set-1">Reverse Engineering</a>
-              <a href="../project/" class="set-1">Projects</a>
-              <a href="../ctf" class="set-1">CTF Writeups</a>
+              <a href="/rev/" class="set-1">Reverse Engineering</a>
+              <a href="/project/" class="set-1">Projects</a>
+              <a href="/ctf" class="set-1">CTF Writeups</a>
             </div>
           </div>
         </div>
@@ -163,13 +163,13 @@
     <div id="footer-content"></div>
   </footer>
   <!-- end footer -->
-  <script src="../js/vendors/jquery-3.5.1.min.js"></script>
-  <script src="../js/vendors/simple-jekyll-search.min.js"></script>
-  <script src="../js/vendors/jquery.fitvids.js"></script>
-  <script src="../js/vendors/lazyload.min.js"></script>
-  <script src="../js/vendors/transition.js"></script>
-  <script src="../js/vendors/zoom.min.js"></script>
-  <script src="../js/common.js"></script>
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
   <script>
     var base_url = "",
       pagination_next_url = base_url + '/page2',
