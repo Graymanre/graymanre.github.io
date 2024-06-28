@@ -90,16 +90,13 @@
     <div class="container">
       <article class="post animate">
         <div class="post__content">
-          <h3 id="post__content__title">Shall we play another game?</h3>
-          <div class="language-plaintext highlighter-rouge">
-            <div class="highlight">
-              <pre
-                class="highlight"><code>I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall we play another game?</code></pre>
-            </div>
-          </div>
           <h3 id="post__content__title2">Challenge Writeup</h3>
           <p>
             When launching the application you will see two instructions:
+            <div>
+              <img src="/img/8ball-game.png" alt="8Ball Game" onclick="window.open(this.src, '_blank');"
+              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+            </div>
             <div class="language-plaintext highlighter-rouge">
                 <div class="highlight">
                   <pre
@@ -108,50 +105,60 @@
             </div>
             The given instructions indicate that a combination of arrow keys and a string would be needed in order to crack the challenge.
             We load the binary into IDA and set out to understand how it works. 
-            <br>
-            The main entrypoint of the application is the <span id="inline-code">WinMain</span> function which will call a single function. Analyzing this
-            function it appears to configure the basics in order to start the program. Based on the imports table we see that a substantial amount of functions
-            have the <span id="inline-code">SDL</span> prefix. Some research shows that the Simple DirectMedia Layer library is used by this application.
+            <br><br>
+            If we glance over the imports table, we identify that a substantial amount of functions of the SDL2 libary are imporated, as shown in the screenshot
+            below. The SDL2 library supports the Simple DirectMedia Layer.
             <div class="language-plaintext highlighter-rouge">
-                <div class="highlight">
-                    <pre class="highlight"><code>Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL/Direct3D/Metal/Vulkan. It is used by video playback software, emulators, and popular games including Valve's award winning catalog and many Humble Bundle games.</code></pre>
-                </div>
+              <div class="highlight">
+                  <pre class="highlight"><code>Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL/Direct3D/Metal/Vulkan. It is used by video playback software, emulators, and popular games including Valve's award winning catalog and many Humble Bundle games.</code></pre>
+              </div>
             </div>
-            
-            From the documentation we gleam that the application's <span id="inline-code">main</span> function will be redefined/replaced by <span id="inline-code">SDL_SetMainReady</span>.
-            Furthermore, we can assume that keyboard input will be used to, which is handled using the function <span id="inline-code">SDL_PollEvent</span>.
-            
-            If we focus our initial efforts on <span id="inline-code">SDL_SetMainReady</span>, we see that it will call the function at <span id="inline-code">Magic8Ball+0x27A0</span>,
-            before calling other functions which all seem responsible for cleaning up the process. Therefore, we will refocus on the execution flow within
-            the <span id="inline-code">Magic8Ball+0x27A</span> function.
+            <div>
+              <img src="/img/8ball-imports.png" alt="8Ball Imports" onclick="window.open(this.src, '_blank');"
+              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+            </div>
+            The main entrypoint of the application is the <span id="inline-code">WinMain</span> function which calls a single function <span id="inline-code">sub_403690</span>. 
+            Analyzing this function, we can identify that it will check if any command line arguments are given, handle those and will then call 
+            <span id="inline-code">SDL_SetMainReady</span> before calling <span id="inline-code">sub_4027A0</span>. Based on the documentation, we
+            can assume that the code so far has initialized the environment, and we can resume our analysis by diving into the last function that is called.
+            <br><br>
+            The first three blocks until <span id="inline-code">0x40281d</span> seem to do more initialization processes such as loading strings, fonts,
+            and setting buffers. The application then calls <span id="inline-code">sub_402090</span> on which we will now focus our attention.
+            We identify more SDL2 function calls responsible for creating images, a window and a renderer. Furthermore, we identify that a 4x4 hex characters
+            get loaded into a register <span id="inline-code">6D6D69676C662065702067613F736C</span>. When we decode this hex string, we find out it resolves to 
+            <span id="inline-code">gimme flag pls?</span>. We assume that this string that this string might be of importance later on. Note how the string is 
+            stored in a dowrd pointer starting at <span id="inline-code">edi+5Ch</span>. Furthermore, a little down we identify the strings that are visible in 
+            the program and serve as instructions on how to operate the program. 
+            <br><br>
+            Since we know that SDL2 is used for keyboard events, I read up on the documentary and discovered that the function <span id="inline-code">SDL_PollEvents</span>
+            is used to listen for keyboard events. This function is only used twice within the same function: <span id="inline-code">sub_401E50</span>, which
+            is closely located in relation to the previous functions we have analysed. As such, the assumption is made that the call at 
+            <span id="inline-code">Magic8Ball+2888</span> contains the first part of the logic to get the flag.
+            <br><br>
+            As it was not immediately clear what the usage of this function was, a couple of breakpoints were set on the multiple if-statements within this
+            function. Because the <span id="inline-code">SDL_PollEvents</span> function will handle _all_ events, it should be possible to deduce when the 
+            user-input will be handled. After some trial-and-error, it appeared that setting a breakpoint on <span id="inline-code">Magic8Ball+26B9</span>,
+            before execution, then using the arrow keys and entering the question and pressing "ENTER" would result in the execution flow ending up here. 
+            From hereonwards, we see a nested <span id="inline-code">if</span> structure, which eventually result in a call to <span id="inline-code">strncmp</span>.
+            <div>
+              <img src="/img/8ball-pattern.png" alt="8Ball Pattern" onclick="window.open(this.src, '_blank');"
+              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+            </div>
             <br>
-            Analyzing the <span id="inline-code">Magic8Ball+0x27A</span> function brings us initially to a call at <span id="inline-code">Magic8Ball+0x281D</span>. This funcion appears
-            to further setup the application, reads fonts, and additionally sets a buffer starting at <span id="inline-code">edi+5c</span> to the value of
-            <span id="inline-code">6D6D69676C662065702067613F736C</span>. When we decode this hex string, we find out it resolves to <span id="inline-code">gimme flag pls?</span>. We 
-            assume that this string that this string might be of importance later on. 
-            <br>
-            As the process uses SDL, it will use <span id="inline-code">PollEvents</span> to handle any keyboard input and other such events. The call at
-            <span id="inline-code">Magic8Ball+287D</span> seems to call the function that will handle the<span id="inline-code">PollEvents</span>.
-            As such, the assumption is made that the call at<span id="inline-code">Magic8Ball+2888</span> contains the logic to get the flag.
-            <br>
-            As it was not immediately clear what th eusage of this function was, a couple of breakpoints were set on the multiple
-            if-statements within this function. Because the<span id="inline-code">SDL_PollEvents</span> function will handle _all_ events, it should be
-            possible to deduce when the user-input will be handled. After some trial-and-error, it appeared that setting a breakpoint
-            on<span id="inline-code">Magic8Ball+26B9</span>, before execution, then entering the question and pressing "ENTER" would result in the execution flow
-            ending up here. From hereonwards, we see a nested<span id="inline-code">if</span> structure, wihch should result eventually in a call to<span id="inline-code">strncmp</span>
-            and a subsequent call to<span id="inline-code">Magic8Ball+1A10</span>.
-            <br>
-            For every<span id="inline-code">if-statement</span>, it is checked if the value in<span id="inline-code">[ecx+x]</span> where<span id="inline-code">x</span> is an incrementing number starting at 0,
-            is equal to a certain hex-value. Checking all the<span id="inline-code">if-statements</span> it became obvious that there were only 4 unique
-            hex-values that were considered 'valid' input. These values corresponded to the letters<span id="inline-code">L, R, U, D</span>, likely for 
-            "left, right, up & down". With this new insight we could reverse what the expected pattern is and identified it to
-            be corresponding to:<span id="inline-code">LLURULDUL</span>. If this pattern was hit, the user would then be prompted to input a "question".
-            Following execution flow, we see that the user's input is subsequently compared using<span id="inline-code">strncmp</span> against the earlier
-            identified hardcoded string "gimme flag pls?". 
-            <br>
-            Thus, by inputting the arrow key combination "LLURULDUL" and asking the question "gimme flag pls?" we obtain the
-            flag for this challenge: <span id="inline-code">U_cRackeD_th1$_maG1cBaLL_!!_@flare-on.com</span>. And with that, 
-            we have completed the third Flare-On challenge!
+            For every <span id="inline-code">if-statement</span>, it is checked if the value in <span id="inline-code">[ecx+x]</span> where <span id="inline-code">x</span> 
+            is an incrementing number starting at 0, is equal to a certain hex-value. Checking all the <span id="inline-code">if-statements</span> it became
+            obvious that there were only 4 unique hex-values that were considered 'valid' input. These values corresponded to the letters 
+            <span id="inline-code">L, R, U, D</span>, which correspond to the arrow keys for "left, right, up & down". With this new insight we could reverse what
+            the expected pattern is: <span id="inline-code">LLURULDUL</span>. If this pattern was hit, the user would then need to input a "question".
+            Following execution flow, we see that the user's input is subsequently compared using <span id="inline-code">strncmp </span> against the earlier
+            identified hardcoded string "gimme flag pls?" stored in a pointer to <span id="inline-code">edi+5Ch</span>. 
+            <br><br>
+            Thus, by inputting the arrow key combination "LLURULDUL" and asking the question "gimme flag pls?" we obtain the flag for this challenge: 
+            <span id="inline-code">U_cRackeD_th1$_maG1cBaLL_!!_@flare-on.com</span>. And with that, we have completed the third Flare-On challenge!
+            <div>
+              <img src="/img/8ball-flag.png" alt="8Ball Flag" onclick="window.open(this.src, '_blank');"
+              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+            </div>
           </p>
         </div>
       </article>
