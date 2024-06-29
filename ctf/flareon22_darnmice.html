@@ -111,7 +111,7 @@
             Jumping into the function, the rather long sequential <span id="inline-code">mov</span> instructions are rather curious and deserve closer
             analysis. In total, 36 bytes get loaded into <span id="inline-code">ebp+var_28</span> up and until <span id='inline-code'>ebp+var_5</span>.
             This is also exactly the length of the loop which occurs a little later. In this loop, for each iteration a memory page is allocated using 
-            <span id="inline-code">VirtualAlloc</span> with a size of 1000 bytes. The page is set to <span id="inline_code">PAGE_EXECUTE_READWRITE</span>. 
+            <span id="inline-code">VirtualAlloc</span> with a size of 1000 bytes. The page is set to <span id="inline-code">PAGE_EXECUTE_READWRITE</span>. 
             The return value of the call to <span id="inline-code">VirtualAlloc</span> is stored in <span id="inline-code">[ebp+var_34]</span>, which will 
             be called later. In between the page creation and subsequent call, the allocated memory page is filled as follows: for the nth round of iteration,
             the nth byte from the user's input is taken and added to the nth byte of the previously allocated 'string'. The resulting byte is then written to the 
