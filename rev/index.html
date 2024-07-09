@@ -15,8 +15,10 @@
   <link href="/css/main.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-    $(function() {
-      $("#header-content").load("https://graymanre.github.io/header.html");
+    $(document).ready(function() {
+      $('#header-content').load('https://graymanre.github.io/header.html', function() {
+        $.getScript('./js/common.js');
+      });
       $("#footer-content").load("https://graymanre.github.io/footer.html");
     });
   </script>

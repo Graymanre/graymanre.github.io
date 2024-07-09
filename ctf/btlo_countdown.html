@@ -15,9 +15,11 @@
   <link rel="stylesheet" href="/css/main.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-    $(function() {
-        $("#header-content").load("https://graymanre.github.io/header.html");
-        $("#footer-content").load("https://graymanre.github.io/footer.html");
+    $(document).ready(function() {
+      $('#header-content').load('https://graymanre.github.io/header.html', function() {
+        $.getScript('./js/common.js');
+      });
+      $("#footer-content").load("https://graymanre.github.io/footer.html");
     });
   </script>
   <!-- Google tag (gtag.js) -->

@@ -17,7 +17,6 @@
   <script>
       $(document).ready(function() {
       $('#header-content').load('https://graymanre.github.io/header.html', function() {
-        // Ensure that event listeners are set after the header is loaded
         $.getScript('./js/common.js');
       });
       $("#footer-content").load("https://graymanre.github.io/footer.html");
