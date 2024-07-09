@@ -1,23 +1,58 @@
 [
-  
-    {
-      "title"    : "Flare-On22 - Pixel Poker Writeup",
-      "category" : "",
-      "tags"     : "CTF Writeups",
-      "url"      : "/ctf/flareon22_pixelpoker.html",
-      "date"     : "Dec 11, 2022",
-      "content"  : "",
-      "article"  : ""
-    },
-  
-    {
-      "title"    : "Automating a M365 Tenant Security Maturity Assessment",
-      "category" : "",
-      "tags"     : "Projects",
-      "url"      : "/projects/automating_tenant_assessments.html",
-      "date"     : "Sep 25, 2023",
-      "content"  : "",
-      "article"  : ""
-    } 
-  
+  {
+    "title": "Flare-On22 - Pixel Poker Writeup",
+    "category": "CTF",
+    "tags": "IDA, Static analysis, Reverse engineering, Flare-On",
+    "url": "ctf/flareon22_pixelpoker.html",
+    "date": "11 December 2022",
+    "content": "This writeup focusses on solving the second challenge \"Pixel Poker\" of the Flare-On 9 contest, hosted by Mandiant in 2022."
+  },  
+  {
+    "title": "Blue Team Labs Online - Countdown Writeup",
+    "category": "CTF",
+    "tags": "Autopsy, Windows File Analyzer, WinPrefetchView, Jumplist Explorer, SQLite DB Browser",
+    "url": "ctf/btlo_countdown.html",
+    "date": "23 March 2024",
+    "content": "Join me as we walk through solving the Blue Team Labs Online forensic challenge \"Countdown\"."
+  },
+  {
+    "title": "Blue Team Labs Online - Countdown Writeup",
+    "category": "CTF",
+    "tags": "Event Viewer, Wireshark, MFTExplorer, T1190, T1105, T1496, T1003",
+    "url": "ctf/btlo_badlogic.html",
+    "date": "26 March 2024",
+    "content": "Join me as we walk through solving the Blue Team Labs Online forensic challenge \"Bad Logic\"."
+  },
+  {
+    "title": "Flare-On22 - Magic 8 Ball Writeup",
+    "category": "CTF",
+    "tags": "IDA, Static analysis, Dynamic analysis, Reverse engineering, Flare-On",
+    "url": "ctf/flareon22_magic8ball.html",
+    "date": "26 June 2024",
+    "content": "This writeup focusses on solving the third challenge \"Magic 8 Ball\" of the Flare-On 9 contest, hosted by Mandiant in 2022."
+  },
+  {
+    "title": "Flare-On22 - Darn Mice Writeup",
+    "category": "CTF",
+    "tags": "IDA, Static analysis, Reverse engineering, ROP, Flare-On",
+    "url": "ctf/flareon22_darnmice.html",
+    "date": "28 June 2024",
+    "content": "This writeup focusses on solving the fourth challenge \"Darn Mice\" of the Flare-On 9 contest, hosted by Mandiant in 2022."
+  },
+  {
+    "title": "Blue Team Labs Online - The Key Writeup",
+    "category": "CTF",
+    "tags": "FTK Imager, Arsenal, Registry, NirLauncher, T1530, T1532",
+    "url": "ctf/btlo_thekey.html",
+    "date": "7 July 2024",
+    "content": "Join me as we walk through solving the Blue Team Labs Online forensic challenge \"The Key\"."
+  },
+  {
+    "title": "Automating M365 Security Assessments",
+    "category": "CTF",
+    "tags": "Microsoft, Azure, Defender, Intune, Graph API, PowerShell",
+    "url": "projects/automating_tenant_assessments.html",
+    "date": "25 September 2023",
+    "content": "Dive into the world of automation through the Windows Graph API and automate your M365 Security Assessment."
+  }
 ]

@@ -3067,6 +3067,16 @@ table tr:hover {
   }
 }
 
+.search-result {
+  width: 100%;
+  list-style: none
+}
+
+.search-result h3 {
+  font-size: 28px;
+  text-align: center;
+}
+
 .search-results-list .no-results {
   width: 100%;
   list-style: none
@@ -4238,5 +4248,26 @@ textarea {
 
 .collapsible-content p {
   margin-top: 10px;
+  font-size: 16px;
+}
+
+.search-container {
+  max-width: 540px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 0 auto;
+}
+
+.search-result h3 {
+  text-align: left; 
+  margin-bottom: 0px;
+}
+
+.search-subtitle {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.search-content {
   font-size: 16px;
 }

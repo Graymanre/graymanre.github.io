@@ -70,8 +70,11 @@ $(document).ready(function() {
     searchInput: document.getElementById("js-search-input"),
     resultsContainer: document.getElementById("js-results-container"),
     json: "/json/search.json",
-    searchResultTemplate: '{article}',
-    noResultsText: '<li class="no-results"><h3>No results found</h3></li>'
+    searchResultTemplate: '<div class="search-result"><a href="https://graymanre.github.io/{url}"><h3>{title}</h3><p class="search-subtitle">{date} • {category} • {tags}</p><p class="search-content">{content}</p></a></div>',
+    noResultsText: '<div class="no-results"><h3>No results found</h3></div>',
+    limit: 10,
+    fuzzy: false,
+    exclude: []
   });
 
 

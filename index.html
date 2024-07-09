@@ -15,11 +15,16 @@
   <link rel="stylesheet" href="css/main.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-    $(function() {
-      $("#header-content").load("https://graymanre.github.io/header.html");
+      $(document).ready(function() {
+      $('#header-content').load('https://graymanre.github.io/header.html', function() {
+        // Ensure that event listeners are set after the header is loaded
+        $.getScript('./js/common.js');
+      });
       $("#footer-content").load("https://graymanre.github.io/footer.html");
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
   <script>
@@ -48,19 +53,18 @@
               <div class="search__close">
                 <i class="ion ion-md-close"></i>
               </div>
-              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
-                placeholder="Type to search...">
+              <label for="js-search-input" class="screen-reader-text">Search for Blog</label>
+              <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="container">
+    <div class="search-container">
       <div class="row search-results-list" id="js-results-container"></div>
     </div>
   </div>
-  <!-- end search -->
+  <!-- end search -->  
 
   <!-- begin content -->
   <main class="content" aria-label="Content">
@@ -91,7 +95,7 @@
                   <div class="article__content">
                     <div class="article__meta">
                       <span class="article__minutes">15 min read <time class="article__date"
-                          datetime="2024-07-03T00:00:00+02:00">July 7, 2024</time>
+                          datetime="2024-07-03T00:00:00+02:00">7 July 2024</time>
                     </div>
                     <h2 class="article__title">Blue Team Labs Online - The Key Writeup</h2>
                     <p class="article__excerpt">Today we will be walking through one of the Blue Team Labs Online Investigations: The Key...</p>
@@ -347,13 +351,8 @@
   <script src="./js/vendors/lazyload.min.js"></script>
   <script src="./js/vendors/transition.js"></script>
   <script src="./js/vendors/zoom.min.js"></script>
-  <script src="./js/common.js"></script>
-  <script>
-    var base_url = "",
-      pagination_next_url = base_url + '/page2',
-      pagination_next_page_number = '',
-      pagination_available_pages_number = '1';
-  </script>
+  <script src="/js/common.js"></script>
+
 </body>
 
 </html>

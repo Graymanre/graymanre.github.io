@@ -71,8 +71,7 @@
           <div class="col col-8 col-t-12">
             <div class="post-head__box">
               <div class="post__meta">
-                <span class="post__minutes">5 min read <time class="post__date" datetime="2022-12-11T00:00:00+02:00">Dec
-                    11, 2022</time>
+                <span class="post__minutes">5 min read <time class="post__date" datetime="2022-12-11T00:00:00+02:00">11 December 2022</time>
                 </span>
               </div>
               <h2 class="post__title">02 - Pixel Poker - Flare-On9 Writeup</h2>
@@ -113,7 +112,8 @@
           we see the <span id="inline-code">x</span> and <span id="inline-code">y</span> coordinates being updated in the title bar.
           Additionally, we can click on each pixel, another number in the title bar is also being updated. In total we can click 10
           pixels before we get a pop-up stating: <span id="inline-code">"Please play again!</span>. So we can assume that we have to
-          find the correct pixel in order to obtain the flag, and we have a total of 10 tries. We load the game into IDA for further analysis.
+          find the correct pixel in order to obtain the flag, and we have a total of 10 tries. We load the game into IDA for further 
+          analysis.
           <div>
             <img src="/img/pp-game.png" alt="Pixel Poker" onclick="window.open(this.src, '_blank');"
             width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
@@ -124,23 +124,31 @@
           in the disassembly, it appears close to the end of function <span id="inline-code">sub_4012C0</span>. We identify that 
           execution flow will end up in that block and show the MessageBox, if the previous compare operation of the value in 
           <span id="inline-code">eax</span> against 10 is equal. We can assume that this is the counter that keeps track of how 
-          often pixels were clicked. So, we follow the false branch, which is taken when the compare fails and we haven't yet clicked ten pixels.
+          often pixels were clicked. So, we follow the false branch, which is taken when the compare fails and we haven't yet clicked
+          ten pixels.
           <br><br>
           The next blocks that follow, are depicted in the screenshot below. We see multiple things happening here. First of all, 
           note that a string is loaded into register <span id="inline-code">eax</span>. This string contains "FLARE-On" which might
           be relevant later. Next, we notice that two blocks after each other, perform a compare statement. We set breakpoints on
-          both of the compare statements and run the debugger. Once we click on a pixel, the X and Y values representing the location
-          of that pixel, seem to be used for both compare statements. The X value is compared to <span id="inline-code">0x5F</span> or
-          integer 95, whilst the Y value is compared to <span id="inline-code">0x139</span> or integer 313.
+          both of the compare statements and run the debugger. Once we click on a pixel, the <span id="inline-code">X</span> and 
+          <span id="inline-code"></span>Y</span> values representing the location of that pixel, seem to be used for both compare 
+          statements. The <span id="inline-code">X</span> value is compared to <span id="inline-code">0x5F</span> or integer 95, 
+          whilst the <span id="inline-code"></span>Y</span> value is compared to <span id="inline-code">0x139</span> or integer 313.
           <br><br>
-          <img class="rounded" src="/img/pp-ida-view.png" alt="Pixel Poker IDA view" width="561" height="346">
+          <div>
+            <img src="/img/pp-ida-view.png" alt="Pixel Poker IDA view" onclick="window.open(this.src, '_blank');"
+            width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+          </div>
           <br><br>
           Based on this information, we can conclude that if we click the pixel at location <span id="inline-code">95,313</span>, we
           will have found the correct pixel. Rerunning the game and clicking that specific pixel, will then result in the flag:
           <br><br>
           <pre class="highlight"><code>w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
           And with that, we have completed the second Flare-On challenge!
-          <img class="rounded" src="/img/pp-flag.png" alt="Pixel Poker Flag" width="561" height="346">
+          <div>
+            <img src="/img/pp-flag.png" alt="Pixel Poker Flag" onclick="window.open(this.src, '_blank');"
+            width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+          </div>
           </p>
         </div>
       </article>
