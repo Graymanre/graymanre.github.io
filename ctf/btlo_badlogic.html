@@ -4,18 +4,18 @@
 <head>
   <title>GraymanRe</title>
   <meta name='description' content='Personal Portfolio & Project Website'>
-  <link rel="canonical" href="../">
-  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="../feed.xml">
-  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+  <link rel="canonical" href="/">
+  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <!-- Ionicons -->
   <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/main.css">
-  <link href="../css/prism.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="/css/prism.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="../js/vendors/prism.js"></script>
+  <script src="/js/vendors/prism.js"></script>
   <script>
     $(document).ready(function() {
       $('#header-content').load('https://graymanre.github.io/header.html', function() {
@@ -80,14 +80,14 @@
               <h2 class="post__title">Blue Team Labs Online - Bad Logic</h2>
               <div class="post__bottom">
                 <div class="post__author">
-                  <a href="../contact/" aria-label="GraymanRe"><img class="post__author-image"
-                      src="../img/logo.png" alt="GraymanRe's Picture"></a>
+                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
+                      src="/img/logo.png" alt="GraymanRe's Picture"></a>
                 </div>
                 <div class="post__bottom-meta">
-                  <a href="../contact/" class="post__author-link">GraymanRe</a>
+                  <a href="/contact/" class="post__author-link">GraymanRe</a>
                   <span>in</span>
                   <span class="post-tags">
-                    <a href="../ctf" class="post__tag">CTF</a>
+                    <a href="/ctf" class="post__tag">CTF</a>
                   </span>
                 </div>
               </div>
@@ -138,7 +138,7 @@ be of assistance. A full review of the compromised application may also be in or
             Based on this information, we can conclude that the application is <span id="inline-code">weblogic</span> which runs on port <span id="inline-code">7001</span> and is exploited
             using <span id="inline-code">CVE-2020-14882</span>.
             <br>
-            <img src="../img/badlogic_q1.png" alt="q1_answer">
+            <img src="/img/badlogic_q1.png" alt="q1_answer">
           </p>
           <h2 id="post__content__title">Malicious Domain</h2>
           <pre><code class="language-markdown">Q2) What is the malicious domain used by the threat actor? (10 points)</code></pre><br>
@@ -149,7 +149,7 @@ be of assistance. A full review of the compromised application may also be in or
             download request, we observe the threat actor trying to obtain the binary from the same domain: <span id="inline-code">advertyzing.co.uk</span>. Therefore we can conclude that it
             is highly likely that the malicious domain is <span id="inline-code">advertyzing.co.uk</span>. 
             <br>
-            <img src="../img/badlogic_q1.png" alt="q2_answer">
+            <img src="/img/badlogic_q1.png" alt="q2_answer">
           </p>
           <h2 id="post__content__title">Threat Actor IP IOCs</h2>
           <pre><code class="language-markdown">Q3) Confirm the two IP addresses utilized by the threat actor (10 points)</code></pre><br>
@@ -178,8 +178,8 @@ be of assistance. A full review of the compromised application may also be in or
             <span id="inline-code">startWebLogic.bat</span> makes it seem like the commands one would normally pass to netcat. Therefore, we can conclude that the threat actor modified key file: 
             <span id="inline-code">startweblogic.cmd</span>.
             <br>
-            <img src="../img/badlogic_q4_1.png" alt="q4_answer">
-            <img src="../img/badlogic_q4_2.png" alt="q4_answer">
+            <img src="/img/badlogic_q4_1.png" alt="q4_answer">
+            <img src="/img/badlogic_q4_2.png" alt="q4_answer">
           </p>
           <h2 id="post__content__title">LOLBins</h2>
           <pre><code class="language-markdown">Q5) The threat actor has made good use of 'Living off the land' binaries (LOLBins). Which
@@ -191,7 +191,7 @@ be of assistance. A full review of the compromised application may also be in or
             However, we have identified that the threat actor performed multiple requests to the vulnerable endpoint. If we analyze the other commands that were executed, we discover that
             the threat actor used <span id="inline-code">certutil.exe</span> to download the <span id="inline-code">nc.exe</span> binary. 
             <br>
-            <img src="../img/badlogic_q5.png" alt="q5_answer">
+            <img src="/img/badlogic_q5.png" alt="q5_answer">
           </p>
           <h2 id="post__content__title">Windows Executable</h2>
           <pre><code class="language-markdown">Q6) What was the name of the malicious file they downloaded using this 
@@ -201,7 +201,7 @@ be of assistance. A full review of the compromised application may also be in or
             the "malicious" file <span id="inline-code">nc.exe</span>. I put malicious inside of quotation marks since as I discussed in question 2, nc.exe is used both for legitimate and
             illegitimate purposes.
             <br>
-            <img src="../img/badlogic_q5.png" alt="q6_answer">
+            <img src="/img/badlogic_q5.png" alt="q6_answer">
           </p>
           <h2 id="post__content__title">Threat Actor Email IOC</h2>
           <pre><code class="language-markdown">Q7) What email address is associated with the threat actor? (10 points)</code></pre><br>
@@ -213,7 +213,7 @@ be of assistance. A full review of the compromised application may also be in or
             I came back to this question after answering question 10, after browsing to the PowerShell log, since I discovered that the cryptominer of question 8 had created a user configuration
             data folder as well. When I browsed into that folder, I had a look at, amongst others, the <span id="inline-code">config.json</span> file and discovered the email address: <span id="inline-code">bzuyxpdpphthhbvxpz@niwghx.com</span>.
             <br>
-            <img src="../img/badlogic_q7.png" alt="q7_answer">
+            <img src="/img/badlogic_q7.png" alt="q7_answer">
           </p>
           <h2 id="post__content__title">Cryptominer usage</h2>
           <pre><code class="language-markdown">Q8) The threat actor has used an off-the-shelf cryptominer, what is the name of the 
@@ -225,7 +225,7 @@ be of assistance. A full review of the compromised application may also be in or
             and has a comment of <span id="inline-code">[...] Kryptex uses admin privileges to configure system for better mining performance</span> Additionally, a quick Google search for 
             Kryptex reveals it's <a href="https://www.kryptex.com/en/">website</a> promoting the tool as a cryptocurrency miner.
             <br>
-            <img src="../img/badlogic_q8.png" alt="q8_answer">
+            <img src="/img/badlogic_q8.png" alt="q8_answer">
           </p>
           <h2 id="post__content__title">Password Dumping Tool</h2>
           <pre><code class="language-markdown">Q9) What is the name of the password dumping tool used by the threat actor? (10 points)</code></pre><br>
@@ -238,7 +238,7 @@ be of assistance. A full review of the compromised application may also be in or
             tool to the file <span id="inline-code">password_extract.txt</span>. Once again, a quick Google search helps us out. LaZagne is available on 
             <a href="https://github.com/AlessandroZ/LaZagne">Github</a> and is desribed as an open source application used to retrieve lots of passwords stored on a local computer. 
             <br>
-            <img src="../img/badlogic_q9.png" alt="q9_answer">
+            <img src="/img/badlogic_q9.png" alt="q9_answer">
           </p>
           <h2 id="post__content__title">Data Exfiltration</h2>
           <pre><code class="language-markdown">Q10) What is the name of the text file the TA echo'ed out to? (10 points)</code></pre><br>
@@ -246,7 +246,7 @@ be of assistance. A full review of the compromised application may also be in or
             To answer this question, we can refer back to our findings for question 9, where we identified that the output of lazange was redirected (echo'ed) to the file:
             <span id="inline-code">password_extract.txt</span>
             <br>
-            <img src="../img/badlogic_q9.png" alt="q10_answer">
+            <img src="/img/badlogic_q9.png" alt="q10_answer">
           </p>
       </article>
     </div>
@@ -265,7 +265,7 @@ be of assistance. A full review of the compromised application may also be in or
               <h2 class="widget__title">Explore Tags</h2>
             </div>
             <div class="tag__cloud">
-              <a href="../ctf/" class="set-1">CTF Writeups</a>
+              <a href="/ctf/" class="set-1">CTF Writeups</a>
             </div>
           </div>
         </div>
@@ -279,13 +279,13 @@ be of assistance. A full review of the compromised application may also be in or
     <div id="footer-content"></div>
   </footer>
   <!-- end footer -->
-  <script src="../js/vendors/jquery-3.5.1.min.js"></script>
-  <script src="../js/vendors/simple-jekyll-search.min.js"></script>
-  <script src="../js/vendors/jquery.fitvids.js"></script>
-  <script src="../js/vendors/lazyload.min.js"></script>
-  <script src="../js/vendors/transition.js"></script>
-  <script src="../js/vendors/zoom.min.js"></script>
-  <script src="../js/common.js"></script>
+  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+  <script src="/js/vendors/jquery.fitvids.js"></script>
+  <script src="/js/vendors/lazyload.min.js"></script>
+  <script src="/js/vendors/transition.js"></script>
+  <script src="/js/vendors/zoom.min.js"></script>
+  <script src="/js/common.js"></script>
   <script>
     var base_url = "",
       pagination_next_url = base_url + '/page2',
