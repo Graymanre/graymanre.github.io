@@ -1,1 +1,1 @@
-Sitemap: /sitemap.xml
+Sitemap: https://graymanre.github.io/sitemap.xml

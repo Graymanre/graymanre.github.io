@@ -2,9 +2,20 @@
 <html lang="en">
 
 <head>
-  <title>GraymanRe</title>
-  <meta name='description' content='Personal Portfolio & Project Website'>
-  <link rel="canonical" href="/">
+  <meta property="og:title" content="GraymanRe - The Key" />
+  <meta property="og:description" content="Blue Team Labs The Key Forensics Challenge Writeup" />
+  <meta property="og:image" content="https://graymanre.github.io" />
+  <meta property="og:url" content="https://graymanre.github.io/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@grayman_re" />
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>GraymanRe - BTLO The Key</title>
+
+  <link rel="canonical" href="https://graymanre.github.io/">
   <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
   <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
   <!-- Fonts -->
@@ -12,16 +23,18 @@
 
   <!-- Ionicons -->
   <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="css/main.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-    $(document).ready(function() {
+      $(document).ready(function() {
       $('#header-content').load('https://graymanre.github.io/header.html', function() {
         $.getScript('/js/common.js');
       });
       $("#footer-content").load("https://graymanre.github.io/footer.html");
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
   <script>
