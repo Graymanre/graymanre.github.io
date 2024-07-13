@@ -2,215 +2,215 @@
 <html lang="en">
 
 <head>
-  <meta property="og:title" content="GraymanRe - Flare-on9 PixelPoker" />
-  <meta property="og:description" content="Flare-On9 2022 PixelPoker Challenge Writeup" />
-  <meta property="og:image" content="https://graymanre.github.io" />
-  <meta property="og:url" content="https://graymanre.github.io/" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:creator" content="@grayman_re" />
+    <meta property="og:title" content="GraymanRe - Flare-on9 PixelPoker" />
+    <meta property="og:description" content="Flare-On9 2022 PixelPoker Challenge Writeup" />
+    <meta property="og:image" content="https://graymanre.github.io" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@grayman_re" />
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>GraymanRe - Flare-On9 2022 PixelPoker</title>
+    <title>GraymanRe - Flare-On9 2022 PixelPoker</title>
 
-  <link rel="canonical" href="https://graymanre.github.io/">
-  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
-  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Ionicons -->
-  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>
-      $(document).ready(function() {
-      $('#header-content').load('https://graymanre.github.io/header.html', function() {
-        $.getScript('/js/common.js');
-      });
-      $("#footer-content").load("https://graymanre.github.io/footer.html");
-    });
-  </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-4VZEKGVZPK');
-  </script>
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
 </head>
 
 <body class="is-in">
-  <!-- begin header -->
-  <header class="header">
-    <div id="header-content">
-  </header>
-  <!-- end header -->
-
-  <!-- begin search -->
-  <div class="search">
-    <div class="container">
-      <div class="row">
-        <div class="col col-12">
-          <div class="search__box">
-            <div class="search__group">
-              <div class="search__close">
-                <i class="ion ion-md-close"></i>
-              </div>
-              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
-                placeholder="Type to search...">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row search-results-list" id="js-results-container"></div>
-    </div>
-  </div>
-  <!-- end search -->
-
-  <!-- Start of custom content -->
-  <main class="content" aria-label="Content">
-    <div class="post-head">
-      <div class="container">
-        <div class="row">
-          <div class="col col-2"></div>
-          <div class="col col-8 col-t-12">
-            <div class="post-head__box">
-              <div class="post__meta">
-                <span class="post__minutes">5 min read <time class="post__date" datetime="2022-12-11T00:00:00+02:00">11 December 2022</time>
-                </span>
-              </div>
-              <h2 class="post__title">02 - Pixel Poker - Flare-On9 Writeup</h2>
-              <div class="post__bottom">
-                <div class="post__author">
-                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
-                      src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"/>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                   placeholder="Type to search...">
+                        </div>
+                    </div>
                 </div>
-                <div class="post__bottom-meta">
-                  <a href="/contact/" class="post__author-link">GraymanRe</a>
-                  <span>in</span>
-                  <span class="post-tags">
-                    <a href="/ctf" class="article__tag">CTF Writeups</a>
-                  </span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span class="post__minutes">
+                                    5 min read <time class="post__date" datetime="2022-12-11T00:00:00+02:00">11 December 2022</time>
+                                </span>
+                            </div>
+                            <h2 class="post__title">02 - Pixel Poker - Flare-On9 Writeup</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/ctf" class="article__tag">CTF Writeups</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- begin post -->
-    <div class="container">
-      <article class="post animate">
-        <div class="post__content">
-          <h3 id="post__content__title2">Challenge Writeup</h3>
-          <p>The challenge is made up out of 2 files: <span id="inline-code">PixelPoker.exe</span> and <span id="inline-code">README.txt</span>
-          The README shortly explains how the game works and we can derive some information from it:
-          <br>
-          <div class="language-plaintext highlighter-rouge">
-            <div class="highlight">
-              <pre
-                class="highlight"><code>Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!<br>Your goal is simple: find the correct pixel and click it <br>Good luck!</code></pre>
-            </div>
-          </div>
-          When we launch the game, we are presented with a field that contains pixels. When we move the mouse over the "playing field",
-          we see the <span id="inline-code">x</span> and <span id="inline-code">y</span> coordinates being updated in the title bar.
-          Additionally, we can click on each pixel, another number in the title bar is also being updated. In total we can click 10
-          pixels before we get a pop-up stating: <span id="inline-code">"Please play again!</span>. So we can assume that we have to
-          find the correct pixel in order to obtain the flag, and we have a total of 10 tries. We load the game into IDA for further 
-          analysis.
-          <div>
-            <img src="/img/pp-game.png" alt="Pixel Poker" onclick="window.open(this.src, '_blank');"
-            width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-          </div>
-          <br><br>
-          As this is still an early level of Flare-On, we start by searching for strings in the binary. We come across the string 
-          <span id="inline-code">"Please play again!"</span>, which we saw earlier when clicking on 10 pixels. Locating the string
-          in the disassembly, it appears close to the end of function <span id="inline-code">sub_4012C0</span>. We identify that 
-          execution flow will end up in that block and show the MessageBox, if the previous compare operation of the value in 
-          <span id="inline-code">eax</span> against 10 is equal. We can assume that this is the counter that keeps track of how 
-          often pixels were clicked. So, we follow the false branch, which is taken when the compare fails and we haven't yet clicked
-          ten pixels.
-          <br><br>
-          The next blocks that follow, are depicted in the screenshot below. We see multiple things happening here. First of all, 
-          note that a string is loaded into register <span id="inline-code">eax</span>. This string contains "FLARE-On" which might
-          be relevant later. Next, we notice that two blocks after each other, perform a compare statement. We set breakpoints on
-          both of the compare statements and run the debugger. Once we click on a pixel, the <span id="inline-code">X</span> and 
-          <span id="inline-code"></span>Y</span> values representing the location of that pixel, seem to be used for both compare 
-          statements. The <span id="inline-code">X</span> value is compared to <span id="inline-code">0x5F</span> or integer 95, 
-          whilst the <span id="inline-code"></span>Y</span> value is compared to <span id="inline-code">0x139</span> or integer 313.
-          <br><br>
-          <div>
-            <img src="/img/pp-ida-view.png" alt="Pixel Poker IDA view" onclick="window.open(this.src, '_blank');"
-            width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-          </div>
-          <br><br>
-          Based on this information, we can conclude that if we click the pixel at location <span id="inline-code">95,313</span>, we
-          will have found the correct pixel. Rerunning the game and clicking that specific pixel, will then result in the flag:
-          <br><br>
-          <pre class="highlight"><code>w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
-          And with that, we have completed the second Flare-On challenge!
-          <div>
-            <img src="/img/pp-flag.png" alt="Pixel Poker Flag" onclick="window.open(this.src, '_blank');"
-            width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-          </div>
-          </p>
+        <!-- begin post -->
+        <div class="container">
+            <article class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title2">Challenge Writeup</h3>
+                    <p>
+                        The challenge is made up out of 2 files: <span id="inline-code">PixelPoker.exe</span> and <span id="inline-code">README.txt</span>
+                        The README shortly explains how the game works and we can derive some information from it:
+                        <br>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight"><code>Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!<br>Your goal is simple: find the correct pixel and click it <br>Good luck!</code></pre>
+                            </div>
+                        </div>
+                        When we launch the game, we are presented with a field that contains pixels. When we move the mouse over the "playing field",
+                        we see the <span id="inline-code">x</span> and <span id="inline-code">y</span> coordinates being updated in the title bar.
+                        Additionally, we can click on each pixel, another number in the title bar is also being updated. In total we can click 10
+                        pixels before we get a pop-up stating: <span id="inline-code">"Please play again!</span>. So we can assume that we have to
+                        find the correct pixel in order to obtain the flag, and we have a total of 10 tries. We load the game into IDA for further
+                        analysis.
+                        <div>
+                            <img src="/img/pp-game.png" alt="Pixel Poker" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                        <br><br>
+                        As this is still an early level of Flare-On, we start by searching for strings in the binary. We come across the string
+                        <span id="inline-code">"Please play again!"</span>, which we saw earlier when clicking on 10 pixels. Locating the string
+                        in the disassembly, it appears close to the end of function <span id="inline-code">sub_4012C0</span>. We identify that
+                        execution flow will end up in that block and show the MessageBox, if the previous compare operation of the value in
+                        <span id="inline-code">eax</span> against 10 is equal. We can assume that this is the counter that keeps track of how
+                        often pixels were clicked. So, we follow the false branch, which is taken when the compare fails and we haven't yet clicked
+                        ten pixels.
+                        <br><br>
+                        The next blocks that follow, are depicted in the screenshot below. We see multiple things happening here. First of all,
+                        note that a string is loaded into register <span id="inline-code">eax</span>. This string contains "FLARE-On" which might
+                        be relevant later. Next, we notice that two blocks after each other, perform a compare statement. We set breakpoints on
+                        both of the compare statements and run the debugger. Once we click on a pixel, the <span id="inline-code">X</span> and
+                        <span id="inline-code">Y</span> values representing the location of that pixel, seem to be used for both compare
+                        statements. The <span id="inline-code">X</span> value is compared to <span id="inline-code">0x5F</span> or integer 95,
+                        whilst the <span id="inline-code">Y</span> value is compared to <span id="inline-code">0x139</span> or integer 313.
+                        <br><br>
+                        <div>
+                            <img src="/img/pp-ida-view.png" alt="Pixel Poker IDA view" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                        <br><br>
+                        Based on this information, we can conclude that if we click the pixel at location <span id="inline-code">95,313</span>, we
+                        will have found the correct pixel. Rerunning the game and clicking that specific pixel, will then result in the flag:
+                        <br><br>
+                        <pre class="highlight"><code>w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
+                        And with that, we have completed the second Flare-On challenge!
+                        <div>
+                            <img src="/img/pp-flag.png" alt="Pixel Poker Flag" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                </div>
+            </article>
         </div>
-      </article>
-    </div>
-  </main>
-  <!-- End of custom content -->
+    </main>
+    <!-- End of custom content -->
 
-  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
-  <!-- begin footer-widgets -->
-  <section class="footer-widgets">
-    <div class="container">
-      <div class="row">
-        <div class="col col-4 col-d-6 col-t-12">
-          <div class="widget widget-tag-cloud">
-            <div class="widget__head">
-              <h3 class="widget__title">Explore Tags</h3>
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/rev/" class="set-1">Reverse Engineering</a>
+                            <a href="/project/" class="set-1">Projects</a>
+                            <a href="/ctf" class="set-1">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="tag__cloud">
-              <a href="/rev/" class="set-1">Reverse Engineering</a>
-              <a href="/project/" class="set-1">Projects</a>
-              <a href="/ctf" class="set-1">CTF Writeups</a>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
-  <!-- end footer-widgets -->
-
-  <!-- begin footer -->
-  <footer class="footer">
-    <div id="footer-content"></div>
-  </footer>
-  <!-- end footer -->
-  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
-  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
-  <script src="/js/vendors/jquery.fitvids.js"></script>
-  <script src="/js/vendors/lazyload.min.js"></script>
-  <script src="/js/vendors/transition.js"></script>
-  <script src="/js/vendors/zoom.min.js"></script>
-  <script src="/js/common.js"></script>
-  <script>
-    var base_url = "",
-      pagination_next_url = base_url + '/page2',
-      pagination_next_page_number = '',
-      pagination_available_pages_number = '1';
-  </script>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
 </body>
 
 </html>

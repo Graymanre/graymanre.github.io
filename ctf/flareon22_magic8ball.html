@@ -2,233 +2,232 @@
 <html lang="en">
 
 <head>
-  <meta property="og:title" content="GraymanRe - Flare-on9 Magic8Ball" />
-  <meta property="og:description" content="Flare-On9 2022 Magic8Ball Challenge Writeup" />
-  <meta property="og:image" content="https://graymanre.github.io" />
-  <meta property="og:url" content="https://graymanre.github.io/" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:creator" content="@grayman_re" />
+    <meta property="og:title" content="GraymanRe - Flare-on9 Magic8Ball" />
+    <meta property="og:description" content="Flare-On9 2022 Magic8Ball Challenge Writeup" />
+    <meta property="og:image" content="https://graymanre.github.io" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@grayman_re" />
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>GraymanRe - Flare-On9 2022 Magic8Ball</title>
+    <title>GraymanRe - Flare-On9 2022 Magic8Ball</title>
 
-  <link rel="canonical" href="https://graymanre.github.io/">
-  <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
-  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Ionicons -->
-  <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>
-      $(document).ready(function() {
-      $('#header-content').load('https://graymanre.github.io/header.html', function() {
-        $.getScript('/js/common.js');
-      });
-      $("#footer-content").load("https://graymanre.github.io/footer.html");
-    });
-  </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-4VZEKGVZPK');
-  </script>
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
 </head>
 
 <body class="is-in">
-  <!-- begin header -->
-  <header class="header">
-    <div id="header-content">
-  </header>
-  <!-- end header -->
-
-  <!-- begin search -->
-  <div class="search">
-    <div class="container">
-      <div class="row">
-        <div class="col col-12">
-          <div class="search__box">
-            <div class="search__group">
-              <div class="search__close">
-                <i class="ion ion-md-close"></i>
-              </div>
-              <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-              <input type="text" id="js-search-input" class="search__text" autocomplete="off"
-                placeholder="Type to search...">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row search-results-list" id="js-results-container"></div>
-    </div>
-  </div>
-  <!-- end search -->
-
-  <!-- Start of custom content -->
-  <main class="content" aria-label="Content">
-    <div class="post-head">
-      <div class="container">
-        <div class="row">
-          <div class="col col-2"></div>
-          <div class="col col-8 col-t-12">
-            <div class="post-head__box">
-              <div class="post__meta">
-                <span class="post__minutes">8 min read <time class="post__date" datetime="2024-06-26T00:00:00+02:00">26 June 2024</time>
-                </span>
-              </div>
-              <h2 class="post__title">03 - Magic 8 Ball - Flare-On9 Writeup</h2>
-              <div class="post__bottom">
-                <div class="post__author">
-                  <a href="/contact/" aria-label="GraymanRe"><img class="post__author-image"
-                      src="/img/logo.webp" alt="GraymanRe's Picture"></a>
-                </div>
-                <div class="post__bottom-meta">
-                  <a href="/contact/" class="post__author-link">GraymanRe</a>
-                  <span>in</span>
-                  <span class="post-tags">
-                    <a href="/ctf" class="article__tag">CTF Writeups</a>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- begin post -->
-    <div class="container">
-      <article class="post animate">
-        <div class="post__content">
-          <h3 id="post__content__title2">Challenge Writeup</h3>
-          <p>
-            When launching the application you will see two instructions:
-            <div>
-              <img src="/img/8ball-game.png" alt="8Ball Game" onclick="window.open(this.src, '_blank');"
-              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-            </div>
-            <div class="language-plaintext highlighter-rouge">
-                <div class="highlight">
-                  <pre
-                    class="highlight"><code>1. Press arrow keys to shake the ball.<br>2. Start typing your question (max. 75 characters)</code></pre>
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"/>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                   placeholder="Type to search...">
+                        </div>
+                    </div>
                 </div>
             </div>
-            The given instructions indicate that a combination of arrow keys and a string would be needed in order to crack the challenge.
-            We load the binary into IDA and set out to understand how it works. 
-            <br><br>
-            If we glance over the imports table, we identify that a substantial amount of functions of the SDL2 libary are imporated, as shown in the screenshot
-            below. The SDL2 library supports the Simple DirectMedia Layer.
-            <div class="language-plaintext highlighter-rouge">
-              <div class="highlight">
-                  <pre class="highlight"><code>Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL/Direct3D/Metal/Vulkan. It is used by video playback software, emulators, and popular games including Valve's award winning catalog and many Humble Bundle games.</code></pre>
-              </div>
-            </div>
-            <div>
-              <img src="/img/8ball-imports.png" alt="8Ball Imports" onclick="window.open(this.src, '_blank');"
-              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-            </div>
-            The main entrypoint of the application is the <span id="inline-code">WinMain</span> function which calls a single function <span id="inline-code">sub_403690</span>. 
-            Analyzing this function, we can identify that it will check if any command line arguments are given, handle those and will then call 
-            <span id="inline-code">SDL_SetMainReady</span> before calling <span id="inline-code">sub_4027A0</span>. Based on the documentation, we
-            can assume that the code so far has initialized the environment, and we can resume our analysis by diving into the last function that is called.
-            <br><br>
-            The first three blocks until <span id="inline-code">0x40281d</span> seem to do more initialization processes such as loading strings, fonts,
-            and setting buffers. The application then calls <span id="inline-code">sub_402090</span> on which we will now focus our attention.
-            We identify more SDL2 function calls responsible for creating images, a window and a renderer. Furthermore, we identify that a 4x4 hex characters
-            get loaded into a register <span id="inline-code">6D6D69676C662065702067613F736C</span>. When we decode this hex string, we find out it resolves to 
-            <span id="inline-code">gimme flag pls?</span>. We assume that this string that this string might be of importance later on. Note how the string is 
-            stored in a dowrd pointer starting at <span id="inline-code">edi+5Ch</span>. Furthermore, a little down we identify the strings that are visible in 
-            the program and serve as instructions on how to operate the program. 
-            <br><br>
-            Since we know that SDL2 is used for keyboard events, I read up on the documentary and discovered that the function <span id="inline-code">SDL_PollEvents</span>
-            is used to listen for keyboard events. This function is only used twice within the same function: <span id="inline-code">sub_401E50</span>, which
-            is closely located in relation to the previous functions we have analysed. As such, the assumption is made that the call at 
-            <span id="inline-code">Magic8Ball+2888</span> contains the first part of the logic to get the flag.
-            <br><br>
-            As it was not immediately clear what the usage of this function was, a couple of breakpoints were set on the multiple if-statements within this
-            function. Because the <span id="inline-code">SDL_PollEvents</span> function will handle _all_ events, it should be possible to deduce when the 
-            user-input will be handled. After some trial-and-error, it appeared that setting a breakpoint on <span id="inline-code">Magic8Ball+26B9</span>,
-            before execution, then using the arrow keys and entering the question and pressing "ENTER" would result in the execution flow ending up here. 
-            From hereonwards, we see a nested <span id="inline-code">if</span> structure, which eventually result in a call to <span id="inline-code">strncmp</span>.
-            <div>
-              <img src="/img/8ball-pattern.png" alt="8Ball Pattern" onclick="window.open(this.src, '_blank');"
-              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-            </div>
-            <br>
-            For every <span id="inline-code">if-statement</span>, it is checked if the value in <span id="inline-code">[ecx+x]</span> where <span id="inline-code">x</span> 
-            is an incrementing number starting at 0, is equal to a certain hex-value. Checking all the <span id="inline-code">if-statements</span> it became
-            obvious that there were only 4 unique hex-values that were considered 'valid' input. These values corresponded to the letters 
-            <span id="inline-code">L, R, U, D</span>, which correspond to the arrow keys for "left, right, up & down". With this new insight we could reverse what
-            the expected pattern is: <span id="inline-code">LLURULDUL</span>. If this pattern was hit, the user would then need to input a "question".
-            Following execution flow, we see that the user's input is subsequently compared using <span id="inline-code">strncmp </span> against the earlier
-            identified hardcoded string "gimme flag pls?" stored in a pointer to <span id="inline-code">edi+5Ch</span>. 
-            <br><br>
-            Thus, by inputting the arrow key combination "LLURULDUL" and asking the question "gimme flag pls?" we obtain the flag for this challenge: 
-            <span id="inline-code">U_cRackeD_th1$_maG1cBaLL_!!_@flare-on.com</span>. And with that, we have completed the third Flare-On challenge!
-            <div>
-              <img src="/img/8ball-flag.png" alt="8Ball Flag" onclick="window.open(this.src, '_blank');"
-              width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-            </div>
-          </p>
         </div>
-      </article>
-    </div>
-  </main>
-  <!-- End of custom content -->
-
-  <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
-  <!-- begin footer-widgets -->
-  <section class="footer-widgets">
-    <div class="container">
-      <div class="row">
-        <div class="col col-4 col-d-6 col-t-12">
-          <div class="widget widget-tag-cloud">
-            <div class="widget__head">
-              <h3 class="widget__title">Explore Tags</h3>
-            </div>
-            <div class="tag__cloud">
-              <a href="/rev/" class="set-1">Reverse Engineering</a>
-              <a href="/project/" class="set-1">Projects</a>
-              <a href="/ctf" class="set-1">CTF Writeups</a>
-            </div>
-          </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
         </div>
-      </div>
     </div>
-  </section>
-  <!-- end footer-widgets -->
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span class="post__minutes">
+                                    8 min read <time class="post__date" datetime="2024-06-26T00:00:00+02:00">26 June 2024</time>
+                                </span>
+                            </div>
+                            <h2 class="post__title">03 - Magic 8 Ball - Flare-On9 Writeup</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/ctf" class="article__tag">CTF Writeups</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <!-- begin footer -->
-  <footer class="footer">
-    <div id="footer-content"></div>
-  </footer>
-  <!-- end footer -->
-  <script src="/js/vendors/jquery-3.5.1.min.js"></script>
-  <script src="/js/vendors/simple-jekyll-search.min.js"></script>
-  <script src="/js/vendors/jquery.fitvids.js"></script>
-  <script src="/js/vendors/lazyload.min.js"></script>
-  <script src="/js/vendors/transition.js"></script>
-  <script src="/js/vendors/zoom.min.js"></script>
-  <script src="/js/common.js"></script>
-  <script>
-    var base_url = "",
-      pagination_next_url = base_url + '/page2',
-      pagination_next_page_number = '',
-      pagination_available_pages_number = '1';
-  </script>
+        <!-- begin post -->
+        <div class="container">
+            <article class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title2">Challenge Writeup</h3>
+                    <p>
+                        When launching the application you will see two instructions:
+                        <div>
+                            <img src="/img/8ball-game.png" alt="8Ball Game" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight"><code>1. Press arrow keys to shake the ball.<br>2. Start typing your question (max. 75 characters)</code></pre>
+                            </div>
+                        </div>
+                        The given instructions indicate that a combination of arrow keys and a string would be needed in order to crack the challenge.
+                        We load the binary into IDA and set out to understand how it works.
+                        <br><br>
+                        If we glance over the imports table, we identify that a substantial amount of functions of the SDL2 libary are imporated, as shown in the screenshot
+                        below. The SDL2 library supports the Simple DirectMedia Layer.
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight"><code>Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL/Direct3D/Metal/Vulkan. It is used by video playback software, emulators, and popular games including Valve's award winning catalog and many Humble Bundle games.</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <img src="/img/8ball-imports.png" alt="8Ball Imports" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                        The main entrypoint of the application is the <span id="inline-code">WinMain</span> function which calls a single function <span id="inline-code">sub_403690</span>.
+                        Analyzing this function, we can identify that it will check if any command line arguments are given, handle those and will then call
+                        <span id="inline-code">SDL_SetMainReady</span> before calling <span id="inline-code">sub_4027A0</span>. Based on the documentation, we
+                        can assume that the code so far has initialized the environment, and we can resume our analysis by diving into the last function that is called.
+                        <br><br>
+                        The first three blocks until <span id="inline-code">0x40281d</span> seem to do more initialization processes such as loading strings, fonts,
+                        and setting buffers. The application then calls <span id="inline-code">sub_402090</span> on which we will now focus our attention.
+                        We identify more SDL2 function calls responsible for creating images, a window and a renderer. Furthermore, we identify that a 4x4 hex characters
+                        get loaded into a register <span id="inline-code">6D6D69676C662065702067613F736C</span>. When we decode this hex string, we find out it resolves to
+                        <span id="inline-code">gimme flag pls?</span>. We assume that this string that this string might be of importance later on. Note how the string is
+                        stored in a dowrd pointer starting at <span id="inline-code">edi+5Ch</span>. Furthermore, a little down we identify the strings that are visible in
+                        the program and serve as instructions on how to operate the program.
+                        <br><br>
+                        Since we know that SDL2 is used for keyboard events, I read up on the documentary and discovered that the function <span id="inline-code">SDL_PollEvents</span>
+                        is used to listen for keyboard events. This function is only used twice within the same function: <span id="inline-code">sub_401E50</span>, which
+                        is closely located in relation to the previous functions we have analysed. As such, the assumption is made that the call at
+                        <span id="inline-code">Magic8Ball+2888</span> contains the first part of the logic to get the flag.
+                        <br><br>
+                        As it was not immediately clear what the usage of this function was, a couple of breakpoints were set on the multiple if-statements within this
+                        function. Because the <span id="inline-code">SDL_PollEvents</span> function will handle _all_ events, it should be possible to deduce when the
+                        user-input will be handled. After some trial-and-error, it appeared that setting a breakpoint on <span id="inline-code">Magic8Ball+26B9</span>,
+                        before execution, then using the arrow keys and entering the question and pressing "ENTER" would result in the execution flow ending up here.
+                        From hereonwards, we see a nested <span id="inline-code">if</span> structure, which eventually result in a call to <span id="inline-code">strncmp</span>.
+                        <div>
+                            <img src="/img/8ball-pattern.png" alt="8Ball Pattern" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                        <br>
+                        For every <span id="inline-code">if-statement</span>, it is checked if the value in <span id="inline-code">[ecx+x]</span> where <span id="inline-code">x</span>
+                        is an incrementing number starting at 0, is equal to a certain hex-value. Checking all the <span id="inline-code">if-statements</span> it became
+                        obvious that there were only 4 unique hex-values that were considered 'valid' input. These values corresponded to the letters
+                        <span id="inline-code">L, R, U, D</span>, which correspond to the arrow keys for "left, right, up & down". With this new insight we could reverse what
+                        the expected pattern is: <span id="inline-code">LLURULDUL</span>. If this pattern was hit, the user would then need to input a "question".
+                        Following execution flow, we see that the user's input is subsequently compared using <span id="inline-code">strncmp </span> against the earlier
+                        identified hardcoded string "gimme flag pls?" stored in a pointer to <span id="inline-code">edi+5Ch</span>.
+                        <br><br>
+                        Thus, by inputting the arrow key combination "LLURULDUL" and asking the question "gimme flag pls?" we obtain the flag for this challenge:
+                        <span id="inline-code">U_cRackeD_th1$_maG1cBaLL_!!_@flare-on.com</span>. And with that, we have completed the third Flare-On challenge!
+                        <div>
+                            <img src="/img/8ball-flag.png" alt="8Ball Flag" onclick="window.open(this.src, '_blank');"
+                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </main>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/rev/" class="set-1">Reverse Engineering</a>
+                            <a href="/project/" class="set-1">Projects</a>
+                            <a href="/ctf" class="set-1">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
 </body>
 
 </html>
