@@ -49,10 +49,18 @@
   },
   {
     "title": "Automating M365 Security Assessments",
-    "category": "CTF",
+    "category": "Projects",
     "tags": "Microsoft, Azure, Defender, Intune, Graph API, PowerShell",
     "url": "projects/automating_tenant_assessments.html",
     "date": "25 September 2023",
     "content": "Dive into the world of automation through the Windows Graph API and automate your M365 Security Assessment."
+  },
+  {
+    "title": "Developing a WinDBG Extension in C++",
+    "category": "Projects",
+    "tags": "C++, WinDBG, Time Travel Debugging, DebugCreate, IDebugClient, Debugging, Reverse Engineering",
+    "url": "projects/windbg_dev_extension.html",
+    "date": "13 July 2024",
+    "content": "Tutorial on how to write a WinDBG extension in C++"
   }
 ]
