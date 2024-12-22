@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="GraymanRe - How Your Executable Comes to Life" />
+    <meta property="og:description" content="How Your Executable Comes to Life" />
+    <meta property="og:image" content="https://graymanre.github.io" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@grayman_re" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRe - How Your Executable Comes to Life</title>
+
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="../feed.xml">
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span class="post__minutes">20 min read <time class="post__date" datetime="2024-12-10T00:00:00+02:00">- 12 December 2024</time></span>
+                            </div>
+                            <h2 class="post__title">Deploying OpenVPN on pfSense using LDAP</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="../contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="../img/banner.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="../contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="../projects" class="post__tag">Projects</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Introduction</h3>
+                    <p>
+                        I have been messing around with my home network layout recently and had the idea to setup a Windows Domain.
+                        One of the reasons for this is because wanted to expirment with setting up OpenVPN through my pfSense using LDAP. Now, the current guides on how to configure your pfSense
+                        with LDAP are outdated. As such, quite a bit of time went into figuring out how to properly setup LDAP on pfSense and getting the configuration correct. 
+                        <br><br>
+                        My setup for this guide/tutorial is as follows:
+                        <ul style="margin-bottom: 0;">
+                            <li>One VM running Windows Server 2022 and with the Active Directory Domain Services role (Domain Controller).</li>
+                            <li>One VM running Windows Server 2022 and with the Active Directory Certificate Services role.</li>
+                            <li>One pfSense appliance (version 24.03) able to reach the Domain Controller.</li>
+                            <li>One device, such as a laptop with the OpenVPN client installed.</li>
+                        </ul>
+                        <br>
+                        Note: It is recommended to run, at least, two domain controllers and ensure replication is enabled. Although I fully support this notion, for this tutorial I will not go to
+                        the length of setting up a second AD DC.
+
+                        <br><br>
+                        <h3 id="post__content__title2">Configuring the Active Directory Domain Controller</h3>
+                        I found that configuring the Active Directory Domain Controller was the 'easy' step in the process.
+
+                        We will complete three main steps to enable LDAP:
+                        <ul style="margin-bottom: 0;">
+                            <li>Create a specific organizational unit with 1 user</li>
+                            <li>Setup a connection to the LDAP server</li>
+                            <li>Login with the newly created user to confirm successful authentication</li>
+                        </ul>
+                        <br>
+                        <h3 id="post__content__title2">Creating an OU and user</h3>
+                        We will create a dedicated "VPNUsers" Organizational Unit by opening the "Active Directory Users and Computers" application on the Domain Controller.
+                        In this application, right click our domain (contosotest.com) and select "New" -> "Organizational Unit" and name it "VPNUsers". In this Organizational Unit, add a new 
+                        user and name it "admin" and set a password for this user.
+
+                        <br><br>
+                        <h3 id="post__content__title2">Setting up a connection to the LDAP server</h3>
+                        Using the Windows button, search for "ldp.exe" and open the application. In the menu, select "Connection" -> "Connect...". 
+                        Fill in the server (contosotest.com) and port (389) and leave both the "Connectionless" and "SSL" checkboxes unchecked. After clicking on OK, it should result in a long 
+                        list of keys and values, which starts at the top with the sentence "Established connection to contosotest.com".
+
+                        <br><br>
+                        <h3 id="post__content__title2">Logging in with the new user on the LDAP server</h3>
+                        Now, in the ldp.exe application go to "Connection" -> "Bind...". In the menu, select the option "Simple bind". Supply the plain username (admin) and corresponding 
+                        password for the newly created user and click "OK". You should see a message stating "Authenticated as 'CONTOSOTEST\admin'.
+
+                        If all of this went as expected, LDAP is properly configured and we are ready to continue to the next step. 
+
+                        <br><br>
+                        <h3 id="post__content__title2">Configuring the pfSense appliance - Setting up LDAP over Standard TCP</h3>
+                        To enable LDAP authentication on the pfSense we first have to setup an Authentication Server with the applicable settings to allow the connection between the pfSense 
+                        appliance and the DC.
+                        On the pfSense, go to "System" -> "User Manager" -> "Authentication Servers" -> "Add". I have used the following values for the following fields:
+                        <br><br>
+                        <ul style="margin-bottom: 0;">
+                            <li><b>Descriptive name</b> -> AD LDAP -> Can be anything you like</li>
+                            <li><b>Type</b> -> LDAP -> Should be self explanatory</li>
+                            <li><b>Hostname or IP address</b> -> dc0.contosotest.com -> The hostname of the Domain Controller, this can also be the IP address</li>
+                            <li><b>Port value</b> -> 389 -> Default TCP LDAP port</li>
+                            <li><b>Transport</b> -> Standard TCP -> Default protocol for LDAP on port 389</li>
+                            <li><b>Peer Certificate Authority</b> -> Can be left empty / to its default value since this is only applicable if we use STARTTLS / TLS Encrypted LDAP</li>
+                            <li><b>Client Certificate</b> -> None -> Can be left empty since this is only applicable if we use STARTTLS / TLS Encrypted LDAP</li>
+                            <li><b>Protocol Version</b> -> 3 -> LDAP protocol version</li>
+                            <li><b>Server Timeout</b> -> 25 -> Default timeout should be fine</li>
+                            <li><b>Search Scope</b></li>
+                                <ul style="margin-bottom: 0;">
+                                    <li><b>Level</b> -> Entire Subtree -> Allows us to find all authentication containers</li>
+                                    <li><b>Base DN</b> -> DC=contosotest,DC=com -> Set to the base domain name of our domain</li>
+                                </ul>
+                            <li><b>Authentication containers</b> -> Skipping over this on purpose for now</li>
+                            <li><b>Extended query</b> -> Unchecked -> We do not currently need this feature, it allows us to add certain requirements to the user(s) within a specific authentication 
+                                container</li>
+                            <li><b>Bind anonymous</b> -> Unchecked -> We do not want to use anonymous binds</li>
+                            <li><b>Bind Credentials</b></li>
+                            <ul style="margin-bottom: 0;">
+                                <li><b>Username</b>: CONTOSOTEST\admin</li>
+                                <li><b>Password</b>: password -> the password we previously configured for this user</li>
+                            </ul>
+                            <li><b>Initial Template</b> -> Microsoft AD</li>
+                            <li><b>User naming attribute</b> -> sAMAccountName -> Windows specific value</li>
+                            <li><b>Group naming attribute</b> -> cn -> Windows specific value</li>
+                            <li><b>Group member attribute</b> -> memberOf -> Windows specific value</li>
+                            <li><b>RFC 2307 Groups</b> -> Unchecked -> Not a requirement for Windows LDAP</li>
+                            <li><b>Group Object Class</b> -> posixGroup -> Default object class for RFC2307</li>
+                            <li><b>UTF8 Encode</b> -> Unchecked -> Not a requirement for our setup</li>
+                            <li><b>Username Alternations</b> -> Unchecked -> Not a requirement for our setup></li>
+                            <li><b>Allow unauthenticated bind</b> -> Unchecked -> Could be needed when we use a (group) Managed Service Account ((g)MSA) but in our case this is not a requirement</li>
+                        </ul>
+                        <br>
+                        Now, we can refer back to the earlier skipped "Authentication containers". Here we will fill in the top level container, which is equal to the top-level domain name 
+                        "DC=dbmz,DC=com". Note that using the button on the right-hand side, it also allows us to select a container.
+                        <br><br>
+                        If you configured everything correctly, clicking the button should result in a pop-up window, allowing us to select the specific authentication container we would like to
+                        use. In case nothing happens, scroll to the bottom, you should be presented with a red string stating something like: "Could not connect to the LDAP server. Please check 
+                        the LDAP configuration". This means one of the values above is configured incorrectly, so you would need to go back and review the settings. In our case everything went 
+                        well and we can select the appropriate container: "OU=VPNUsers,DC=contosotest,DC=com". We could also have prefilled this option, but using the button, we verify that the
+                        connection to the LDAP server on the Domain Controller is working. 
+                        <br><br>
+                        Now, go ahead and save this Authentication Server configuration. We want to be absolutely certain that this configuration works, for that we will go to the "Settings" tab
+                        in the User Manager. Here, change the authentication server from "Local Database" to the authentication server name we just created and click on "Save & Test". If the 
+                        LDAP configuration settings are correctly configured we should be presented with an overview of the test results stating all 3 tests succeeded and one or more organizational
+                        units were found. 
+                        <br><br>
+                        <h3 id="post__content__title2">Configuring the Active Directory Certificate Services</h3>
+                        Since OpenVPN will be working with certificates, we want to ensure that we have a Certificate Authority under our control that can deploy domain wide certificates. 
+                        For this, we will be using a clean Windows Server 2022 installation on which we will deploy the Certificate Services roles & features. 
+                        When the Certificate Services have been deployed, the Certification Authority tool allows us to export the CA's certificate. We will need this certificate to add the 
+                        Certificate Authority to pfSense. Furthermore, using the templates, we need to create a server certificate for the pfSense.
+
+                        <br><br>
+                        <h3 id="post__content__title2">Configuring the pfSense appliance - Deploying OpenVPN</h3>
+                        pfSense has the OpenVPN package preinstalled. Therefore, we can go to VPN -> OpenVPN and use the Wizards tab to deploy a new OpenVPN server. On the first pane, set the type 
+                        of server to LDAP. Then, on the second pane select the previously deployed authentication server, in our case `AD LDAP`. Continuing, in the next pane we select the 
+                        Certificate Authority we previously deployed to pfSense. Moving on, in the seventh pane, we select the previously imported server certificate. Now, we reach step 9 of the 
+                        setup. Here, we use the following options with corresponding values:
+
+                        <ul style="margin-bottom: 0;">
+                            <li><b>Description</b> -> Remote Workplace</li>
+                            <li><b>Protocol</b> -> UDP on IPv4 only</li>
+                            <li><b>Interface</b> -> WAN</li>
+                            <li><b>Local Port</b> -> 1194</li>
+                            <li><b>TLS Authentication</b> -> enabled</li>
+                            <li><b>Generate TLS Key</b> -> enabled</li>
+                            <li><b>DH Parameters Length</b> -> 2048 bit</li>
+                            <li><b>Data Encryption Algorithms</b> -> select all</li>
+                            <li><b>Fallback Data Encryption Algorithm</b> -> AES-256-CBC (256 bit key, 128 bit block)</li>
+                            <li><b>Auth Digest Algorithm</b> -> SHA256 (256-bit)</li>
+                            <li><b>Tunnel Network</b> -> 192.168.201.0/24</li>
+                            <li><b>IPv4 Local Network</b> -> 192.168.2.0/24</li>
+                            <li><b>Concurrent Connections</b> -> 5</li>
+                            <li><b>Allow Compression</b> -> Refuse any non-stub compression (Most secure)</li>
+                            <li><b>Compression</b> -> Disable Compression [Omit Preference]</li>
+                            <li><b>Dynamic IP</b> -> checked</li>
+                            <li><b>Topology</b> -> Subnet -> One IP address per client in a common subnet</li>
+                            <li><b>DNS default domain</b> -> contosotest.com -> Domain name of the Domain</li>
+                            <li><b>DNS Server 1</b> -> 192.168.2.10 -> IP address of the DC</li>
+                            <li><b>NTP Server</b> -> 192.168.2.10 -> IP address of the DC</li>
+                        </ul>
+                        <br>
+                        Then, on the last pane enable both options:
+                        <ul style="margin-bottom: 0;">
+                            <li><b>Traffic from clients to server</b> -> Add a rule to permit connections to this OpenVPN server instance from clients anywhere on the internet</li>
+                            <li><b>Traffic from clients through VPN</b> -> Add a rule to allow all traffic from connected clients to pass inside the VPN tunnel</li>
+                        </ul>
+                        <br>
+                        Then select next and finish the process. You should now have a new OpenVPN server under the Servers tab in the OpenVPN portal. 
+                        To make life easier, we will proceed to download the Client Export tool which enables the easy direct creation of a OpenVPN Client Config file. 
+                        <br><br>
+                        Go to System -> Package Manager and search for "openvpn-client-export". After installing the package go to VPN -> OpenVPN -> Client Export.
+                        In this screen, scroll down to the "OpenVPN Clients" pane, here, the option should be provided to download the "Inline Configuration". Proceed by selecting the 
+                        "Most Clients" option and copy/transfer the file to the laptop or any other device. Ensure that said device is currently <b>not</b> connected to the WiFi network in which 
+                        the OpenVPN server is installed. 
+                        <br><br>
+                        Import the configuration file into the OpenVPN client on the device and use the credentials of the "admin" user previously created to 
+                        setup the VPN connection. 
+                        <img class="rounded" src="../img/M365E.png" alt="Entra Tenant Assessment App Registrations" onclick="window.open(this.src, '_blank');"
+                             width="561" , height="346" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'"><br><br>
+                    </p>
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="../ctf/" class="set-1">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="../js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="../js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="../js/vendors/jquery.fitvids.js"></script>
+    <script src="../js/vendors/lazyload.min.js"></script>
+    <script src="../js/vendors/transition.js"></script>
+    <script src="../js/vendors/zoom.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
+</body>
+
+</html>
