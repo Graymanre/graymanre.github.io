@@ -113,11 +113,13 @@
                 <div class="post__content">
                     <h3 id="post__content__title">Introduction</h3>
                     <p>
-                        I have been messing around with my home network layout recently and had the idea to setup a Windows Domain.
-                        One of the reasons for this is because wanted to expirment with setting up OpenVPN through my pfSense using LDAP. Now, the current guides on how to configure your pfSense
-                        with LDAP are outdated. As such, quite a bit of time went into figuring out how to properly setup LDAP on pfSense and getting the configuration correct. 
+                        Recently, I decided to revamp my home network and explore setting up a Windows Domain. The main driver behind this was my interest in configuring OpenVPN on my 
+                        pfSense router using LDAP authentication. However, I quickly discovered that most existing guides for integrating pfSense with LDAP are outdated, leading to a 
+                        significant amount of trial and error to get the setup and configuration just right. 
                         <br><br>
-                        My setup for this guide/tutorial is as follows:
+                        Based on my experience, this blog post aims to guide you through setting up LDAP on pfSense and enable Active Directory authentication. For this, we will need to
+                        deploy the following:
+                        </p>
                         <ul style="margin-bottom: 0;">
                             <li>One VM running Windows Server 2022 and with the Active Directory Domain Services role (Domain Controller).</li>
                             <li>One VM running Windows Server 2022 and with the Active Directory Certificate Services role.</li>
@@ -125,26 +127,73 @@
                             <li>One device, such as a laptop with the OpenVPN client installed.</li>
                         </ul>
                         <br>
-                        Note: It is recommended to run, at least, two domain controllers and ensure replication is enabled. Although I fully support this notion, for this tutorial I will not go to
-                        the length of setting up a second AD DC.
-
-                        <br><br>
+                        <p>
+                        Note: It is recommended to run, at least, two domain controllers and ensure replication is enabled. Although I fully support this notion, for this tutorial I will
+                        not go to the length of setting up a second AD DC in this specific post.
+                        </p>
                         <h3 id="post__content__title2">Configuring the Active Directory Domain Controller</h3>
-                        I found that configuring the Active Directory Domain Controller was the 'easy' step in the process.
-
-                        We will complete three main steps to enable LDAP:
+                        <p>
+                        I found that configuring the Active Directory Domain Controller was the 'easy' step in the process. We will complete three main steps to enable LDAP:
+                        </p>
                         <ul style="margin-bottom: 0;">
+                            <li>Deploy the Active Directory Domain Services (feel free to skip this step if you are familiar with deploying ADDS)</li>
                             <li>Create a specific organizational unit with 1 user</li>
                             <li>Setup a connection to the LDAP server</li>
                             <li>Login with the newly created user to confirm successful authentication</li>
                         </ul>
                         <br>
-                        <h3 id="post__content__title2">Creating an OU and user</h3>
-                        We will create a dedicated "VPNUsers" Organizational Unit by opening the "Active Directory Users and Computers" application on the Domain Controller.
-                        In this application, right click our domain (contosotest.com) and select "New" -> "Organizational Unit" and name it "VPNUsers". In this Organizational Unit, add a new 
-                        user and name it "admin" and set a password for this user.
-
+                        <button type="button" class="collapsible"><h3 id="post__content__title2" style="margin-bottom: 0;">Deploying the Active Directory Domain Services</h3></button>
+                        <div class="collapsible-content">
+                            <br>
+                            <img class="lazy" data-src="../img/ADDS_1.png" alt="Add roles and features">
+                            <p>In the server manager, click "Add roles and features"...</p>
+                            <img class="lazy" data-src="../img/ADDS_2.png" alt="Add roles and features wizard">
+                            <p>On the first page in the wizard, click next...</p>
+                            <img class="lazy" data-src="../img/ADDS_3.png" alt="Select installation type">
+                            <p>Ensure you select "Role-based or feature-based installation" and click next...</p>
+                            <img class="lazy" data-src="../img/ADDS_4.png" alt="Server selection">
+                            <p>In the sever selection tab, select the current server and click next...</p>
+                            <img class="lazy" data-src="../img/ADDS_5.png" alt="Server roles">
+                            <p>On the server roles tab, ensure you select both the Active Directory Domain Services and DNS Server roles...</p>
+                            <img class="lazy" data-src="../img/ADDS_6.png" alt="Confirmation">
+                            <p>On the confirmation tab ensure the roles are displayed. You may opt to select the "Restart the destination server automatically if required" option, but it should
+                                not be necessary to perform a server restart.
+                            </p>
+                            <img class="lazy" data-src="../img/ADDS_7.png" alt="Results tab">
+                            <p>The specified roles will now be installed, this may take a couple of minutes. Once this has been successfully completed, you will see the option appear to 
+                                "Promote this server to a domain controller". Select this option.
+                            </p>
+                            <img class="lazy" data-src="../img/ADDS_8.png" alt="Add new forest">
+                            <p>Since this is a new setup, we will begin by adding a new forest. Ensure you give your forest an appropriate name, like "contosotest.com"</p>
+                            <img class="lazy" data-src="../img/ADDS_9.png" alt="ADRM password">
+                            <p>In the domain controller options, add a secure Directory Service Restore Mode password and click next...</p>
+                            <img class="lazy" data-src="../img/ADDS_10.png" alt="DNS Delegation">
+                            <p>Select the button to create the DNS delegation and add the credentials of the Administrative user of the server before clicking next...</p>
+                            <img class="lazy" data-src="../img/ADDS_11.png" alt="NetBIOS name">
+                            <p>The wizard should automatically fill the NetBIOS name, we will leave this to the default value</p>
+                            <img class="lazy" data-src="../img/ADDS_12.png" alt="Paths">
+                            <p>The wizard should automatically fill the paths, we will leave this to the default value</p>
+                            <img class="lazy" data-src="../img/ADDS_13.png" alt="Review options">
+                            <p>Review the chosen options and click next...</p>
+                            <img class="lazy" data-src="../img/ADDS_14.png" alt="Add new forest">
+                            <p>The wizard will perform a prerequisites check which should pass successfully on a default server. You can now select install, which will deploy the 
+                                Active Directory Domain Services and DNS Server configuration to the server. This may take a while and afterwards a reboot is likely required. Once 
+                                completed, the server is now the primary Domain Controller and we can continue by creating an OU and dedicated VPN user.
+                            </p>
+                        </div>
                         <br><br>
+                        <h3 id="post__content__title2">Creating an OU and user</h3>
+                        <p>
+                        We will create a dedicated "VPNUsers" Organizational Unit by opening the "Active Directory Users and Computers" application on the Domain Controller.
+                        </p>
+                        <img class="lazy" data-src="../img/ADDS_15.png" alt="Add roles and features"/>
+                        <p>In this application, right click our domain (contosotest.com) and select "New" -> "Organizational Unit"</p>
+                        <img class="lazy" data-src="../img/ADDS_16.png" alt="Add roles and features wizard"/>
+                        <p>Name the OU something distinctive like "VPNUsers".</p>
+                        <img class="lazy" data-src="../img/ADDS_17.png" alt="Select installation type"/>
+                        <p>In this Organizational Unit, add a new user</p>
+                        <img class="lazy" data-src="../img/ADDS_18.png" alt="New user"/>
+                        <p>Name the user vpn_admin and set a password</p>
                         <h3 id="post__content__title2">Setting up a connection to the LDAP server</h3>
                         Using the Windows button, search for "ldp.exe" and open the application. In the menu, select "Connection" -> "Connect...". 
                         Fill in the server (contosotest.com) and port (389) and leave both the "Connectionless" and "SSL" checkboxes unchecked. After clicking on OK, it should result in a long 
@@ -154,7 +203,8 @@
                         <h3 id="post__content__title2">Logging in with the new user on the LDAP server</h3>
                         Now, in the ldp.exe application go to "Connection" -> "Bind...". In the menu, select the option "Simple bind". Supply the plain username (admin) and corresponding 
                         password for the newly created user and click "OK". You should see a message stating "Authenticated as 'CONTOSOTEST\admin'.
-
+                        <img class="lazy" data-src="../img/LDP_1.png" alt="New user"/>
+                        <br>
                         If all of this went as expected, LDAP is properly configured and we are ready to continue to the next step. 
 
                         <br><br>
@@ -218,6 +268,34 @@
                         When the Certificate Services have been deployed, the Certification Authority tool allows us to export the CA's certificate. We will need this certificate to add the 
                         Certificate Authority to pfSense. Furthermore, using the templates, we need to create a server certificate for the pfSense.
 
+                        <button type="button" class="collapsible"><h3 id="post__content__title2" style="margin-bottom: 0;">Deploying the Active Directory Certificate Services</h3></button>
+                        <div class="collapsible-content">
+                            <br>
+                            <img class="lazy" data-src="../img/ADDS_1.png" alt="Add roles and features">
+                            <p>In the server manager, click "Add roles and features"...</p>
+                            <img class="lazy" data-src="../img/ADDS_2.png" alt="Add roles and features wizard">
+                            <p>On the first page in the wizard, click next...</p>
+                            <img class="lazy" data-src="../img/ADDS_3.png" alt="Select installation type">
+                            <p>Ensure you select "Role-based or feature-based installation" and click next...</p>
+                            <img class="lazy" data-src="../img/ADCS_4.png" alt="Server selection">
+                            <p>In the sever selection tab, select the current server and click next...</p>
+                            <img class="lazy" data-src="../img/ADCS_5.png" alt="Server roles">
+                            <p>On the server roles tab, ensure you select the Active Directory Certificate Services...</p>
+                            <img class="lazy" data-src="../img/ADCS_6.png" alt="Role Services">
+                            <p>The goal of this server is to issue and manage certificates, as such we chose the Certificate Authority role.</p>
+                            <img class="lazy" data-src="../img/ADCS_7.png" alt="Confirmation tab">
+                            <p>On the confirmation tab ensure the roles are displayed. You may opt to select the "Restart the destination server automatically if required" option, but it should
+                                not be necessary to perform a server restart.</p>
+                            <img class="lazy" data-src="../img/ADCS_8.png" alt="Installation progress">
+                            <p>The specified roles will now be installed, this may take a couple of minutes. Once this has been successfully completed, you will see the option appear to 
+                                "Configure Active Directory Certificate Services on the destination server". Select this option.
+                            </p>
+                            <img class="lazy" data-src="../img/ADCS_9.png" alt="ADCS Credentials">
+                            <p>Specify the credentials to configure role services, in this instance we will use the local Administrator credentials</p>
+                            <img class="lazy" data-src="../img/ADCS_10.png" alt="Role Services">
+                            <p>Since we only installed the Certificate Authority role, it is the only option we can select before clicking next...</p>
+                        </div>
+
                         <br><br>
                         <h3 id="post__content__title2">Configuring the pfSense appliance - Deploying OpenVPN</h3>
                         pfSense has the OpenVPN package preinstalled. Therefore, we can go to VPN -> OpenVPN and use the Wizards tab to deploy a new OpenVPN server. On the first pane, set the type 
@@ -264,8 +342,6 @@
                         <br><br>
                         Import the configuration file into the OpenVPN client on the device and use the credentials of the "admin" user previously created to 
                         setup the VPN connection. 
-                        <img class="rounded" src="../img/M365E.png" alt="Entra Tenant Assessment App Registrations" onclick="window.open(this.src, '_blank');"
-                             width="561" , height="346" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'"><br><br>
                     </p>
                 </div>
             </article>
