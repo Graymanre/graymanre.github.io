@@ -117,29 +117,29 @@
                         pfSense router using LDAP authentication. However, I quickly discovered that most existing guides for integrating pfSense with LDAP are outdated, leading to a 
                         significant amount of trial and error to get the setup and configuration just right. 
                         <br><br>
-                        Based on my experience, this blog post aims to guide you through setting up LDAP on pfSense and enable Active Directory authentication. For this, we will need to
+                        Based on my experience, this blog post aims to guide you through setting up LDAP on pfSense and enabling Active Directory authentication. For this, we will need to
                         deploy the following:
                         </p>
                         <ul style="margin-bottom: 0;">
-                            <li>One VM running Windows Server 2022 and with the Active Directory Domain Services role (Domain Controller).</li>
-                            <li>One VM running Windows Server 2022 and with the Active Directory Certificate Services role.</li>
-                            <li>One pfSense appliance (version 24.03) able to reach the Domain Controller.</li>
+                            <li>One VM running Windows Server 2022, with the Active Directory Domain Services role (Domain Controller).</li>
+                            <li>One VM running Windows Server 2022, with the Active Directory Certificate Services role.</li>
+                            <li>One pfSense appliance (version 24.03) able to communicate with the Domain Controller.</li>
                             <li>One device, such as a laptop with the OpenVPN client installed.</li>
                         </ul>
                         <br>
                         <p>
                         Note: It is recommended to run, at least, two domain controllers and ensure replication is enabled. Although I fully support this notion, for this tutorial I will
-                        not go to the length of setting up a second AD DC in this specific post.
+                        not go to the length of setting up a second AD DC.
                         </p>
                         <h3 id="post__content__title2">Configuring the Active Directory Domain Controller</h3>
                         <p>
                         I found that configuring the Active Directory Domain Controller was the 'easy' step in the process. We will complete three main steps to enable LDAP:
                         </p>
                         <ul style="margin-bottom: 0;">
-                            <li>Deploy the Active Directory Domain Services (feel free to skip this step if you are familiar with deploying ADDS)</li>
-                            <li>Create a specific organizational unit with 1 user</li>
-                            <li>Setup a connection to the LDAP server</li>
-                            <li>Login with the newly created user to confirm successful authentication</li>
+                            <li>Deploy the Active Directory Domain Services (feel free to skip this step if you are familiar with deploying ADDS);</li>
+                            <li>Create a specific organizational unit with 1 user;</li>
+                            <li>Setup a connection to the LDAP server;</li>
+                            <li>Login with the newly created user to confirm successful authentication;</li>
                         </ul>
                         <br>
                         <button type="button" class="collapsible"><h3 id="post__content__title2" style="margin-bottom: 0;">Deploying the Active Directory Domain Services</h3></button>
@@ -152,7 +152,7 @@
                             <img class="lazy" data-src="../img/ADDS_3.png" alt="Select installation type">
                             <p>Ensure you select "Role-based or feature-based installation" and click next...</p>
                             <img class="lazy" data-src="../img/ADDS_4.png" alt="Server selection">
-                            <p>In the sever selection tab, select the current server and click next...</p>
+                            <p>In the server selection tab, select the current server and click next...</p>
                             <img class="lazy" data-src="../img/ADDS_5.png" alt="Server roles">
                             <p>On the server roles tab, ensure you select both the Active Directory Domain Services and DNS Server roles...</p>
                             <img class="lazy" data-src="../img/ADDS_6.png" alt="Confirmation">
@@ -166,13 +166,13 @@
                             <img class="lazy" data-src="../img/ADDS_8.png" alt="Add new forest">
                             <p>Since this is a new setup, we will begin by adding a new forest. Ensure you give your forest an appropriate name, like "contosotest.com"</p>
                             <img class="lazy" data-src="../img/ADDS_9.png" alt="ADRM password">
-                            <p>In the domain controller options, add a secure Directory Service Restore Mode password and click next...</p>
+                            <p>In the domain controller options pane, add a secure Directory Service Restore Mode password and click next...</p>
                             <img class="lazy" data-src="../img/ADDS_10.png" alt="DNS Delegation">
                             <p>Select the button to create the DNS delegation and add the credentials of the Administrative user of the server before clicking next...</p>
                             <img class="lazy" data-src="../img/ADDS_11.png" alt="NetBIOS name">
-                            <p>The wizard should automatically fill the NetBIOS name, we will leave this to the default value</p>
+                            <p>The wizard should automatically fill the NetBIOS name, we will leave this to the default value, click next...</p>
                             <img class="lazy" data-src="../img/ADDS_12.png" alt="Paths">
-                            <p>The wizard should automatically fill the paths, we will leave this to the default value</p>
+                            <p>The wizard should automatically fill the paths, we will leave these to the default value, click next...</p>
                             <img class="lazy" data-src="../img/ADDS_13.png" alt="Review options">
                             <p>Review the chosen options and click next...</p>
                             <img class="lazy" data-src="../img/ADDS_14.png" alt="Add new forest">
@@ -197,12 +197,15 @@
                         <h3 id="post__content__title2">Setting up a connection to the LDAP server</h3>
                         Using the Windows button, search for "ldp.exe" and open the application. In the menu, select "Connection" -> "Connect...". 
                         Fill in the server (contosotest.com) and port (389) and leave both the "Connectionless" and "SSL" checkboxes unchecked. After clicking on OK, it should result in a long 
-                        list of keys and values, which starts at the top with the sentence "Established connection to contosotest.com".
-
+                        list of keys and values. At the top of this response, it should state "Established connection to contosotest.com". 
+                        <br><br>
+                        In case any other message is displayed, there is likely a fault in the default LDAP setup. Please consult online sources as to what prevents a successful connection.
                         <br><br>
                         <h3 id="post__content__title2">Logging in with the new user on the LDAP server</h3>
-                        Now, in the ldp.exe application go to "Connection" -> "Bind...". In the menu, select the option "Simple bind". Supply the plain username (admin) and corresponding 
-                        password for the newly created user and click "OK". You should see a message stating "Authenticated as 'CONTOSOTEST\admin'.
+                        Now, in the ldp.exe application go to "Connection" -> "Bind...". In the menu, select the option "Simple bind". Supply the plain username (vpn_admin) and corresponding 
+                        password and click "OK". You should see a message stating "Authenticated as 'CONTOSOTEST\admin'.
+                        <br><br>
+                        In case any other message is displayed, there is likely a fault in the LDAP setup. Review your username and password and ensure the user was properly configured.
                         <img class="lazy" data-src="../img/LDP_1.png" alt="New user"/>
                         <br>
                         If all of this went as expected, LDAP is properly configured and we are ready to continue to the next step. 
@@ -216,7 +219,7 @@
                         <ul style="margin-bottom: 0;">
                             <li><b>Descriptive name</b> -> AD LDAP -> Can be anything you like</li>
                             <li><b>Type</b> -> LDAP -> Should be self explanatory</li>
-                            <li><b>Hostname or IP address</b> -> dc0.contosotest.com -> The hostname of the Domain Controller, this can also be the IP address</li>
+                            <li><b>Hostname or IP address</b> -> dc0.contosotest.com -> The hostname of the Domain Controller, this can also be the IP address. Check the PC name of the Domain Controller if you don't know its hostname</li>
                             <li><b>Port value</b> -> 389 -> Default TCP LDAP port</li>
                             <li><b>Transport</b> -> Standard TCP -> Default protocol for LDAP on port 389</li>
                             <li><b>Peer Certificate Authority</b> -> Can be left empty / to its default value since this is only applicable if we use STARTTLS / TLS Encrypted LDAP</li>
@@ -244,18 +247,18 @@
                             <li><b>RFC 2307 Groups</b> -> Unchecked -> Not a requirement for Windows LDAP</li>
                             <li><b>Group Object Class</b> -> posixGroup -> Default object class for RFC2307</li>
                             <li><b>UTF8 Encode</b> -> Unchecked -> Not a requirement for our setup</li>
-                            <li><b>Username Alternations</b> -> Unchecked -> Not a requirement for our setup></li>
+                            <li><b>Username Alternations</b> -> Unchecked -> Not a requirement for our setup</li>
                             <li><b>Allow unauthenticated bind</b> -> Unchecked -> Could be needed when we use a (group) Managed Service Account ((g)MSA) but in our case this is not a requirement</li>
                         </ul>
                         <br>
-                        Now, we can refer back to the earlier skipped "Authentication containers". Here we will fill in the top level container, which is equal to the top-level domain name 
-                        "DC=dbmz,DC=com". Note that using the button on the right-hand side, it also allows us to select a container.
+                        Now, we can refer back to the earlier skipped "Authentication containers". Here we will pre-fill the top level container, which is equal to the top-level domain name 
+                        "DC=dbmz,DC=com". Note that using the button on the right-hand side also allows us to select a container.
                         <br><br>
-                        If you configured everything correctly, clicking the button should result in a pop-up window, allowing us to select the specific authentication container we would like to
-                        use. In case nothing happens, scroll to the bottom, you should be presented with a red string stating something like: "Could not connect to the LDAP server. Please check 
-                        the LDAP configuration". This means one of the values above is configured incorrectly, so you would need to go back and review the settings. In our case everything went 
-                        well and we can select the appropriate container: "OU=VPNUsers,DC=contosotest,DC=com". We could also have prefilled this option, but using the button, we verify that the
-                        connection to the LDAP server on the Domain Controller is working. 
+                        If you configured everything correctly and pre-filled the field, clicking the button should result in a pop-up window, allowing us to select the specific authentication 
+                        container we would like to use. In case nothing happens, scroll to the bottom, you should be presented with a red string stating something like: "Could not connect to the
+                        LDAP server. Please check the LDAP configuration". This means one of the values above is configured incorrectly, so you would need to go back and review the settings. 
+                        In our case everything went well and we can select the appropriate container: "OU=VPNUsers,DC=contosotest,DC=com". We could also have prefilled this option, but using 
+                        the button, we verify that the connection to the LDAP server on the Domain Controller is working. 
                         <br><br>
                         Now, go ahead and save this Authentication Server configuration. We want to be absolutely certain that this configuration works, for that we will go to the "Settings" tab
                         in the User Manager. Here, change the authentication server from "Local Database" to the authentication server name we just created and click on "Save & Test". If the 
@@ -267,7 +270,7 @@
                         For this, we will be using a clean Windows Server 2022 installation on which we will deploy the Certificate Services roles & features. 
                         When the Certificate Services have been deployed, the Certification Authority tool allows us to export the CA's certificate. We will need this certificate to add the 
                         Certificate Authority to pfSense. Furthermore, using the templates, we need to create a server certificate for the pfSense.
-
+                        <br><br>
                         <button type="button" class="collapsible"><h3 id="post__content__title2" style="margin-bottom: 0;">Deploying the Active Directory Certificate Services</h3></button>
                         <div class="collapsible-content">
                             <br>
@@ -278,52 +281,53 @@
                             <img class="lazy" data-src="../img/ADDS_3.png" alt="Select installation type">
                             <p>Ensure you select "Role-based or feature-based installation" and click next...</p>
                             <img class="lazy" data-src="../img/ADCS_4.png" alt="Server selection">
-                            <p>In the sever selection tab, select the current server and click next...</p>
+                            <p>In the server selection tab, select the current server and click next...</p>
                             <img class="lazy" data-src="../img/ADCS_5.png" alt="Server roles">
-                            <p>On the server roles tab, ensure you select the Active Directory Certificate Services...</p>
+                            <p>On the server roles tab, ensure you select the Active Directory Certificate Services role and click next...</p>
                             <img class="lazy" data-src="../img/ADCS_6.png" alt="Role Services">
-                            <p>The goal of this server is to issue and manage certificates, as such we chose the Certificate Authority role.</p>
+                            <p>The goal of this server is to issue and manage certificates, as such we chose the Certificate Authority role. Click next...</p>
                             <img class="lazy" data-src="../img/ADCS_7.png" alt="Confirmation tab">
                             <p>On the confirmation tab ensure the roles are displayed. You may opt to select the "Restart the destination server automatically if required" option, but it should
                                 not be necessary to perform a server restart.</p>
                             <img class="lazy" data-src="../img/ADCS_8.png" alt="Installation progress">
                             <p>The specified roles will now be installed, this may take a couple of minutes. Once this has been successfully completed, you will see the option appear to 
-                                "Configure Active Directory Certificate Services on the destination server". Select this option.
+                                "Configure Active Directory Certificate Services on the destination server". Select this option before continuing.
                             </p>
                             <img class="lazy" data-src="../img/ADCS_9.png" alt="ADCS Credentials">
-                            <p>Specify the credentials to configure role services, in this instance we will use the local Administrator credentials</p>
+                            <p>Specify the credentials to configure role services, in this instance we will use the local Administrator credentials.</p>
                             <img class="lazy" data-src="../img/ADCS_10.png" alt="Role Services">
                             <p>Since we only installed the Certificate Authority role, it is the only option we can select before clicking next...</p>
                         </div>
 
                         <br><br>
                         <h3 id="post__content__title2">Configuring the pfSense appliance - Deploying OpenVPN</h3>
-                        pfSense has the OpenVPN package preinstalled. Therefore, we can go to VPN -> OpenVPN and use the Wizards tab to deploy a new OpenVPN server. On the first pane, set the type 
-                        of server to LDAP. Then, on the second pane select the previously deployed authentication server, in our case `AD LDAP`. Continuing, in the next pane we select the 
-                        Certificate Authority we previously deployed to pfSense. Moving on, in the seventh pane, we select the previously imported server certificate. Now, we reach step 9 of the 
-                        setup. Here, we use the following options with corresponding values:
+                        pfSense has the OpenVPN package preinstalled. If this isn't the case for your setup, please go ahead and download the OpenVPN package using the Package Manager.
+                        Next, we go to VPN -> OpenVPN and using the Wizards tab we will deploy a new OpenVPN server. On the first pane, set the type of server to LDAP. Then, on the second pane 
+                        select the previously deployed authentication server, in our case `AD LDAP`. Continuing, in the next pane we select the Certificate Authority we previously deployed to 
+                        pfSense. Moving on, in the seventh pane, we select the previously imported server certificate. Now, we reach step 9 of the setup. Here, we use the following options with
+                        corresponding values:
 
                         <ul style="margin-bottom: 0;">
-                            <li><b>Description</b> -> Remote Workplace</li>
-                            <li><b>Protocol</b> -> UDP on IPv4 only</li>
-                            <li><b>Interface</b> -> WAN</li>
-                            <li><b>Local Port</b> -> 1194</li>
-                            <li><b>TLS Authentication</b> -> enabled</li>
-                            <li><b>Generate TLS Key</b> -> enabled</li>
-                            <li><b>DH Parameters Length</b> -> 2048 bit</li>
-                            <li><b>Data Encryption Algorithms</b> -> select all</li>
-                            <li><b>Fallback Data Encryption Algorithm</b> -> AES-256-CBC (256 bit key, 128 bit block)</li>
-                            <li><b>Auth Digest Algorithm</b> -> SHA256 (256-bit)</li>
-                            <li><b>Tunnel Network</b> -> 192.168.201.0/24</li>
-                            <li><b>IPv4 Local Network</b> -> 192.168.2.0/24</li>
-                            <li><b>Concurrent Connections</b> -> 5</li>
-                            <li><b>Allow Compression</b> -> Refuse any non-stub compression (Most secure)</li>
+                            <li><b>Description</b> -> Remote Workplace -> can be anything you like</li>
+                            <li><b>Protocol</b> -> UDP on IPv4 only -> we will use the simplest setting here.</li>
+                            <li><b>Interface</b> -> WAN -> we want to be able to connect to the OpenVPN server from outside of our network.</li>
+                            <li><b>Local Port</b> -> 1194 -> this can be any value you like.</li>
+                            <li><b>TLS Authentication</b> -> enabled -> we will leave this in place.</li>
+                            <li><b>Generate TLS Key</b> -> enabled -> will automatically take place.</li>
+                            <li><b>DH Parameters Length</b> -> 2048 bit -> choose at least 2048-bit or higher for security reasons.</li>
+                            <li><b>Data Encryption Algorithms</b> -> select all -> these algorithms allow for a variety of computers whilst keeping security high.</li>
+                            <li><b>Fallback Data Encryption Algorithm</b> -> AES-256-CBC (256 bit key, 128 bit block) -> select this or any other secure value.</li>
+                            <li><b>Auth Digest Algorithm</b> -> SHA256 (256-bit) -> select this or any other secure value.</li>
+                            <li><b>Tunnel Network</b> -> 192.168.201.0/24 -> the network range of IP addresses that clients connecting over OpenVPN should receive.</li>
+                            <li><b>IPv4 Local Network</b> -> 192.168.2.0/24 -> the currently connected local network range on the inside of your network.</li>
+                            <li><b>Concurrent Connections</b> -> 5 -> this value will depend on the amount of hosts that will connect over VPN at the same time.</li>
+                            <li><b>Allow Compression</b> -> Refuse any non-stub compression (Most secure) -> Select the most secure option.</li>
                             <li><b>Compression</b> -> Disable Compression [Omit Preference]</li>
-                            <li><b>Dynamic IP</b> -> checked</li>
-                            <li><b>Topology</b> -> Subnet -> One IP address per client in a common subnet</li>
-                            <li><b>DNS default domain</b> -> contosotest.com -> Domain name of the Domain</li>
-                            <li><b>DNS Server 1</b> -> 192.168.2.10 -> IP address of the DC</li>
-                            <li><b>NTP Server</b> -> 192.168.2.10 -> IP address of the DC</li>
+                            <li><b>Dynamic IP</b> -> checked -> allow hosts to receive dynamic IPs rather than static IPs</li>
+                            <li><b>Topology</b> -> Subnet -> One IP address per client in a common subnet -> most straightforward solution to keep maintenance low.</li>
+                            <li><b>DNS default domain</b> -> contosotest.com -> Domain name of the Domain -> the default domain that should be used for DNS queries.</li>
+                            <li><b>DNS Server 1</b> -> 192.168.2.10 -> IP address of the Domain Controller which will be used for DNS queries.</li>
+                            <li><b>NTP Server</b> -> 192.168.2.10 -> IP address of the Domain Controller which will be used for NTP queries.</li>
                         </ul>
                         <br>
                         Then, on the last pane enable both options:
@@ -333,12 +337,13 @@
                         </ul>
                         <br>
                         Then select next and finish the process. You should now have a new OpenVPN server under the Servers tab in the OpenVPN portal. 
-                        To make life easier, we will proceed to download the Client Export tool which enables the easy direct creation of a OpenVPN Client Config file. 
                         <br><br>
+                        <h3 id="post__content__title2">Installing OpenVPN client export package and exporting client certificates</h3>
+                        To make life easier, we will proceed to download the Client Export tool which enables the easy direct creation of a OpenVPN Client Config file. 
                         Go to System -> Package Manager and search for "openvpn-client-export". After installing the package go to VPN -> OpenVPN -> Client Export.
-                        In this screen, scroll down to the "OpenVPN Clients" pane, here, the option should be provided to download the "Inline Configuration". Proceed by selecting the 
+                        In this screen, scroll down to the "OpenVPN Clients" pane. Here, the option should be provided to download the "Inline Configuration". Proceed by selecting the 
                         "Most Clients" option and copy/transfer the file to the laptop or any other device. Ensure that said device is currently <b>not</b> connected to the WiFi network in which 
-                        the OpenVPN server is installed. 
+                        the OpenVPN server is installed.                         
                         <br><br>
                         Import the configuration file into the OpenVPN client on the device and use the credentials of the "admin" user previously created to 
                         setup the VPN connection. 
