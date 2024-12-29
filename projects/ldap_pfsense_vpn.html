@@ -121,10 +121,10 @@
                         deploy the following:
                         </p>
                         <ul style="margin-bottom: 0;">
-                            <li>One VM running Windows Server 2022, with the Active Directory Domain Services role (Domain Controller).</li>
-                            <li>One VM running Windows Server 2022, with the Active Directory Certificate Services role.</li>
-                            <li>One pfSense appliance (version 24.03) able to communicate with the Domain Controller.</li>
-                            <li>One device, such as a laptop with the OpenVPN client installed.</li>
+                            <li>1 VM running Windows Server 2022, with Active Directory Domain Services role.</li>
+                            <li>1 VM running Windows Server 2022, with Active Directory Certificate Services role.</li>
+                            <li>1 pfSense appliance (version 24.03).</li>
+                            <li>1 (mobile) device, such as a laptop with the OpenVPN client installed.</li>
                         </ul>
                         <br>
                         <p>
@@ -252,7 +252,10 @@
                         </ul>
                         <br>
                         Now, we can refer back to the earlier skipped "Authentication containers". Here we will pre-fill the top level container, which is equal to the top-level domain name 
-                        "DC=dbmz,DC=com". Note that using the button on the right-hand side also allows us to select a container.
+                        "DC=contosotest,DC=com". Note that using the button on the right-hand side also allows us to select a container.
+                        <br><br>
+                        <img class="lazy" data-src="../img/authserver_1.png" alt="Auth Server Setup 1">
+                        <img class="lazy" data-src="../img/authserver_2.png" alt="Auth Server Setup 2">
                         <br><br>
                         If you configured everything correctly and pre-filled the field, clicking the button should result in a pop-up window, allowing us to select the specific authentication 
                         container we would like to use. In case nothing happens, scroll to the bottom, you should be presented with a red string stating something like: "Could not connect to the
@@ -302,10 +305,16 @@
                         <br><br>
                         <h3 id="post__content__title2">Configuring the pfSense appliance - Deploying OpenVPN</h3>
                         pfSense has the OpenVPN package preinstalled. If this isn't the case for your setup, please go ahead and download the OpenVPN package using the Package Manager.
-                        Next, we go to VPN -> OpenVPN and using the Wizards tab we will deploy a new OpenVPN server. On the first pane, set the type of server to LDAP. Then, on the second pane 
-                        select the previously deployed authentication server, in our case `AD LDAP`. Continuing, in the next pane we select the Certificate Authority we previously deployed to 
-                        pfSense. Moving on, in the seventh pane, we select the previously imported server certificate. Now, we reach step 9 of the setup. Here, we use the following options with
-                        corresponding values:
+                        Next, we go to VPN -> OpenVPN and using the Wizards tab we will deploy a new OpenVPN server. 
+                        <img class="lazy" data-src="../img/pfsense_1.png" alt="OpenVPN-Pane-1">
+                        <p>In the first step, set the type of server to "LDAP", click next...</p>
+                        <img class="lazy" data-src="../img/pfsense_2.png" alt="OpenVPN-Pane-2">
+                        <p>On the next step, select the previously deployed authentication server, in our case `AD LDAP` and click next...</p>
+                        <img class="lazy" data-src="../img/pfsense_3.png" alt="OpenVPN-Pane-3">
+                        <p>Continuing, in the next step we select the Certificate Authority we previously deployed to pfSense.</p>
+                        <img class="lazy" data-src="../img/pfsense_4.png" alt="OpenVPN-Pane-4">
+                        <p>Moving on, in the following step, we select the previously imported server certificate. Click next...</p>
+                        Now, we reach step 9 of the setup. Here, we use the following options with corresponding values:
 
                         <ul style="margin-bottom: 0;">
                             <li><b>Description</b> -> Remote Workplace -> can be anything you like</li>
@@ -329,14 +338,19 @@
                             <li><b>DNS Server 1</b> -> 192.168.2.10 -> IP address of the Domain Controller which will be used for DNS queries.</li>
                             <li><b>NTP Server</b> -> 192.168.2.10 -> IP address of the Domain Controller which will be used for NTP queries.</li>
                         </ul>
-                        <br>
+                        <img class="lazy" data-src="../img/pfsense_5.png" alt="OpenVPN-Pane-5">
+                        <img class="lazy" data-src="../img/pfsense_6.png" alt="OpenVPN-Pane-6">
+                        <img class="lazy" data-src="../img/pfsense_7.png" alt="OpenVPN-Pane-7">
+                        <br><br>
                         Then, on the last pane enable both options:
                         <ul style="margin-bottom: 0;">
                             <li><b>Traffic from clients to server</b> -> Add a rule to permit connections to this OpenVPN server instance from clients anywhere on the internet</li>
                             <li><b>Traffic from clients through VPN</b> -> Add a rule to allow all traffic from connected clients to pass inside the VPN tunnel</li>
                         </ul>
-                        <br>
+                        <img class="lazy" data-src="../img/pfsense_8.png" alt="OpenVPN-Pane-8">
+                        <br><br>
                         Then select next and finish the process. You should now have a new OpenVPN server under the Servers tab in the OpenVPN portal. 
+                        <img class="lazy" data-src="../img/pfsense_9.png" alt="OpenVPN-Pane-9">
                         <br><br>
                         <h3 id="post__content__title2">Installing OpenVPN client export package and exporting client certificates</h3>
                         To make life easier, we will proceed to download the Client Export tool which enables the easy direct creation of a OpenVPN Client Config file. 
@@ -345,8 +359,10 @@
                         "Most Clients" option and copy/transfer the file to the laptop or any other device. Ensure that said device is currently <b>not</b> connected to the WiFi network in which 
                         the OpenVPN server is installed.                         
                         <br><br>
-                        Import the configuration file into the OpenVPN client on the device and use the credentials of the "admin" user previously created to 
-                        setup the VPN connection. 
+                        To properly test this, ensure that your laptop (or whatever test device you use) is not connected to your home network, instead use a hotspot or other network.
+                        Then, import the configuration file into the OpenVPN client on the device and use the credentials of the "vpn_admin" user previously created to finish setting
+                        up the VPN connection. Now, if all went well, you should be connected to the OpenVPN server and as such your own network. You can test this, amongst others,
+                        by browsing to the internal IP address of your pfSense device.
                     </p>
                 </div>
             </article>
