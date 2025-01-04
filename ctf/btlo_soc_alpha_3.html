@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="GraymanRe - SOC Alpha 3" />
+    <meta property="og:description" content="Blue Team Labs SOC Alpha 3 Forensics Challenge Writeup" />
+    <meta property="og:image" content="https://graymanre.github.io" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@grayman_re" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRe - BTLO SOC Alpha 3</title>
+
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                   placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span class="post__minutes">15 min read <time class="post__date" datetime="2025-01-04T00:00:00+02:00">04 January 2025</time>
+                                </span>
+                            </div>
+                            <h2 class="post__title">Blue Team Labs Online - SOC Alpha 3</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/ctf/" class="post__tag">CTF Writeups</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article class="post animate">
+                <div class="post__content">
+                    <h2 id="post__content__title">Introduction</h2>
+                    <p>
+                        Today we will be walking through one of the Blue Team Labs Online Investigations: <b>SOC Alpha 3</b>. The Investigation is
+                        rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 17 questions in regard to
+                        the following scenario:
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Just like SOC ALPHA 2 lab, you are provided with the more alerts triggered on the ingested logs in ELK. Show your hunting skills to answer the questions for each alert.<br><br>Note: While submitting answers, ignore the escape characters and double quotes if any<br>Example:<br>If you found an answer: “C:\\Windows\\System32\\cmd.exe”, submit the answer as: C:\Windows\System32\cmd.exe</pre>
+                            </div>
+                        </div>
+                    </p>
+                    Additionally, within the Lab we find a README that supplies some information on the hunting scenario's for this case:
+                    <br>
+                    H1 - Compression of collected data (T1560)
+                    <br>
+                    H2 - New Run Key to suspicious folder
+                    <br>
+                    H3 - EventLog Cleared
+                    <br>
+                    H4 - New Windows Firewall rule added
+                    <br>
+                    H5 - Suspicious File Download
+                    <br>
+                    H6 - DarkSide Ransomware Pattern Detected
+                    <br>
+                    H7 - CoinMiner Activity detected
+                    <br>
+                    H8 - Multiple services stop
+                    <br><br>
+                    <h2 id="post__content__title">Q1) Compression Program</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) What program is used for compression? (5 points)</pre>
+                            </div>
+                        </div>
+                        When we load into Kibana, we see that there are 4 index patterns at our disposal focussing on PowerShell, Security, Sysmon and System events that
+                        were gathered from the system. Since we are looking for the execution of a program to compress a file, we will use the sysmon event logs.
+                        Specifically, we will look for events with Event ID 11, which signals the creation of a file. Since a large amount of files are returned that were
+                        created by the MsMpEng process, we will go ahead and filter these out: <span id="inline-code">Event_System_EventID: 11 and not Event_EventData_Image: "C:\\Program Files\\Windows Defender\\MsMpEng.exe</span>
+                        <br>
+                        This leaves us with 105 hits. As we are focussing on a program that can be used for compression, we can relatively quickly disregard most entries, until
+                        we stumble upon  <span id="inline-code">C:\Program Files\WinRAR\WinRAR.exe</span>. We see that it is used to compress a file in the Downloads directory
+                        that has a hash as its name. Additionally, two log entries further, we see that an executable with the same hash value is creating an README.47bf44bd.TXT.
+                        A quick Google on the hash shows it is related to a ransomware campaign. So we can assume that WinRAR is used for compression.
+                        <br>
+                        However, the entry that we have identified, is used to decompress/unzip a file. As no other applicable files are found, I focus on EventID 1, which
+                        corresponds to process creation events. Here, I apply a filter to search for WinRAR only: <span id="inline-code">Event_EventData_Image: *WinRAR*</span>
+                        Only 2 processes remain, of which one is actually a compression operation, confirming that the program that is used is <span id="inline-code">C:\Program Files\WinRAR\WinRAR.exe</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q1.png" alt="q1_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q2) Compressed File Name</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) What is the name of the compressed file? (5 points)</pre>
+                            </div>
+                        </div>
+                        Now that we have identified the program that is used, we can closely examine the command line to figure out what the name of the compressed file is.
+                        We see that the files/folders "gatherings" and "folder" were compressed into <span id="inline-code">gatherings.rar</span>.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q1.png" alt="q2_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q3) Registry File Add</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) What is the name of the file that has been added to the registry? (6 points)</pre>
+                            </div>
+                        </div>
+                        For Windows Registry events, we remain within the winevent-sysmon view and we can look for EventID 13, which contains Registry Events where a value is set.
+                        We identify 37 unique events and focus on events that have a RuleName which corresponds to a MITRE Attack Flow technique. Only three techniques are documented.
+                        One which refers to DOM Hijacking (T1122), one which refers to the creation or modification of system processes(T1031/T1050) and one which refers to the
+                        creation of a run key (T1060).
+                        <br><br>
+                        All events with rule T1122 don't contain a value that resembles a file, so these are left out of scope. All events with rule T1122 point to DLLs however,
+                        these are related to Windows Defender and appear to be legitimate. The sole event for T1060 points to a file in the Windows Temp directory, namely:
+                        <span id="inline-code">C:\Windows\Temp\process.exe</span>. Additionally, that file is added to a generic, and somewhat suspicious sounding, object
+                        <span id="inline-code">WindowsProcess</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q3.png" alt="q3_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q4) Registry Value</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What is the RegValue? (6 points)</pre>
+                            </div>
+                        </div>
+                        As identified in question 3, the file <span id="inline-code">C:\Windows\Temp\process.exe</span> is added to the RegValue of <span id="inline-code">WindowsProcess</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q3.png" alt="q4_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q5) Log Clearing Timestamp</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) What is the timestamp when the logs are cleared? (6 points)</pre>
+                            </div>
+                        </div>
+                        If we have a look at the MITRE Attack Flow, we learn that clearing the event logs is a subcategory of indicator removal and known as technique T1070.001.
+                        Additionally, the <a href="https://attack.mitre.org/techniques/T1070/001/">webpage</a> logs example commands to identify log clearing. If we use the
+                        keyword "wevutil" and search for it's usage as an Event_EventData_Image within the winevent-sysmon logs, we identify two commands where the security
+                        logs got cleared. However, the timestamps do not seem to be correct answers. So we have to continue our hunt.
+                        <br>
+                        We also <a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1102">learn</a>
+                        that we can identify clearing of the audit logs by searching for Event ID 1102 in the Security log. So we change our view in Kibana to the security log
+                        and apply that filter, which returns exactly one result. The log was cleared at <span id="inline-code">2021-05-28T00:26:29</span>.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q5.png" alt="q5_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q6) Log Source Confirmation</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) What is the logsource from which you confirmed this event and what is the fieldname and value in the log? (6 points)</pre>
+                            </div>
+                        </div>
+                        As discussed whilst answering question 5, we had to utilize the <span id="inline-code">winevent-security</span> log and search for
+                        <span id="inline-code">Event_System_EventID: 1102</span> to confirm the log clearing event.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q5.png" alt="q6_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q7) Firewall rule addition</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) What is the program used for adding the firewall rule? (6 points)</pre>
+                            </div>
+                        </div>
+                        We can search for Firewall events using the winevent-sysmon log and searching for process creation events. The programs that I am familiar with, all require
+                        you to use some variant of the word "firewall" or "rule" to add firewall rules. So I will add a specific query which includes the usage of these two words
+                        in the CommandLine and we identify only two commands that apply. We see that to add firewall rules, the program <span id="inline-code">netsh.exe</span> was used.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q7.png" alt="q7_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q8) Firewall Rule Name</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q8) What is the rulename? (6 points)</pre>
+                            </div>
+                        </div>
+                        As identified in question 7, the rule that was added was named: <span id="inline-code">Zoop TCP Port 80</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q7.png" alt="q8_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q9) Malware Downloader</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) What is the program used for downloading the suspicious file? (6 points)</pre>
+                            </div>
+                        </div>
+                        Once again, we rely upon EventID 1 in the sysmon log files and search for download actions. I worked with the assumption that the download took place
+                        over the internet, and as such added both "http" and "https" to my search query using: <span id="inline-code">Event_EventData_CommandLine: *http*</span>.
+                        Only one event is identified, which shows us that <span id="inline-code">bitsadmin.exe</span> was used to download a file from pastebin and store it on
+                        the local system as a powershell file. Bitsadmin is a <a href="https://lolbas-project.github.io/lolbas/Binaries/Bitsadmin/">living-off-the-land binary</a>
+                        which can be used to download files from remote sources.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q9.png" alt="q9_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q10) Download URL</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What is the URL from which the file is downloaded? (6 points)</pre>
+                            </div>
+                        </div>
+                        As identified in question 9, the suspicious file is downloaded from the url <span id="inline-code">https://pastebin.com/raw/AGdtReXJ0</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q9.png" alt="q10_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q11) Darkside Ransomware</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q11) Hunt for the darkside ransomware sample and what is the MD5 hash of the sample? (6 points)</pre>
+                            </div>
+                        </div>
+                        Whilst solving question 1, I already had stumbled upon the DarkSide ransomware sample due to the usage of the SHA256 hash as the name for the executable.
+                        This stood out to me and has now allowed me to search for the specific hash in the winevent-sysmon events specifically focussing on EventID 1 as sysmon
+                        automatically includes MD5, SHA256 and IMPHASH hashes in each log entry. As such we identify that the DarkSide ransomware sample has MD5 hash:
+                        <span id="inline-code">9D418ECC0F3BF45029263B0944236884</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q11.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q12) Command execution</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) The alert is triggered using the processid flag of DllHost.exe, find out the full command associated with it (6 points)</pre>
+                            </div>
+                        </div>
+                        Once again, we remain with the sysmon event logs, focussing on process creation (EventID 1) and search for all command lines containing "DllHost". We find
+                        only one such event whose full command line is: <span id="inline-code">C:\Windows\SysWOW64\DllHost.exe /Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q12.png" alt="q12_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q13) Malware delection command</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q13) There is an event to delete the malware from the system. Can you find the full command? (6 points)</pre>
+                            </div>
+                        </div>
+                        We already know, that based on the results for question 11, searching for the specific SHA256 hash won't result in any logs that point to removal of
+                        the malware. However, as we also don't find any indicators that the malware is removed, we focus on all commands that were performed on the folder
+                        in which the malware was located: <span id="inline-code">Event_System_EventID : 1 and Event_EventData_CommandLine : *Downloads*</span>. To my surprise,
+                        no other log entries are found that indicator removal. So I applied the same filter but then using "nexus" as the CommandLine filter. Here, we discover
+                        an event that points to malware removal. The command used, uses Windows' 8.3 naming rules for creating short file name aliases as documented
+                        <a href="https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file">here</a>.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q13.png" alt="q13_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q14) Mining Server</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q14) What is the username of the mining server used? (6 points)</pre>
+                            </div>
+                        </div>
+                        Whilst answering multiple of the previous questions, I mentioned that I used EventID: 1 in the winevent-sysmon logs to look for process creation events.
+                        Whilst doing this, and analyzing the events, I already stumbled upon the execution of the executable <span id="inline-code">xmrig.exe</span>. I know from
+                        experience that this is an cryptominer that is used for legitimate and illegitimate purposes. Searching for all process creation events involving xmrig,
+                        a total of 5 events are found. Only one however, starts the miner and includes the username: <span id="inline-code">42PkwcWLCjheUAaXy2h6CndY9DoKvv4pQ6QogCxgnFFF268ueYNb2FXiLCgQeds64jAytuaXzFTctbsujZYzUuaRVhn8Cjd</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q14.png" alt="q14_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q15) Mining version</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q15) What is the version of the miner? (6 points)</pre>
+                            </div>
+                        </div>
+                        In the command line of the xmrig miner, we see that the exectuable is located in <span id="inline-code">C:\ProgramData\xmrig-6.12.1\xmrig.exe</span>,
+                        as such we can assume that 6.12.1 is the version of the miner.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q14.png" alt="q15_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q16) Stopping Windows Defender</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q16) What is the full command attempted to stop the windows defender? (6 points)</pre>
+                            </div>
+                        </div>
+                        A quick Google search reveals that the Microsoft Defender Antivirus Service is called <a href="https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-antivirus-windows#microsoft-defender-antivirus-processes-and-services">WinDefend</a>.
+                        Using our reliable Event ID 1 within the sysmon event logs with the filter <span id="inline-code">Event_EventData_CommandLine: *WinDefend*</span> we identify
+                        multiple commands aiming to stop the service such as: <span id="inline-code">C:\Windows\system32\net1 STOP WinDefend</span> and <span id="inline-code">"C:\Windows\system32\net.exe" STOP WinDefend</span>
+                        <div>
+                            <img src="/img/btlo_socalpha3_q16.png" alt="q16_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h2 id="post__content__title">Q17) Targeted Services</h2>
+                    <p>
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q17) From cmd.exe, the attacker tried to stop 3 more services with a bypass prompt flag. What are the services in alphabetical order? (6 points)</pre>
+                            </div>
+                        </div>
+                        Since we have identified, by answering question 16, that <span id="inline-code">net.exe/net1</span> is used to stop services, we focus on 
+                        all commands containing either <span id="inline-code">"net1</span> or <span id="inline-code">"net.exe</span>. Note that filtering for 
+                        <span id="inline-code">net</span> will show a lot of non-related events as well, therefore we use an OR filter. By doing so, we remain with
+                        22 logs and see that the <span id="inline-code">/y</span> switch is used for only 3 services. Except for <a href="https://www.installaware.com/forums/viewtopic.php?t=9435">this</a>
+                        mention I have not found a reliable source indicating that the <span id="inline-code">/y</span> switch is used for bypassing prompts.
+                        However, since it specifically suits our scenario, my assumption is that we can rely on the information on the aforementioned webpage,
+                        and we have identified which three services were stopped by the attacker using the bypass prompt flag.
+                        <div>
+                            <img src="/img/btlo_socalpha3_q17.png" alt="q17_answer" onclick="window.open(this.src, '_blank');"
+                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h2 class="widget__title">Explore Tags</h2>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/ctf/" class="set-1">CTF Writeups</a>
+                            <a href="/projects/" class="set-1">Projects</a>
+                            <a href="/rev/" class="set-1">Reverse Engineering</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
+</body>
+
+</html>
