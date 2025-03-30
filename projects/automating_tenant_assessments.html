@@ -4,9 +4,10 @@
 <head>
     <meta property="og:title" content="GraymanRe - Automating M365 Assessments" />
     <meta property="og:description" content="Automating M365 Assessments" />
-    <meta property="og:image" content="https://graymanre.github.io" />
+    <meta property="og:image" content="https://graymanre.github.io/img/entra_tenant_assessment.webp" />
     <meta property="og:url" content="https://graymanre.github.io/" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/entra_tenant_assessment.webp" />
     <meta name="twitter:creator" content="@grayman_re" />
 
     <meta charset="utf-8">
@@ -24,6 +25,7 @@
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -113,19 +115,21 @@
         <div class="container">
             <article class="post animate">
                 <div class="post__content">
-                    <h3 id="post__content__title">Introduction - Microsoft Entra</h3>
+                    <h3 id="post__content__title">Introduction - Microsoft Entra ID and Microsoft 365 Suite</h3>
                     <p>
-                        Microsoft has recently renamed their Microsoft Azure AD to Microsoft Entra ID. Although this is only a minor
-                        name change, the Entra platform federates all existing identity and access management functions of Microsoft
-                        and integrates the new capabilities delivered through Cloud Infrastructure Entitlement Management (CIEM) and
-                        Decentralized Identity.
+                        As the influence of the cloud has increased over the past 10 years, Microsoft have rolled out their cloud-based identity and access
+                        management solution called Entra ID. With this, organization could transform their on-premises Active Directory into a hybrid or even
+                        full-cloud based environment. As Entra ID and subsequently Microsoft 365 (including OneDrive, SharePoint, Microsoft Defender, Exchange, 
+                        etc.) have matured, the platform has increased its vast array of security configurations and policies that aim to safeguard these 
+                        hybrid- or full-cloud-based tenants from threat actors. 
                         <br><br>
-                        The vastness of the Entra platform ensures that customers can use, enable, and implement a broad range of
-                        security settings and features. This allows for fine-grained control over the Microsoft Tenant whilst
-                        simultaneously resulting in the need for experienced administrators that are intricately familiar with the
-                        platform.
+                        The vastness of the Entra/M365 suite ensures that customers can use, enable, and implement a broad range of security settings and
+                        features. This allows for fine-grained control over the Microsoft Tenant whilst simultaneously resulting in the need for experienced
+                        administrators that are intricately familiar with the platform.
+                        <br><br>
+                        Exactly this challenge is what we aim to address in this blog post.
                         <br>
-                        <h3 id="post__content__title2">The need for automation</h3>
+                        <h3 id="post__content__title2">About Microsoft Graph PowerShell</h3>
                         Both new and experienced organisations can have a hard time keeping up with the ever changing landscape of M365 products.
                         For organisations that are new to the M365 suite, a new world arises with seeminly endless possibilities and at least as
                         many portals, admin centers and configuration screens. If we look at the array of products included in a M365 Enterprise
