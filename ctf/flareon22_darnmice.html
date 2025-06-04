@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">  
 
 <head>
     <meta property="og:title" content="GraymanRe - Flare-on9 Darn Mice" />
@@ -85,9 +85,7 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span class="post__minutes">
-                                    5 min read <time class="post__date" datetime="2024-06-28T00:00:00+02:00">28 June 2024</time>
-                                </span>
+                                <span id="time"></span> min read <time class="post__date" datetime="2024-06-28T00:00:00+02:00">28 June 2024</time>
                             </div>
                             <h2 class="post__title">04 - Darn Mice - Flare-On9 Writeup</h2>
                             <div class="post__bottom">
@@ -113,7 +111,7 @@
 
         <!-- begin post -->
         <div class="container">
-            <article class="post animate">
+            <article id="article" class="post animate">
                 <div class="post__content">
                     <h3 id="post__content__title2">Challenge Writeup</h3>
                     <p>
@@ -195,6 +193,7 @@
     <script src="/js/vendors/transition.js"></script>
     <script src="/js/vendors/zoom.min.js"></script>
     <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
     <script>
         var base_url = "",
             pagination_next_url = base_url + '/page2',

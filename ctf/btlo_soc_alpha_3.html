@@ -86,8 +86,7 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span class="post__minutes">15 min read <time class="post__date" datetime="2025-01-04T00:00:00+02:00">04 January 2025</time>
-                                </span>
+                                <span id="time"></span> min read <time class="post__date" datetime="2025-01-04T00:00:00+02:00">04 January 2025</time>
                             </div>
                             <h2 class="post__title">Blue Team Labs Online - SOC Alpha 3</h2>
                             <div class="post__bottom">
@@ -113,7 +112,7 @@
 
         <!-- begin post -->
         <div class="container">
-            <article class="post animate">
+            <article id="article" class="post animate">
                 <div class="post__content">
                     <h2 id="post__content__title">Introduction</h2>
                     <p>
@@ -461,6 +460,7 @@
     <script src="/js/vendors/transition.js"></script>
     <script src="/js/vendors/zoom.min.js"></script>
     <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
     <script>
         var base_url = "",
             pagination_next_url = base_url + '/page2',

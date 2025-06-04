@@ -84,9 +84,7 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span class="post__minutes">
-                                    10 min read <time class="post__date" datetime="2024-03-26T15:00:00+02:00">26 March 2024</time>
-                                </span>
+                                <span id="time"></span> min read <time class="post__date" datetime="2024-03-26T15:00:00+02:00">26 March 2024</time>
                             </div>
                             <h2 class="post__title">Blue Team Labs Online - Bad Logic</h2>
                             <div class="post__bottom">
@@ -112,7 +110,7 @@
 
         <!-- begin post -->
         <div class="container">
-            <article class="post animate">
+            <article id="article" class="post animate">
                 <div class="post__content">
                     <h2 id="post__content__title">Introduction</h2>
                     <p>
@@ -301,12 +299,6 @@ be of assistance. A full review of the compromised application may also be in or
     <script src="/js/vendors/transition.js"></script>
     <script src="/js/vendors/zoom.min.js"></script>
     <script src="/js/common.js"></script>
-    <script>
-        var base_url = "",
-            pagination_next_url = base_url + '/page2',
-            pagination_next_page_number = '',
-            pagination_available_pages_number = '1';
-    </script>
+    <script src="/js/readingtime.js"></script>
 </body>
-
 </html>

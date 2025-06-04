@@ -85,9 +85,7 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span class="post__minutes">
-                                    10 min read <time class="post__date" datetime="2024-07-12T00:00:00+02:00">12 July 2024</time>
-                                </span>
+                                <span id="time"></span> min read <time class="post__date" datetime="2024-07-12T00:00:00+02:00">- 12 July 2024</time>
                             </div>
                             <h2 class="post__title">Building a WinDBG extension in C++</h2>
                             <div class="post__bottom">
@@ -113,7 +111,7 @@
 
         <!-- begin post -->
         <div class="container">
-            <article class="post animate">
+            <article id="article" class="post animate">
                 <div class="post__content">
                     <h3 id="post__content__title">Developing our own WinDBG extension</h3>
                     <p>
@@ -733,6 +731,8 @@ DECLARE_API(demo_ext) {
     <script src="/js/vendors/transition.js"></script>
     <script src="/js/vendors/zoom.min.js"></script>
     <script src="/js/vendors/prism.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
 
     <script>
         var base_url = "",
