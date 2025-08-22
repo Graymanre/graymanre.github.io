@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="GraymanRe - Mamona Ransomware: Technical Analysis" />
+    <meta property="og:description" content="Mamona Ransomware: Technical Analysis" />
+    <meta property="og:image" content="https://graymanre.github.io/img/mamona.webp" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="description" content="Blog post analyzing the new Mamona ransomware variant" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/mamona.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRe - Mamona Ransomware: Technical Analysis</title>
+
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date" datetime="2025-08-15T00:00:00+02:00">- 15 August 2025</time>
+                            </div>
+                            <h2 class="post__title">Mamona Ransomware: Technical Analysis</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="/img/banner.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/projects" class="post__tag">Projects</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Introduction</h3>
+                    <p>
+                        Mamona is a ransomware strain used by the GLOBAL GROUP ransomware actor. Threat actor analysts have established that this group is a continuation of previous
+                        ransomware groups Mamona RIP and Black Lock. This analysis dives deeper into one of the two newly (July 2025) shared samples.
+                        One of the main interesting points is that this ransomware strain has no command-and-control section and as such it is more difficult to detect using network-based signatures. 
+                        Encryption is configurable meaning the operator can target the local or one or more remote systems and specific files and folders using a set number of 
+                        commandline arguments. 
+                        <br><br>
+                        Mamona has the following features and behaviours:
+                        <ul>
+                            <li>Detect debugging through a call to the Win32 API <span id="inline-code">DebugBreak</span></li>
+                            <li>Obfuscates imported functions from specific DLLs through PEB Walk and import hashing</li>
+                            <li>Prevents execution on already ransomed systems using the mutex: <span id="inline-code">Global\\Fxo16jmdgujs437</span></li>
+                            <li>Attempts to clear the recycle bin using the Win32 API <span id="inline-code">SHEmtpyRecycleBinA</span></li>
+                            <li>Attempts to escalate privileges and obtain privileges from the <span id="inline-code">winlogon.exe</span> or <span id="inline-code">TrustedInstaller.exe</span> process</li>
+                            <li>Attempts to clear the event logs</li>
+                            <li>Disables a specific subset of processes and services</li>
+                            <li>Contains a specific section called <span id="inline-code">.config</span> which contains the with XOR-encoded README</li>
+                            <li>Encrypts only files based on a specific subset of extensions</li>
+                            <li>Remove itself from the target system using the command <span id="inline-code">cmd.exe /C ping 127.0.0.7 -n 3 > Nul & Del /f /q "%s"</span></li>
+                        </ul>
+                        <table>
+                            <tr>
+                                <th>Hash (SHA256)</th>
+                            </tr>
+                            <tr>
+                                <td>c5f49c0f566a114b529138f8bd222865c9fa9fa95f96ec1ded50700764a1d4e7</td>
+                            </tr>
+                        </table>
+                        In the analysis below, we dive into and attempt to provide an encompassing overview of the specific features present in this sample.
+                        <br>
+                        For feedback, questions and comments feel free to <a href="https://x.com/grayman_re">contact me</a> directly.
+                    </p>
+
+                    <h3 id="post__content__title">DebugBreak to Break Debugging</h3>
+                    <p>
+                        We will start the analysis of the Mamona ransomware sample starts in the main function. At the end of the first block, a condition is checked and a jump is taken, either directly to 
+                        the end of the main function (exiting our ransomware) or continuing along the long vertical line of succeeding blocks. This all depends on the result of the call to
+                        <span id="inline-code">sub_4012F0</span>. The focus of <span id="inline-code">sub_4012F0</span> is on a call to <span id="inline-code">DebugBreak</span> and corresponding
+                        exception handling. In case the DebugBreak call fails, <span id="inline-code">eax</span> returns 0 and execution of the ransomware resumes. This is the default behaviour 
+                        when the executable is not attached to any sort of debugger. Should an exception occur, for example when the executable is attached to a debugger, the call to 
+                        <span id="inline-code">DebugBreak</span> is likely to trigger an exception. The custom exception handler implemented by the ransomware will then check if the exception pointer
+                        is equal to the value of <span id="inline-code">0x80000003</span>, which corresponds to <span id="inline-code">EXCEPTION_BREAKPOINT</span>. If they are equal, 
+                        <span id="inline-code">eax</span> will return 1, and the ransomware will stop its execution, as such hindering any dynamic debugging/reverse engineering attempts.
+                    </p>
+
+                    <h3 id="post__content__title">Command Line Arguments</h3>
+                    <p>
+                        If <span id="inline-code">DebugBreak</span> does not detect a debugger, the ransomware will continue and starts parsing the supplied
+                        commandline argument. It actually performs this operation twice. The first time, at <span id="inline-code">0x4028B4</span>, where it will 
+                        only iterate over all supplied arguments to determine if the <span id="inline-code">-log</span> argument is supplied. This argument
+                        denotes that verbose logging should be enabled and will execute all blocks that contain a call to <span id="inline-code">WriteConsoleW</span>.
+                        <br>
+                        Only later on, at <span id="inline-code">0x402BB0</span> will it start processing all supplied argument and store its values for later use.
+                        <br><br>
+                        Below is a comprehensive overview of all supported arguments.
+                        <table>
+                            <tr>
+                                <th>Argument</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td>-path</td>
+                                <td>Defines the specific paths to files/directories that should be encrypted</td>
+                            </tr>
+                            <tr>
+                                <td>-threads</td>
+                                <td>Defines the number of threads to use during encryption, default is the number of processors returned from SystemInfo.dwNumberOfProcessors</td>
+                            </tr>
+                            <tr>    
+                                <td>-delay</td>
+                                <td>Defines the specific amount of time to wait before starting the encryption process (max 86400 sec/24h)</td>
+                            </tr>
+                            <tr>
+                                <td>-time</td>
+                                <td>Defines the time when to start the encryption process in HH:MM format</td>
+                            </tr>
+                            <tr>
+                                <td>-u</td>
+                                <td>Defines the username to use for authentication</td>
+                            </tr>
+                            <tr>
+                                <td>-p</td>
+                                <td>Defines the password to use for authentication</td>
+                            </tr>
+                            <tr>
+                                <td>-H</td>
+                                <td>Defines the specific host to target</td>
+                            </tr>
+                            <tr>
+                                <td>-sub</td>
+                                <td>Defines the specific subnets to scan</td>
+                            </tr>
+                            <tr>
+                                <td>-code</td>
+                                <td>Defines the password needed to execute the ransomware</td>
+                            </tr>
+                            <tr>
+                                <td>-skip-local</td>
+                                <td>Defines that local drive encryption should be skipped</td>
+                            </tr>
+                            <tr>
+                                <td>-skip-net</td>
+                                <td>Defines that network encryption should be skipped</td>
+                            </tr>
+                            <tr>
+                                <td>-keep</td>
+                                <td>Defines that the ransomware executable should not be deleted</td>
+                            </tr>
+                            <tr>
+                                <td>-log</td>
+                                <td>Defines that extensive logging should be enabled</td>
+                            </tr>
+                        </table>
+
+                    <h3 id="post__content__title">Decrypting the config file</h3>
+                    <p>
+                        After it identified the absence/presence of the <span id="inline-code">-log</span> argument, the ransomware will call <span id="inline-code">GetModuleHandleW</span> on the current
+                        executable. This returns the base address of the current module, or in other words it will point to the beginning of this executable. Subsequently, the ransomware then queries
+                        <span id="inline-code">eax+3Ch</span>(<span id="inline-code">0x40293E</span>), which points to the <span id="inline-code">e_lfanew</span> field in the DOS header. By doing so,
+                        it has now obtained the offset to the PE header. With this offset in hand, the ransomware then 'jumps' to the start of the  PE header by adding the base address of the executable
+                        to the PE header offset. The pointer to the PE header is then stored in <span id="inline-code">esi</span>(<span id="inline-code">0x402941</span>).
+                        <br>
+                        The ransomware then queries the value at <span id="inline-code">[esi+14h]</span>(<span id="inline-code">0x402946</span>). At this location within the PE header when
+                        including the PE magic bytes, the size of the Optional Header is stored. 
+                        <br><br>
+                        Next, <span id="inline-code">ecx</span> is incremented by 0x18 or 24 (<span id="inline-code">0x40294A</span>). This means that the ransomware adds the PE signature size, the size
+                        of the COFF file header and the size Optional header together. Then, by adding <span id="inline-code">esi</span>, which points to the start of the PE header, to the total header size,
+                        <span id="inline-code">ecx</span> now points to the start of the section table (<span id="inline-code">0x402959</span>). 
+                        <br><br>
+                        Next, the total NumberOfSections is retrieved (<span id="inline-code">0x40298B</span>) and a check takes place to determine if the NumberOfSections is 0 or not. If
+                        the Section Table contains one or more sections, the ransomware will loop over all of the sections and will compare the section name against 
+                        a hardcoded value: <span id="inline-code">.config</span>, as can be noticed by the blocks at <span id="inline-code">0x4029A2</span> and <span id="inline-code">0x4029B1</span>.
+                        If the <span id="inline-code">.config</span> section exists the ransomware will read <span id="inline-code">0x860</span> bytes into a predefined buffer and will decode the buffer
+                        with the hardcoded XOR key <span id="inline-code">0x42</span>.
+                        <img class="lazy" data-src="/img/mamona_readmesection.png" alt="Config section retrieval">
+                        <br><br>
+                        By writing a simple section parser in C++, we can statically extract and decode the <span id="inline-code">.config</span> section from the sections table and obtain the exact 
+                        contents of this section. As we discover, this specific section contains the information ransomware victims will normally find in a README file
+                        that states how to contact the ransomware operators and restore access to their lost data. 
+                        <br>
+                        <img class="lazy" data-src="/img/mamona_configsection_decrypted.png" alt="Config section decrypted">
+                    </p>
+
+                    <h3 id="post__content__title">PEB Walk - Part 1</h3>
+                    <p>
+                        After the <span id="inline-code">.config</span> section has been decrypted, execution is returned to the main function and quickly afterwards, <span id="inline-code">sub_401370</span> is called.
+                        In <span id="inline-code">sub_401370</span>, we identify three immediate calls to <span id="inline-code">sub_405900</span>, all with one specific argument: a hardcoded hex value. To determine the
+                        importance of these hex values, let us first analyze <span id="inline-code">sub_405900</span>. This ransomware sample forced me to properly revisit the documentation and 
+                        understand how the FS register works, in part, I have to thank rvsec0n for the well documented <a href="https://rvsec0n.wordpress.com/2019/09/13/routines-utilizing-tebs-and-pebs/">blog post</a>.
+                        <br><br>
+                        The PEB cannot be directly referenced, so in general, the TEB is obtained through the FS register, and then the obtained offset is incremented
+                        by <span id="inline-code">0x30</span> to obtain the PEB. We see the combination of these operations occurring at <span id="inline-code">0x405914</span> and <span id="inline-code">0x40591D</span>. 
+                        <img class="lazy" data-src="/img/mamona_obtainpebteb.png" alt="Obtain PEB/TEB">
+                        <br><br>
+                        One of the components of the Process Environment Block is the LDR table. This table is obtained by the ransomware by adding <span id="inline-code">0x0C</span> to the obtained offset of the PEB. This 
+                        operation occurs at <span id="inline-code">0x405928</span>. The LDR table contains pointers to multiple lists containing the loaded modules, such as the InMemoryOrderModuleList,
+                        InInitializationOrderModuleList as well as the InLoadOrderModuleList. This last list is a doubly linked list which contains a list of DLLs to
+                        process and is located at offset <span id="inline-code">0x0C</span> which is obtained by the ransomware at location <span id="inline-code">0x40592F</span>. 
+                        <br><br>
+                        Now that the InLoadOrderModuleList has been obtained, ebx points to the Flink of the first module. A check is performed to determine if the
+                        end of the linked list has been reached. If this is not the case, the loop will be entered. Else, the loop will be skipped. 
+                        <br><br>
+                        The main loop (running from <span id="inline-code">0x405952</span> to <span id="inline-code">0x4059F5</span>) loops over the full InLoadOrderModuleList and retrieves the full DLL path string. 
+                        The retrieval of the full DLL path string can be identified at location <span id="inline-code">0x405952</span>. In a sub-loop, the full DLL path string is converted to lowercase.
+                        Then, in another sub-loop, the filename + extension are retrieved. Lastly, and most importantly, the filename + extension are hashed and the 
+                        resulting output is compared against the input argument of this function. 
+                        <br>
+                        This explains the hardcoded hex values that were supplied to this function, as these then must correspond to three unique DLLs.
+                        <br><br>
+                        Upon further analysis of <span id="inline-code">sub_405900</span>, it can be identified that if none of the DLLs in the InLoadOrderModuleList correspond to the input hash value, the ransomware will try
+                        to load <span id="inline-code">kernel32.dll</span>, <span id="inline-code">advapi32.dll</span> and <span id="inline-code">shell32.dll</span>. Based on the fact that 
+                        <span id="inline-code">sub_405900</span> is called three times, and if the input arguments do not correspond to any DLL in the InLoadOrderModuleList, three specific DLLs will be imported, it can be 
+                        hypothesized that these three DLLs correspond to the hash values. This can be proven by the hash generation block at <span id="inline-code">0x405A78</span>
+                        which is identical to the block at <span id="inline-code">0x405D90</span> where the output value is subsequently compared against the input buffer at <span id="inline-code">0x405A88</span>.
+                        <img class="lazy" data-src="/img/mamona_hardcodeddlls.png" alt="Hardcoded DLLs">
+                        <br><br>
+                        To close out, the final block at <span id="inline-code">0x405AB3</span> needs to be addressed. Here, the return value will contain the address pointing to the DllBase. In
+                        other words, the return value points to the start of the DLL. This will only be returned, when the DLL is already in the InLoadOrderModuleList.
+                        If this is not the case, the DLL is loaded through the call to LoadLibrary. 
+                    </p>
+
+                    <h3 id="post__content__title">PEB Walk - Part 2</h3>
+                    <p>
+                        Now that <span id="inline-code">sub_405900</span> is dissected, let's focus back on <span id="inline-code">sub_401370</span>. The return value of <span id="inline-code">sub_405900</span> is
+                        either a pointer to the specific DLL, or it is null. It is checked if each call returned a pointer to the specific DLL before continuining. If one of the functions did not return
+                        a pointer, the function <span id="inline-code">sub_401370</span> is exited. If all functions properly returned, the block at <span id="inline-code">0x4013B2</span> is entered. 
+                        Immediately, we can recognize a distinct pattern: a hard coded hex value and the pointer to either <span id="inline-code">kernel32.dll</span>, <span id="inline-code">advapi32.dll</span> or
+                        <span id="inline-code">shell32.dll</span> is supplied as input arguments for a call to <span id="inline-code">sub_405AE0</span>. After each call, the return value in <span id="inline-code">eax</span>
+                        is then stored in a global variable.
+                        <br><br>
+                        By diving into <span id="inline-code">sub_405AE0</span>, initial checks can be identified which ensure that the supplied pointer to the DLL actually is a DLL.
+                        These checks include identifying the existance of the <span id="inline-code">MZ</span> and <span id="inline-code">PE</span> headers. Subsequently, the function will loop over all imported functions,
+                        hash each function name and compare the hash against the supplied hardcoded hex value. In total, 18 functions from <span id="inline-code">kernel32.dll</span>, 3 functions from
+                        <span id="inline-code">advapi32.dll</span> and 1 function from <span id="inline-code">shell32.dll</span> are imported this way. 
+                        <br><br>
+                        The result is each time stored in a unique global variable for later reference/use. By using cross referencing in IDA, we identify that not all of the imported functions will be used.
+                        Therefore, a best effort attempt at identifying the specific functions that are used later is made. We use the C++ code below, to mimic the hashing function and by adding functions
+                        often utilized by ransomware from all three DLLs, we can identify corresponding matches. In some cases, we can also utilize the function signature
+                        (type and count of arguments) passed to the global variable to identify potential matches.
+                        <pre><code id="code-block" class="language-cpp line-numbers"></code></pre><br>
+                        Below is a list of the imported dlls and corresponding hashes as well as the imported functions and corresponding hashes:
+                        <table>
+                            <tr>
+                                <th>Imported DLL</th>
+                                <th>Corresponding hash</th>
+                            </tr>
+                            <tr>
+                                <td>kernel32.dll</td>
+                                <td>0x8E1E9d32</td>
+                            </tr>
+                            <tr>
+                                <td>advapi32.dll</td>
+                                <td>0x84FE3906</td>
+                            </tr>
+                            <tr>
+                                <td>shell32.dll</td>
+                                <td>0xC0B94CC9</td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <th>Imported functions</th>
+                                <th>Corresponding hash</th>
+                            </tr>
+                            <tr>
+                                <td>CreateMutexW</td>
+                                <td>0x8D7EE0E0</td>
+                            </tr>
+                            <tr>
+                                <td>CreateFileW</td>
+                                <td>0x9EEB112D</td>
+                            </tr>
+                            <tr>
+                                <td>WriteFile</td>
+                                <td>0x7ED9CC8D</td>
+                            </tr>
+                            <tr>
+                                <td>CloseHandle</td>
+                                <td>0xEBC51524</td>
+                            </tr>
+                            <tr>
+                                <td>GetFileSize</td>
+                                <td>0x8D7EE0E0</td>
+                            </tr>
+                            <tr>
+                                <td>ReadFile</td>
+                                <td>0xFD63715E</td>
+                            </tr>
+                            <tr>
+                                <td>SetFilePointerEx</td>
+                                <td>0x2BDAFF0C</td>
+                            </tr>
+                            <tr>
+                                <td>GetFileAttributesW</td>
+                                <td>0x6437560</td>
+                            </tr>
+                            <tr>
+                                <td>SetFileAttributesW</td>
+                                <td>0x2F4D0EEC</td>
+                            </tr>
+                            <tr>
+                                <td>MoveFilesExW</td>
+                                <td>0x6CBFCCED</td>
+                            </tr>
+                            <tr>
+                                <td>GetModuleFileNameW</td>
+                                <td>0x4D5FA9E0</td>
+                            </tr>
+                            <tr>
+                                <td>GetLogicalDrives</td>
+                                <td>0x4F1D3C4A</td>
+                            </tr>
+                            <tr>
+                                <td>GetDriveTypeW</td>
+                                <td>0x4E4EFCF5</td>
+                            </tr>
+                            <tr>
+                                <td>**</td>
+                                <td>0xB0286BF8</td>
+                            </tr>
+                            <tr>
+                                <td>CreateIoCompletionPort</td>
+                                <td>0xD11E718D</td>
+                            </tr>
+                            <tr>
+                                <td>CreateThread</td>
+                                <td>0x9CE6A30E</td>
+                            </tr>
+                            <tr>
+                                <td>WaitForSingleObject</td>
+                                <td>0x5B55B9D7</td>
+                            </tr>
+                            <tr>
+                                <td>PostQueuedCompletionStatus</td>
+                                <td>0x285141AF</td>
+                            </tr>
+                            <tr>
+                                <td>CryptAcquireContextW</td>
+                                <td>0xDF72101A</td>
+                            </tr>
+                            <tr>
+                                <td>CryptGenRandom</td>
+                                <td>0xA14E93CF</td>
+                            </tr>
+                            <tr>
+                                <td>CryptReleaseContext</td>
+                                <td>0x7F5B4B1A</td>
+                            </tr>
+                            <tr>
+                                <td>SHEmtpyRecycleBinA</td>
+                                <td>0xBBC7846D</td>
+                            </tr>                            
+                            </table>
+                        <p><sub>** I have not been able to find out the corresponding function for <span id="inline-code">0xB0286BF8</span></sub></p>
+                        Later on in the main function, <span id="inline-code">sub_403E50</span> is used to (re-)import <span id="inline-code">CryptGenRandom</span> from advapi32.dll.
+                    </p>
+
+                    <h3 id="post__content__title">Mutex creation and taking the trash out</h3>
+                    <p>
+                        If the PEB walk has succeeded, the ransomware will continue by creating a unique mutex with the name: <span id="inline-code">Global\\Fxo16jmdgujs437</span>.
+                        <br><br>
+                        Directly after calling <span id="inline-code">CreateMutexW</span>, the ransomware calls <span id="inline-code">GetLastError</span>.
+                        It then performs a check to see if the last error is equal to <span id="inline-code">0xB7</span> which corresponds to <span id="inline-code">ERROR_ALREADY_EXISTS</span>.
+                        As such, it can be concluded that the ransomware will only resume operations if this specific error has not been received. Notice, <span id="inline-code">CreateMutexW</span>
+                        returns an open handle, the ransomware will only close this specific handle after cleanup (discussed later) at <span id="inline-code">0x403C1D</span>.
+                        <br><br>
+                        Upon resumption, the ransomware will then go on to call the, by PEB-walk imported, function <span id="inline-code">SHEmtpyRecycleBinA</span>
+                        with the arguments <span id="inline-code">0, 0, 7</span>. The second argument denotes that all Recycle Bins on all drives should be emptied.
+                        The third argument denotes that no dialog boxes should be displayed nor should any sound be played.
+                    </p>
+
+                    <h3 id="post__content__title">Clearing event logs</h3>
+                    <p>
+                        Within the main function, a call to <span id="inline-code">sub_405BC0</span> takes place. This functions appears to clear the event logs.
+                        <br>
+                        First, a handle to <span id="inline-code">ntdll.dll</span> is obtained, after which the addresses for the functions <span id="inline-code">NtOpenKey</span> and
+                        <span id="inline-code">NtClose</span> are queried. If this operation is successfull, a loop is entered, where the ransomware loops over each of the event logs:
+                        <span id="inline-code">Application</span>, <span id="inline-code">Security</span>, <span id="inline-code">System</span>, <span id="inline-code">Setup</span> and
+                        <span id="inline-code">ForwardedEvents</span>. For each event log, the ransomware tries to clear the logs by calling <span id="inline-code">ClearEventLogW</span>.
+                        Should this fail, the ransomware calls <span id="inline-code">BackupEventLog</span>. It seems that this operation was potentially aimed at overwriting the event 
+                        log, but this would not succeed as the output file name is the literal string <span id="inline-code">NUL</span>.
+                        <br>
+                        <img class="lazy" data-src="/img/mamona_removeevtlogs.png" alt="Remove event logs">
+                    </p>
+
+                    <h3 id="post__content__title">Escalating Privileges</h3>
+                    <p>
+                        After clearing the event logs, the ransomware calls <span id="inline-code">sub_406170</span> from main which contains further interesting operations. It starts with a call 
+                        to <span id="inline-code">sub_405EC0</span>. 
+                        <br><br>
+                        Function <span id="inline-code">sub_405EC0</span> obtains the current token information from the current process. 
+                        The handle to the process token will be passed to <span id="inline-code">sub_405CB0</span>, which is used to try to adjust the current privileges, if required. For each of 11 hardcoded
+                        privileges, the ransomware will check if it currently has obtained said privilege and if it hasn't, it will try to delegate the privilege to itself using <span id="inline-code">AdjustTokenPrivilege</span>
+                        <br>
+                        <img class="lazy" data-src="/img/mamona_adjusttokenprivs.png" alt="Adjust token privileges">
+                        <br><br>
+                        Then, in <span id="inline-code">sub_405EC0</span>, the hardcoded string <span id="inline-code">winlogon.exe</span> is passed to the function <span id="inline-code">sub_405D90</span>.
+                        This function loops over all processes using <span id="inline-code">Process32FirstW</span> and <span id="inline-code">Process32NextW</span> and if the corresponding process supplied
+                        as the input argument is found, it will then return the process ID. Using the process ID, the malware will first try to open the process using <span id="inline-code">PROCESS_QUERY_INFORMATION | PROCESS_VM_READ</span>.
+                        If this fails it will try with access right <span id="inline-code">PROCESS_QUERY_LIMITED_INFORMATION</span>. Should this fail too, the function will return. In any other case, it will
+                        obtain the process tokens using the desired access mask of <span id="inline-code">TOKEN_ALL_ACCESS</span>. If this should fail, it will retry it with the access mask of 
+                        <span id="inline-code">TOKEN_QUERY</span>. Next, using <span id="inline-code">sub_405E40</span>, the ransomware will attempt to duplicate the token obtained from 
+                        <span id="inline-code">winlogon.exe</span>, and delegate the same 11 privileges as mentioned before to said token. It will then call <span id="inline-code">ImpersonateLoggedOnUser</span> 
+                        with the duplicated, high-privilege token.
+                        <br><br>
+                        If all operations so far have succeeded, the ransomware will attempt to open the Service Control Manager with <span id="inline-code">SC_MANAGER_ALL_ACCESS</span>. If this succeeds,
+                        a handle to the service <span id="inline-code">TrustedInstaller</span> will be obtained. Then, it will be checked if the service status can be retrieved, or if the service can be started
+                        and the start operation did not result in the error <span id="inline-code">SERVICE_ALREADY_RUNNING</span>. Should these checks pass, the ransomware will try the exact same
+                        privilege escalation process as with the <span id="inline-code">winlogon.exe</span> process.
+                    </p>
+
+                    <h3 id="post__content__title">Killing services</h3>
+                    <p>
+                        With the elevated privileges, the ransomware now returns back to <span id="inline-code">sub_406170</span>, where it will attempt to open the Service Control Manager
+                        with <span id="inline-code">SC_MANAGER_ALL_ACCESS</span>. If this succeeds it will iterate over a hardcoded list of services and attempt to terminate the service
+                        (using <span id="inline-code">ControlService</span>) and subsequently attempt to delete the service with a call to <span id="inline-code">DeleteService</span>.
+                        <br>
+                        <img class="lazy" data-src="/img/mamona_listofsvcs.png" alt="Services to kill">
+                    </p>
+
+                    <h3 id="post__content__title">Killing processes</h3>
+                    <p>
+                        Once all services have been iterated over, the ransomware continues by obtaining a handle to <span id="inline-code">ntdll.dll</span> to retrieve the process addresses of 
+                        <span id="inline-code">NtOpenProcess</span> as well as <span id="inline-code">NtTerminateProcess</span>. Then, it will start iterating over a set of hardcoded processes
+                        and for each process it will attempt to terminate the process.
+                        After completing the iterator, the function ends by calling the Win32 API <span id="inline-code">RevertToSelf</span> to undo the previous escalation of privileges and returns to main.
+                        <br>
+                        <img class="lazy" data-src="/img/mamona_listofprocs.png" alt="Processes to kill">
+                    </p>
+
+                    <h3 id="post__content__title">Encryption worker setup</h3>
+                    <p>
+                        Before the encryption process is actually started, the selected encryption mode will be determined. If either network-only or local-only has been selected, either a local thread pool or remote thread pool 
+                        will be created respectively. If both modes have been selected, both a local and remote thread pool will be created. One of the required input values for the creation of a thread pool
+                        is the maximum number of workers that should be spun up consectively. This number, even if only a remote thread pool is used, is determined by the number of processors available on the 
+                        current system, which is retrieved from a call to <span id="inline-code">GetNativeSystemInfo</span>.
+                        <br><br>
+                        Thread pool creation itself takes place in <span id="inline-code">sub_404CA0</span>. First, an I/O completion port is created using the number of processors as the number of concurrent threads.
+                        Furthermore, it will create a new thread pointing the start address of the thread to <span id="inline-code">sub_405000</span>. The process within the new thread will call 
+                        <span id="inline-code">NtRemoveIoCompletion</span> in a <span id="inline-code">do {...} while ()</span> loop. Specifically, the last parameter supplied to this function dictates that the
+                        queue will wait forever until there's more work to process. Within the loop, each completion packet starts up a worker which then retrieves the per-job object via the key, runs the object's next
+                        step and likely marks it as finished when completed. For now, the loop is empty, meaning this thread will be in waiting mode until jobs are added. 
+                        <br><br>
+                        Note: New jobs can be added to the queue by using the high level API <span id="inline-code">PostQueuedCompletionStatus</span> or lower level <span id="inline-code">NtSetIoCompletion</span>.
+                    </p>
+
+                    <h3 id="post__content__title">Encrypting the local system</h3>
+                    <p>
+                        The ransomware will determine what drives and paths to encrypt based on the supplied commandline arguments. If no paths have been supplied, the ransomware will encrypt
+                        all drives. To do so, it will use <span id="inline-code">GetLogicalDrives</span> and loop over the results with <span id="inline-code">GetDriveTypeW</span> to determine
+                        the valid drives. 
+                        <br>
+                        Once it has obtained all valid drives or supplied paths in the arguments, it will check if a delay has been specified and will delay execution using <span id="inline-code">NtDelayExecution</span>
+                        for the specified amount of seconds. 
+                        <br><br>
+                        For both drives and supplied paths, it will loop over them, and determine, by calling <span id="inline-code">GetFileAttributesW</span>, if the object is a file or directory. If it is a file,
+                        a direct call to <span id="inline-code">sub_401B50</span> will take place. This appears to be an overarching function which is responsible for reading the input
+                        file and performing the encryption before writing the encrypted blob back to the file. Without diving into the specific encryption process, there seems to be a hardcoded key being used:
+                        <span id="inline-code">xcrydtednotstill_amazingg_time!!</span>. If the custom path points to a folder, the function <span id="inline-code">sub_401770</span> is called. 
+                        <br><br>
+                        Function <span id="inline-code">sub_401770</span> will loop over all files in the directory, and for each file it finds that has one of the extensions listed below, it will add a job 
+                        to the I/O completion port for encryption
+                        <table>
+                            <thead>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">Valid file extensions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>.exe</td>
+                                <td>.dll</td>
+                            </tr>
+                            <tr>
+                                <td>.msi</td>
+                                <td>.sys</td>
+                            </tr>
+                            <tr>
+                                <td>.ini</td>
+                                <td>.lnk</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </p>
+
+                    <h3 id="post__content__title">Encrypting the network</h3>
+                    <p>
+                        If the ransomware operator chooses to encrypt the network, the ransomware will first try to obtain local network information using the function <span id="inline-code">sub_404360</span>.
+                        Here, the local IP address of the system as well as the domain information will be retrieved primarily using <span id="inline-code">GetAdaptersAddresses</span> and <span id="inline-code">GetComputerNameW</span>.
+                        Finally, it will obtain the handles of the following functions from the <span id="inline-code">secur32.dll</span> in the subfunction <span id="inline-code">sub_4064E0</span>:
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Targeted DLLs</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>LsaConnectUntrusted</td></tr>
+                                <tr><td>LsaLookupAuthenticationPackage</td></tr>
+                                <tr><td>LsaCallAuthenticationPackage</td></tr>
+                                <tr><td>LsaDeregisterLogonProcess</td></tr>
+                                <tr><td>LsaFreeReturnBuffer</td></tr>
+                            </tbody>
+                        </table>
+
+                        Once <span id="inline-code">sub_404360</span> returns to main, execution will resume and function <span id="inline-code">sub_404500</span> is called. 
+                        This function appears to be responsible for scanning the network, identifying shares and starting the encryption process of any network-related files. 
+                        However, before it starts doing these operations, first a list of all the local drives is obtained and for each drive that is found, the function
+                        <span id="inline-code">sub_402680</span> is called. This function obtains the file attribues and if the passed object is a file, it will start encryption,
+                        or in any other case it will call <sapn id="inline-code">sub_401770</sapn>, whose functionality was discussed previously under "Encrypting the local system".
+                        <br><br>
+                        Next, back in <span id="inline-code">sub_404500</span>, a network scan will take place to identify all network shares. The setup of the prerequisites for scanning
+                        the subnet takes place in <span id="inline-code">sub_404940</span>. Within this function, the already familiar <span id="inline-code">NtSetIoCompletion</span> can
+                        be once again identified. As seen before, <span id="inline-code">NtSetIoCompletion</span> receives a virtual function table, with a predefined set of functions. We 
+                        identify that the function <span id="inline-code">sub_404C00</span> jumps to <span id="inline-code">sub_403FE0</span>.
+                        <br><br>
+                        Several interesting operations can be identified within this function. For example, it performs IPv4 ICMP echo requests by using <span id="inline-code">IcmpCreateFile</span>
+                        and <span id="inline-code">IcmpSendEcho</span>. Furthermore, it attempts network hash authentication through <span id="inline-code">sub_406570</span>, using Kerberos 
+                        and a combination of <span id="inline-code">LsaConnectUntrusted</span>, <span id="inline-code">LsaLookupAuthenticationPackage</span> and <span id="inline-code">WNetAddConnection2W</span>.
+                        Lastly, it performs network share enumeration by calling <span id="inline-code">NetShareEnum</span>. Ultimately, it returns with a list of enumerated network shares to be encrypted.
+                        <br><br>
+                        The encryption routine is called by <span id="inline-code">sub_404500</span> and as expected it uses the I/O completion port again, with another predefined set of functions
+                        residing in another unique virtual function table. Within this vftable, the function <span id="inline-code">sub_404C10</span> is responsible for calling the previously 
+                        discussed function <span id="inline-code">sub_402680</span> which calls the main encryption function. 
+                        <br><br>
+                        After sending the encryption tasks to the I/O completion port, <span id="inline-code">sub_404500</span> returns execution back to main.
+                    </p>
+
+                    <h3 id="post__content__title">Thank you and well done</h3>
+                    <p>
+                        Regardless of the encryption mode that was selected, the created I/O completion port needs to be told all tasks have been completed and the port can be shut down. 
+                        This specific operation takes place in <span id="inline-code">sub_404D80</span>, where the function <span id="inline-code">PostQueuedCompletionStatus</span> is called.
+                        The PostQueuedCompletionStatus is particularly responsible for posting an I/O completion packet, telling the port it can and will be shutdown. After this operation
+                        has succeeded, any open handles are closed before returning to main. 
+                    </p>
+
+                    <h3 id="post__content__title">Creating the wallpaper</h3>
+                    <p>
+                        Once the encryption process has been completed, a call to <span id="inline-code">sub_405370</span> can be identified. This function looks interesting as it relies 
+                        on the PEB walk to import further functions before performing several operations. Using our previously mentioned tool, we can identify the used DLLs and functions
+                        and identify that two new DLLs are used and a total of 16 functions are imported:
+                        <br>
+                        <table>
+                            <tr>
+                                <th>Imported DLL</th>
+                                <th>Corresponding hash</th>
+                            </tr>
+                            <tr>
+                                <td>user32.dll</td>
+                                <td>0x86A4AF70</td>
+                            </tr>
+                            <tr>
+                                <td>gdi32.dll</td>
+                                <td>0x86A4AF70</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <table>
+                            <tr>
+                                <th>Imported functions</th>
+                                <th>Corresponding hash</th>
+                            </tr>
+                            <tr>
+                                <td>GetDC</td>
+                                <td>0x9F329E09</td>
+                            </tr>
+                            <tr>
+                                <td>ReleaseDC</td>
+                                <td>0xFCD551AA</td>
+                            </tr>
+                            <tr>
+                                <td>SystemParametersInfoW</td>
+                                <td>0xE328CF3E</td>
+                            </tr>
+                            <tr>
+                                <td>FillRect</td>
+                                <td>0x38766F37</td>
+                            </tr>
+                            <tr>
+                                <td>DrawTextW</td>
+                                <td>0x77A89D4C</td>
+                            </tr>
+                            <tr>
+                                <td>CreateCompatibleDC</td>
+                                <td>0xDA03C35D</td>
+                            </tr>
+                            <tr>
+                                <td>CreateCompatibleBitmap</td>
+                                <td>0xF106F453</td>
+                            </tr>
+                            <tr>
+                                <td>GetDeviceCaps</td>
+                                <td>0x770B6E19</td>
+                            </tr>
+                            <tr>
+                                <td>DeleteDC</td>
+                                <td>0x2B9DC79C</td>
+                            </tr>
+                            <tr>
+                                <td>SelectObject</td>
+                                <td>0x9AD2AC39</td>
+                            </tr>
+                            <tr>
+                                <td>DeleteObject</td>
+                                <td>0xEA45C72C</td>
+                            </tr>
+                            <tr>
+                                <td>SetBkMode</td>
+                                <td>0x881F6820</td>
+                            </tr>
+                            <tr>
+                                <td>SetTextColor</td>
+                                <td>0x5F7115D2</td>
+                            </tr>
+                            <tr>
+                                <td>CreateFontW</td>
+                                <td>0x9EEE65E4</td>
+                            </tr>
+                            <tr>
+                                <td>GetDIBits</td>
+                                <td>0x14870CA1</td>
+                            </tr>
+                            <tr>
+                                <td>CreateSolidBrush</td>
+                                <td>0x110B295</td>
+                            </tr>
+                        </table>
+                        <br>
+                        Once the function import process has been completed, a file with the name <span id="inline-code">wallpaper.bmp</span> is created. Once the file is successfully created,
+                        the function <span id="inline-code">SystemParametersInfoW</span> is used to set the actual wallpaper. The first parameter passed to it is the <span id="inline-code">uiAction</span>, where the value
+                        <span id="inline-code">0x14</span> corresponds with <span id="inline-code">SPI_SETDESKWALLPAPER</span>. The second parameter passed to it is the <span id="inline-code">uiParam</span>, with a value of
+                        <span id="inline-code">0x0</span> since no uiParam is expected when using <span id="inline-code">SPI_SETDESKWALLPAPER</span>. The third parameter holds the path to the 
+                        wallpaper file. The fourth, and last, parameter is the  <span id="inline-code">fWinIni</span> value <span id="inline-code">0x3</span> which corresponds to
+                        <span id="inline-code">SPIF_SENDWININICHANGE</span>, meaning the <span id="inline-code">WM_SETTINGCHANGE</span> message will be broadcasted after updating the user profile.
+                    </p>
+
+                    <h3 id="post__content__title">Cleanup</h3>
+                    <p>
+                        If the commandline argument <span id="inline-code">-keep</span> was <b>not</b> supplied, the ransomware will delete itself by executing the command:
+                        <span id="inline-code">cmd.exe /C ping 127.0.0.7 -n 3 > Nul & Del /f /q "%s"</span>, where it will place the the result from <span id="inline-code">GetModuleFileNameW</span>
+                        into the format string, effectively pointing to itself. The ping is used as a delaying mechanism which should provide the ransomware enough time to exit before the executable
+                        is removed. Furthermore, the ransomware also marks itself for deletion by calling <span id="inline-code">SetFileInformationByHandle</span>. This can be gleaned from the second
+                        and third argument. The value 0x4 for the <span id="inline-code">FileInformationClass</span> corresponds to <span id="inline-code">FILE_DISPOSITION_INFO</span>. This struct contains
+                        exactly one value: <span id="inline-code">DeleteFile</span>, which is set to the value of <span id="inline-code">1</span> on line <span id="inline-code">0x405319</span>.
+                    </p>
+
+                    <h3>Closing off</h3>
+                    <p>
+                        After the cleanup function, the ransomware exits and should have successfully achieved its objectives.
+                        <br>
+                        Thank you for reading this extensive analysis of the Mamona ransomware variant. For feedback, questions and comments feel free to <a href="https://x.com/grayman_re">contact me</a> directly.
+                    </p>
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+
+    <textarea id="code-data" style="display: none;">
+#include <iostream>
+
+int main() {
+    const wchar_t* strings[] = {
+        L"kernel32.dll",
+        L"advapi32.dll",
+        L"shell32.dll",
+        nullptr
+    };
+
+    for (const wchar_t** p = strings; *p != nullptr; ++p) {
+        const wchar_t* str = *p;
+        unsigned int init = 0x42;
+        const wchar_t* ptr = str;
+
+        if (*ptr != L'\0') {
+            do {
+                wchar_t c = *ptr++;
+                unsigned int old_hash = init;
+                init = (init << 5) + c + old_hash;
+            } while (*ptr != L'\0');
+        }
+        std::wcout << L"Hash value: 0x" << std::hex << init << " -- " << str << std::endl;
+    }
+    return 0;
+}</textarea>
+
+    <script>
+        // Extract the code content from the textarea
+        const codeContent = document.getElementById('code-data').value.trim();
+
+        // Insert the code content into the <code> element
+        document.getElementById('code-block').textContent = codeContent;
+
+        // Trigger Prism to highlight the newly added code
+        Prism.highlightElement(document.getElementById('code-block'));
+    </script>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/rev/" class="set-1">Reverse Engineering</a>
+                            <a href="/projects/" class="set-1">Projects</a>
+                            <a href="/ctf/" class="set-1">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+            });
+        }
+    </script>
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/vendors/prism.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
+</body>
+
+</html>

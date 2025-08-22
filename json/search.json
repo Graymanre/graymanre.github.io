@@ -62,7 +62,7 @@
     "url": "projects/windbg_dev_extension.html",
     "date": "13 July 2024",
     "content": "Tutorial on how to write a WinDBG extension in C++"
-  }  ,
+  },
   {
     "title": "RokRat Loader MalOps Challenge",
     "category": "CTF",
@@ -70,5 +70,13 @@
     "url": "ctf/malops_rokrat.html",
     "date": "4 June 2025",
     "content": "Reverse engineering the RokRat malware sample and solving the MalOps challenge."
+  },
+  {
+    "title": "Mamona Ransomware Technical Analysis",
+    "category": "rev",
+    "tags": "Mamona, Ransomware, Malware, Infostealer, Reverse Engineering, Global Group Ransomware",
+    "url": "rev/mamona_analysis.html",
+    "date": "22 August 2025",
+    "content": "Deep dive and technical analysis of the new Mamona ransomware strain by GLOBAL GROUP."
   }
 ]
