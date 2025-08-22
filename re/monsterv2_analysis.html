@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="GraymanRe - Developing a WinDBG Extension in C++" />
+    <meta property="og:description" content="Developing a WinDBG Extension in C++" />
+    <meta property="og:image" content="https://graymanre.github.io/img/windbg.webp" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="description" content="Deep dive into developing a custom extension for WinDBG in C++"../>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/windbg.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRe - Developing a WinDBG Extension in C++</title>
+
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="../feed.xml">
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/prism.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date" datetime="2024-07-12T00:00:00+02:00">- 12 July 2024</time>
+                            </div>
+                            <h2 class="post__title">Building a WinDBG extension in C++</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="../contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="../img/logo.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="../contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="../projects" class="post__tag">Projects</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Introduction</h3>
+                    <p>
+                        ProofPoint has recently discovered an infostealer that is believed to be MonsterV2, which is a newer
+                        version of an existing infostealer. ProofPoint describes MonsterV2 as having many capabilities,
+                        but seemingly focusses primarily on functionality of a stealer and loader.
+                        <br><br>
+                        As ProofPoint has only released a set of four <a href="https://x.com/threatinsight/status/1930733204950184410?s=46">X messages</a> dedicated to this new stealer,
+                        we will have a deep dive look into this new version of MonsterV2 and its capabilities.
+                        The X message from ProofPoint mentions two specific example hashes related to this new Monster version:
+                        <ul>
+                            <li>666944b19c707afaa05453909d395f979a267b28ff43d90d143cd36f6b74b53e</li>
+                            <li>b869941a9c476585bbb8f48f7003d158c71e44038ceb2628cedb231493847775</li>
+                        </ul>
+                    </p>
+
+                    <h3 id="post__content__title">Network communications</h3>
+                    <p>
+                        sub_7FF6EF1E5490 -> call to wrapped memcpy at 7FF6EF1E56C9 -> buffer contains 155.138.150.12
+                        Next the value "xpmg" is also added to a buffer
+                        Later on, we see calls to htons, with hardcoded value 1E20 -> port number 7712
+
+                        On each call to connect we can use a simple IDAPython script to obtain the IP address and port number:
+                        ptr = idc.get_reg_value("rdx")
+                        fam = idc.get_wide_word(ptr)
+                        if fam == 2: # AF_INET
+                            port_bytes = idc.get_bytes(ptr + 2, 2)
+                            port = struct.unpack(">H", port_bytes)[0]
+                            ip_bytes = idc.get_bytes(ptr + 4, 4)
+                            ip = ".".join(str(b) for b in ip_bytes)
+                            print(f"[+] connect(AF_INET): {ip}:{port})
+                    </p>
+
+                    <p>
+                        First connection will take place to https://api.ipify.org, this seems to be purely to check if there is an active internet
+                        connection that allows external communications. By creating a simple python script and hard coding our /etc/hosts file we
+                        can pretend to be the valid instance of https://api.ipify.org and listen to the incoming request. Furthermore, just like 
+                        ipify.org we only respond with an IP address, no headers whatsoever. We use an easily recognizable IP like 155.155.155.155.
+                        By doing this, we can confirm that the response is not captured and as such verify that the malware only confirms a successful
+                        connection has taken place. 
+                        
+                        Once this connectivity check has been completed, the malware continues on to initiate a connection with its C2 server, which
+                        we previously identified uses IP address 155.138.150.12 and listens on port 7712. We once again setup a python server that 
+                        listens on this IP address and port. After some tweaking, we discover that it sends a bas64 encoded string which is terminated
+                        by "\r\n" or 0x0D0A. The base64 encoded string contains data such as:
+                        <ul> 
+                            <li>IP address</li>
+                            <li>Computer name</li>
+                            <li>User name</li>
+                            <li>OS name</li>
+                            <li>UUID</li>
+                            <li>OS details</li>
+                            <li>Geo information</li>
+                            <li>Malware build name</li> 
+                            <li>Malware version number</li>
+                        </ul>
+
+                        Directly after sending this data, it will attempt to receive data from the C2 server as well. Based on the reply that it receives
+                        it will check the data for a valid "0x0D0A" ending ("\r\n"). If it doesn't find this in the received data, it will retry receiving
+                        data multiple times. If no valid data has been received, it will attempt to connect to api.ipify.org again, connect again to the C2 
+                        server and send the gathered system information again before attempting to receive data from the C2 server.
+                        
+                    </p>
+
+                    <h3 id="post__content__title">Information gathering</h3>
+                    <p>
+
+                    </p>
+
+                    <h3 id="post__content__title">Encryption</h3>
+                    <p>
+                        RegOpenKeyExW 
+                            -> HKLM\SOFTWARE\Microsoft\Cryptography
+                            -> KEY_READ | KEY_WOW64_64KEY
+
+                        RegGetValueW
+                            -> MachineGuid
+
+                        XChaCha20-Poly1305
+
+                        The malware then goes on to retrieve the Computer Name, using `GetComputerNameW` as well as the value from the registry
+                        key at HKLM\Software\Microsoft\Cryptography\MachineGuid.
+                        These two values, then go on to become the nonce and key respectively for XChaCha20-Poly1305 encryption. The to-be-encrypted
+                        hex blob is hardcoded in the program and has the value of: 5BE0CD191F83D9AB9B05688C510E527F0A54FF53A3C6EF372BB67AE856A09E667
+                    </p>
+
+                    <h3 id="post__content__title">Pre Information Gathering Operations</h3>
+                    <h3 id="post__content__title">Preventing execution in CIS and neighbouring countries</3>
+                    <p>
+                        Before the malware does any sort of real malicious operations, it will call sub_7FF6EF2253D10 from the WinMain function.
+                        By analyzing this function, we discover that it will obtain the systems geografic information and the user's geographic identifier
+                        using the Windows API calls GetGeoInfoA and GetUserGeoID. It will compare the returned value (e.g. US, RU, etc.) with a hardcoded
+                        buffer of values. These values are as follows: "RU;BY;UA;KZ;UZ;TM;KG;AM;TJ;MD;LV;LT;EE". If the system's/user's geographic ID
+                        matches one of the values, the malware will automatically exit and cease operations.
+
+                        Therefore, we can conclude that if the malware identifies that the infected operating system runs within any geographic region belonging
+                        to Russia, Belarus, Ukraine, Kazakhstan, Uzbekistan, Turkmenistan, Kyrgyzstan, Armenia, Tajikistan, Moldova, Lativa, Lithuania or Estiona,
+                        it will self-destruct. This behaviour has been seen before and can likely be attributed to ensure that malware developed by Russian or
+                        Eastern European actors does not draw law enforcement attention to local victims.
+
+                        In the screenshot below, we see that sub_7FF6EF2D89D0 is called with an input buffer which retrieves the decoded
+                        string of country values. Next, the delimiter value is set and the string containing the country codes is transformed
+                        to an array through sub_7FF6EF210A90. Lastly, sub_7FF6EF259520 is called to retrieve the system's country code. 
+                        Subsequently, we identify the loop that tests each country code against the current country code and exits if a match is found.
+                        <div>
+                            <img src="../img/monster_country_code_analysis.png" alt="Country Code Analysis" onclick="wi+ndow.open(this.src, '_blank');"
+                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+                    <h3 id="post__content__title">Custom function resolver</h3>
+                    <p>
+                        Upon execution, the malware will run a custom function resolver. It will obtain 
+                        
+                        rdx will receive hardcoded value of 0x38
+                        r9d will receive hardcoded value of 0x20
+                        r8 will receive the hardcoded xmm_word string
+                        rcx contains empty buffer
+
+                        The XOR key is 0x38000101. It is used to only XOR the first four byte of the hardcoded hex string read into memory:
+                        Input: 08C9BCF367E6096A3BA7CA8485AE67BB2BF894FE72F36E3CF1361D5F3AF54FA5D182E6AD7F520E511F6C3E2B8C68059B6BBD41FBABD9831F79217E1319CDE05B
+                        Ouput: 30C9BDF267E6096A3BA7CA8485AE67BB2BF894FE72F36E3CF1361D5F3AF54FA5D182E6AD7F520E511F6C3E2B8C68059B6BBD41FBABD9A31F79217E1319CDE05B
+
+
+                        9BCB86FFA42909D58C2A99B700969B787A6AD1D02E8146EA142EE86B4FFD6A63
+
+
+                        3267795FF86E3E7DFBED44F8EB740F9170B108F6BCA7542EFA5CC50A2801845064673C64158C6BA5CA746131A6D7282445336F7E9E421A3115171A0FAECEFD53
+                        <ul>
+                            <li>ntdll.dll</li>
+                            <li>kernel32.dll</li>
+                            <li>advapi32.dll</li>
+                            <li>ole32.dll</li>
+                            <li>oleaut32.dll</li>
+                            <li>shell32.dll</li>
+                            <li>user32.dll</li>
+                            <li>psapi.dll</li>
+                            <li>crypt32.dll</li>
+                            <li>gdi32.dll</li>
+                            <li>rstrtmgr.dll</li>
+                        </ul>
+                        
+
+                    </p>
+                    <h3 id="post__content__title">Mutex Creation</h3>
+                    <p>
+                        The malware checks if a mutex with the value Mutant- ... exists. If this value is not found, it will create a new mutex.
+                        Should the value exist, the malware will call ExitProcess. Therefore, we can assume that the malware ensures that only
+                        a single instance of the malware is running on the compromised system.
+                    </p>
+
+                    <h3 id="post__content__title">Privilege Escalation</h3>
+                    <p>
+                        Once the mutex has been created, the malware then goes on to try and escalate its privileges by obtaining specific process
+                        privileges. It will load a specific string from memory, which details the specific process privilege. First, it checks
+                        if the malware process has already obtained this privilege. If the process has not already obtained the privilege, it 
+                        will attempt to obtain it by calling the AdjustTokenPrivileges API. In total it will try and obtain 12 privileges, displayed in the list below:
+                        <ol>
+                            <li>SeDebugPrivilege</li>
+                            <li>SeImpersonatePrivilege</li>
+                            <li>SeProfileSingleProcessPrivilege</li>
+                            <li>SeTakeOwnershipPrivilege</li>
+                            <li>SeBackupPrivilege</li>
+                            <li>SeRestorePrivilege</li>
+                            <li>SeIncreaseBasePriorityPrivilege</li>
+                            <li>SeIncreaseWorkingSetPrivilege</li>
+                            <li>SeSecurityPrivilege</li>
+                            <li>SeIncreaseQuotaPrivilege</li>
+                            <li>SeShutdownPrivilege</li>
+                            <li>SeAssignPrimaryTokenPrivilege</li>
+                        </ol>
+                    </p>
+
+                    <h3 id="post__content__title">Further process manipulation</h3>
+                    <p>
+                        Once these privileges have been obtained, it will (re)set the Process Shutdown Parameters using the normal user app level
+                        of 0x280 and setting the SHUTDOWN_NORETRY flag, which ensures that the operating system will not show any sort of retry 
+                        dialog box for the user. Subsequently, a call to SetPriorityClass ensures that the malware process obtains the 
+                        REALTIME_PRIORITY_CLASS priority and lastly it will add the THREAD_PRIORITY_TIME_CRITICAL priority to the current thread.
+                    </p>
+
+                    <h3 id="post__content__title">Persistence</h3>
+                    <p>
+                        We can use the hardcoded CLSID value to identify the specific COM class that is targeted by the malware. In this case,
+                        the ID value 0f87369f-a4e5-4cfc-bd3e-73e6154572dd corresponds to the task scheduler class. By abusing the task scheduler,
+                        the malware creates persistence through the creation of a scheduled tasks which executes the malware when the workstation
+                        is unlocked by any user. 
+
+                        The scheduled task has the following properties/details:
+                        <ul>
+                            <li>Author: System</li>
+                            <li>User account running the task: Administrators</li>
+                            <li>Security option: Run with highest privileges</li>
+                            <li>Hidden</li>
+                            <li>Delay is set to: PT0S -> no delay</li>
+                        </ul>
+
+                        <div>
+                            <img src="../img/monsterv2_schedtask.png" alt="Scheduled Task Creation" onclick="wi+ndow.open(this.src, '_blank');"
+                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+
+
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="../re" class="set-1">Reverse Engineering</a>
+                            <a href="../projects" class="set-1">Projects</a>
+                            <a href="../ctf/" class="set-5">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="../js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="../js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="../js/vendors/jquery.fitvids.js"></script>
+    <script src="../js/vendors/lazyload.min.js"></script>
+    <script src="../js/vendors/transition.js"></script>
+    <script src="../js/vendors/zoom.min.js"></script>
+    <script src="../js/vendors/prism.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/readingtime.js"></script>
+
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
+</body>
+
+</html>

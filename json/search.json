@@ -75,7 +75,7 @@
     "title": "Mamona Ransomware Technical Analysis",
     "category": "rev",
     "tags": "Mamona, Ransomware, Malware, Infostealer, Reverse Engineering, Global Group Ransomware",
-    "url": "rev/mamona_analysis.html",
+    "url": "re/mamona_analysis.html",
     "date": "22 August 2025",
     "content": "Deep dive and technical analysis of the new Mamona ransomware strain by GLOBAL GROUP."
   }
