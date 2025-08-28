@@ -18,15 +18,15 @@
     <title>GraymanRe - Mamona Ransomware: Technical Analysis</title>
 
     <link rel="canonical" href="https://graymanre.github.io/">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="../feed.xml">
-    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/prism.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -91,16 +91,16 @@
                             <h2 class="post__title">Mamona Ransomware: Technical Analysis</h2>
                             <div class="post__bottom">
                                 <div class="post__author">
-                                    <a href="../contact/" aria-label="GraymanRe">
+                                    <a href="/contact/" aria-label="GraymanRe">
                                         <img class="post__author-image"
-                                             src="../img/banner.webp" alt="GraymanRe's Picture">
+                                             src="/img/banner.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
-                                    <a href="../contact/" class="post__author-link">GraymanRe</a>
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
                                     <span>in</span>
                                     <span class="post-tags">
-                                        <a href="../projects" class="post__tag">Projects</a>
+                                        <a href="/projects" class="post__tag">Projects</a>
                                     </span>
                                 </div>
                             </div>
@@ -271,13 +271,13 @@
                         a hardcoded value: <span id="inline-code">.config</span>, as can be noticed by the blocks at <span id="inline-code">0x4029A2</span> and <span id="inline-code">0x4029B1</span>.
                         If the <span id="inline-code">.config</span> section exists the ransomware will read <span id="inline-code">0x860</span> bytes into a predefined buffer and will decode the buffer
                         with the hardcoded XOR key <span id="inline-code">0x42</span>.
-                        <img class="lazy" data-src="../img/mamona_readmesection.png" alt="Config section retrieval">
+                        <img class="lazy" data-src="/img/mamona_readmesection.png" alt="Config section retrieval">
                         <br><br>
                         By writing a simple section parser in C++, we can statically extract and decode the <span id="inline-code">.config</span> section from the sections table and obtain the exact 
                         contents of this section. As we discover, this specific section contains the information ransomware victims will normally find in a README file
                         that states how to contact the ransomware operators and restore access to their lost data. 
                         <br>
-                        <img class="lazy" data-src="../img/mamona_configsection_decrypted.png" alt="Config section decrypted">
+                        <img class="lazy" data-src="/img/mamona_configsection_decrypted.png" alt="Config section decrypted">
                     </p>
 
                     <h3 id="section4">PEB Walk - Part 1</h3>
@@ -289,7 +289,7 @@
                         <br><br>
                         The PEB cannot be directly referenced, so in general, the TEB is obtained through the FS register, and then the obtained offset is incremented
                         by <span id="inline-code">0x30</span> to obtain the PEB. We see the combination of these operations occurring at <span id="inline-code">0x405914</span> and <span id="inline-code">0x40591D</span>. 
-                        <img class="lazy" data-src="../img/mamona_obtainpebteb.png" alt="Obtain PEB/TEB">
+                        <img class="lazy" data-src="/img/mamona_obtainpebteb.png" alt="Obtain PEB/TEB">
                         <br><br>
                         One of the components of the Process Environment Block is the LDR table. This table is obtained by the ransomware by adding <span id="inline-code">0x0C</span> to the obtained offset of the PEB. This 
                         operation occurs at <span id="inline-code">0x405928</span>. The LDR table contains pointers to multiple lists containing the loaded modules, such as the InMemoryOrderModuleList,
@@ -311,7 +311,7 @@
                         <span id="inline-code">sub_405900</span> is called three times, and if the input arguments do not correspond to any DLL in the InLoadOrderModuleList, three specific DLLs will be imported, it can be 
                         hypothesized that these three DLLs correspond to the hash values. This can be proven by the hash generation block at <span id="inline-code">0x405A78</span>
                         which is identical to the block at <span id="inline-code">0x405D90</span> where the output value is subsequently compared against the input buffer at <span id="inline-code">0x405A88</span>.
-                        <img class="lazy" data-src="../img/mamona_hardcodeddlls.png" alt="Hardcoded DLLs">
+                        <img class="lazy" data-src="/img/mamona_hardcodeddlls.png" alt="Hardcoded DLLs">
                         <br><br>
                         To close out, the final block at <span id="inline-code">0x405AB3</span> needs to be addressed. Here, the return value will contain the address pointing to the DllBase. In
                         other words, the return value points to the start of the DLL. This will only be returned, when the DLL is already in the InLoadOrderModuleList.
@@ -479,7 +479,7 @@
                         Should this fail, the ransomware calls <span id="inline-code">BackupEventLog</span>. It seems that this operation was potentially aimed at overwriting the event 
                         log, but this would not succeed as the output file name is the literal string <span id="inline-code">NUL</span>.
                         <br>
-                        <img class="lazy" data-src="../img/mamona_removeevtlogs.png" alt="Remove event logs">
+                        <img class="lazy" data-src="/img/mamona_removeevtlogs.png" alt="Remove event logs">
                     </p>
 
                     <h3 id="section8">Escalating Privileges</h3>
@@ -491,7 +491,7 @@
                         The handle to the process token will be passed to <span id="inline-code">sub_405CB0</span>, which is used to try to adjust the current privileges, if required. For each of 11 hardcoded
                         privileges, the ransomware will check if it currently has obtained said privilege and if it hasn't, it will try to delegate the privilege to itself using <span id="inline-code">AdjustTokenPrivilege</span>
                         <br>
-                        <img class="lazy" data-src="../img/mamona_adjusttokenprivs.png" alt="Adjust token privileges">
+                        <img class="lazy" data-src="/img/mamona_adjusttokenprivs.png" alt="Adjust token privileges">
                         <br><br>
                         Then, in <span id="inline-code">sub_405EC0</span>, the hardcoded string <span id="inline-code">winlogon.exe</span> is passed to the function <span id="inline-code">sub_405D90</span>.
                         This function loops over all processes using <span id="inline-code">Process32FirstW</span> and <span id="inline-code">Process32NextW</span> and if the corresponding process supplied
@@ -514,7 +514,7 @@
                         with <span id="inline-code">SC_MANAGER_ALL_ACCESS</span>. If this succeeds it will iterate over a hardcoded list of services and attempt to terminate the service
                         (using <span id="inline-code">ControlService</span>) and subsequently attempt to delete the service with a call to <span id="inline-code">DeleteService</span>.
                         <br>
-                        <img class="lazy" data-src="../img/mamona_listofsvcs.png" alt="Services to kill">
+                        <img class="lazy" data-src="/img/mamona_listofsvcs.png" alt="Services to kill">
                     </p>
 
                     <h3 id="section10">Killing Processes</h3>
@@ -524,7 +524,7 @@
                         and for each process it will attempt to terminate the process.
                         After completing the iterator, the function ends by calling the Win32 API <span id="inline-code">RevertToSelf</span> to undo the previous escalation of privileges and returns to main.
                         <br>
-                        <img class="lazy" data-src="../img/mamona_listofprocs.png" alt="Processes to kill">
+                        <img class="lazy" data-src="/img/mamona_listofprocs.png" alt="Processes to kill">
                     </p>
 
                     <h3 id="section11">Encryption Worker Setup</h3>
@@ -806,9 +806,9 @@ int main() {
                             <h3 class="widget__title">Explore Tags</h3>
                         </div>
                         <div class="tag__cloud">
-                            <a href="../re/" class="set-1">Reverse Engineering</a>
-                            <a href="../projects/" class="set-1">Projects</a>
-                            <a href="../ctf/" class="set-1">CTF Writeups</a>
+                            <a href="/re/" class="set-1">Reverse Engineering</a>
+                            <a href="/projects/" class="set-1">Projects</a>
+                            <a href="/ctf/" class="set-1">CTF Writeups</a>
                         </div>
                     </div>
                 </div>
@@ -837,15 +837,15 @@ int main() {
             });
         }
     </script>
-    <script src="../js/vendors/jquery-3.5.1.min.js"></script>
-    <script src="../js/vendors/simple-jekyll-search.min.js"></script>
-    <script src="../js/vendors/jquery.fitvids.js"></script>
-    <script src="../js/vendors/lazyload.min.js"></script>
-    <script src="../js/vendors/transition.js"></script>
-    <script src="../js/vendors/zoom.min.js"></script>
-    <script src="../js/vendors/prism.js"></script>
-    <script src="../js/common.js"></script>
-    <script src="../js/readingtime.js"></script>
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/vendors/prism.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
     <script>
         var base_url = "",
             pagination_next_url = base_url + '/page2',
