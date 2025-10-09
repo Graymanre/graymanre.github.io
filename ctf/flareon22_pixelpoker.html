@@ -130,10 +130,7 @@
                         pixels before we get a pop-up stating: <span id="inline-code">"Please play again!</span>. So we can assume that we have to
                         find the correct pixel in order to obtain the flag, and we have a total of 10 tries. We load the game into IDA for further
                         analysis.
-                        <div>
-                            <img src="/img/flareon22_pp-game.png" alt="Pixel Poker" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_pp-game.png" alt="Pixel Poker">
                         <br><br>
                         As this is still an early level of Flare-On, we start by searching for strings in the binary. We come across the string
                         <span id="inline-code">"Please play again!"</span>, which we saw earlier when clicking on 10 pixels. Locating the string
@@ -151,20 +148,14 @@
                         statements. The <span id="inline-code">X</span> value is compared to <span id="inline-code">0x5F</span> or integer 95,
                         whilst the <span id="inline-code">Y</span> value is compared to <span id="inline-code">0x139</span> or integer 313.
                         <br><br>
-                        <div>
-                            <img src="/img/flareon22_pp-ida-view.png" alt="Pixel Poker IDA view" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_pp-ida-view.png" alt="Pixel Poker IDA view">
                         <br><br>
                         Based on this information, we can conclude that if we click the pixel at location <span id="inline-code">95,313</span>, we
                         will have found the correct pixel. Rerunning the game and clicking that specific pixel, will then result in the flag:
                         <br><br>
                         <pre class="highlight"><code>w1nN3r_W!NneR_cHick3n_d1nNer@flare-on.com</code></pre>
                         And with that, we have completed the second Flare-On challenge!
-                        <div>
-                            <img src="/img/flareon22_pp-flag.png" alt="Pixel Poker Flag" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_pp-flag.png" alt="Pixel Poker Flag">
                     </p>
                 </div>
             </article>

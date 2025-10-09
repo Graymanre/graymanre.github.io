@@ -120,10 +120,7 @@
                         Whilst analyzing the main function we see that we are expected to supply an argument when executing the binary. If we supply one argument,
                         that argument will be used as a parameter for the function <span id="inline-code">sub_401000</span>. If we try executing the binary via the
                         command line again, and supply an argument, we receive two strings and the application exits. Time to dive in deeper.
-                        <div>
-                            <img src="/img/flareon22_darnmice_test.png" alt="Darn Mice Testing" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_darnmice_test.png" alt="Darn Mice Testing">
                         Jumping into the function, the rather long sequential <span id="inline-code">mov</span> instructions are rather curious and deserve closer
                         analysis. In total, 36 bytes get loaded into <span id="inline-code">ebp+var_28</span> up and until <span id='inline-code'>ebp+var_5</span>.
                         This is also exactly the length of the loop which occurs a little later. In this loop, for each iteration a memory page is allocated using
@@ -133,10 +130,7 @@
                         the nth byte from the user's input is taken and added to the nth byte of the previously allocated 'string'. The resulting byte is then written to the
                         memory page. As this page is then executed, and becomes inherently part of the program, any invalid instructions will cause the program to crash.
                         So we have to come up with an ingenious way of ensuring this page does not crash. However, we are only limited to one specific byte for each iteration.
-                        <div>
-                            <img src="/img/flareon22_darnmice_memops.png" alt="Darn Mice Memory Operations" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_darnmice_memops.png" alt="Darn Mice Memory Operations">
                         <br>
                         Therefore, we have to identify a byte that serves as a thrustworthy opcode that is unlikely to crash if it is executed. One opcode that immediately comes
                         to mind is the opcode <span id="inline-code">0xC3</span>, which is the RET instruction which will return execution to the calling program, as such
@@ -150,10 +144,7 @@
                         Based on that we can conclude that the input string needs to be: <span id="inline-code">see three, C3 C3 C3 C3 C3 C3 C3! XD</span>.
                         Eventually we end up with the flag for this challenge <span id="inline-code">i_w0uld_l1k3_to_RETurn_this_joke@flare-on.com</span>. And with that,
                         we have completed the fourth Flare-On challenge!
-                        <div>
-                            <img src="/img/flareon22_darnmice_flag.png" alt="Darn Mice Flag" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_darnmice_flag.png" alt="Darn Mice Flag">
                     </p>
                 </div>
             </article>

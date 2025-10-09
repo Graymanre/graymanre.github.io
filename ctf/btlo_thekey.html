@@ -138,10 +138,7 @@
                         located in <span id="inline-code">C:\Windows\System32\Config</span>. Download the hive and proceed to open the Forensic Registry EDitor (FRED) supplied
                         as a tool on the host. Next load the hive, and browse to the location <span id="inline-code">ControlSet001\Control\TimeZoneInformation</span>.
                         Identify the key <span id="inline-code">TimeZoneKeyName</span> which contains the value value <span id="inline-code">Pacific Standard Time</span>.
-                        <div>
-                            <img src="/img/btlo_thekey_q1.png" alt="q1_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q1.png" alt="q1_answer">
                     </p>
                     <h2 id="post__content__title">Superhero Stories</h2>
                     <p>
@@ -166,10 +163,7 @@
                         <br>
                         The second method will utilize the previously used FRED. Load the SAM database and go to Domains -> Account -> Users -> Names -> PeterDProgrammer ->
                         ResetData Key. Then decode the data from hex and discover the school Peter used to go to.
-                        <div>
-                            <img src="/img/btlo_thekey_q2.png" alt="q2_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q2.png" alt="q2_answer">
                     </p>
                     <h2 id="post__content__title">Favourite Quote</h2>
                     <p>
@@ -185,10 +179,7 @@
                         Windows stores the background image in the location <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming\Microsoft\Windows\Themes\CachedFiles</span>.
                         As expected in the CachedFiles we discover an image and exporting it and opening it in an image viewer (e.g. Paint) will supply us with the quote:
                         <span id="inline-code">Empty Vessels Make The Most Noise</span>.
-                        <div>
-                            <img src="/img/btlo_thekey_q3.png" alt="q3_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q3.png" alt="q3_answer">
                     </p>
                     <h2 id="post__content__title">Computer Name and IP info</h2>
                     <p>
@@ -200,14 +191,8 @@
                         As discussed during question 1, the registry stores a lot of information on the operating system. We once again rely upon the SYSTEM hive to supply
                         us with the two answers for this question. Using FRED, we can locate the computername under <span id="inline-code">ControlSet001\Control\ComputerName\ComputerName</span>
                         and the IP address can be found be going through each interfaces under <span id="inline-code">ControlSet001\Services\Tcpip\Parameters\Interfaces\{365e6613-b9c3-420f-86e0-c00cd3602733}</span>
-                        <div>
-                            <img src="/img/btlo_thekey_q4_0.png" alt="q4_answer0" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
-                        <div>
-                            <img src="/img/btlo_thekey_q4_1.png" alt="q4_answer1" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q4_0.png" alt="q4_answer0">
+                        <img class="lazy" data-src="/img/btlo_thekey_q4_1.png" alt="q4_answer1">
                     </p>
                     <h2 id="post__content__title">Programming Language</h2>
                     <p>
@@ -221,10 +206,7 @@
                         identify in <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming</span> that Peter uses Notepad++. Notepad++ keeps a backup folder where
                         sessions are stored. Within this folder, we identify one Notepad++ session which we can extract and view with a text editor. This session contains the
                         text: <span id="inline-code">starting my python journey</span>. As such, we can conclude that Peter is learning the Python programming language.
-                        <div>
-                            <img src="/img/btlo_thekey_q5.png" alt="q5_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q5.png" alt="q5_answer">
                     </p>
                     <h2 id="post__content__title">Peter's Day Plan</h2>
                     <p>
@@ -238,10 +220,7 @@
                         to look at the stored Sublime session(s) in <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming\Sublime Text 3\Local\</span>. Within this
                         folder, we identify the existence of the file: <span id="inline-code">Session.sublime_session</span>. This file contains the tasks in Peter's Day Plan,
                         of which <span id="inline-code">Code to Save the world</span> is still in progress.
-                        <div>
-                            <img src="/img/btlo_thekey_q6.png" alt="q6_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q6.png" alt="q6_answer">
                     </p>
                     <h2 id="post__content__title">TeamViewer Partner information</h2>
                     <p>
@@ -258,10 +237,7 @@
                         Instead of using the <span id="inline-code">Connections_incoming.txt</span> file, it is also possible to check the <span id="inline-code">TeamViewer15_Logfile</span>
                         located in the same folder and search for log entries containing <span id="inline-code">New Participant added</span> messages. The corresponding ID and DisplayName are:
                         989029790, IE11WIN8_1
-                        <div>
-                            <img src="/img/btlo_thekey_q7.png" alt="q7_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q7.png" alt="q7_answer">
                     </p>
                     <h2 id="post__content__title">Peter's TeamViewer Information</h2>
                     <p>
@@ -272,10 +248,7 @@
                         </div>
                         Since we already know the computername of Peter's computer, we can search for that value in the same logs we used to answer question 7.
                         With this information we discover that Peter's TeamViewer ID is: <span id="inline-code">984033617</span>
-                        <div>
-                            <img src="/img/btlo_thekey_q7.png" alt="q8_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q7.png" alt="q8_answer">
                     </p>
                     <h2 id="post__content__title">Password Manager</h2>
                     <p>
@@ -292,10 +265,7 @@
                         It's history location file is stored at <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User Data\Default\History.sqlite</span>.
                         Extracting this SQLite database and opening it in DB Browser for SQLite, we browse to the urls table and find an entry for <span id="inline-code">https://lastpass.com/automatic-login</span>.
                         With this trivial piece of information in hand, we can conclude that Peter uses LastPass as a password manager.
-                        <div>
-                            <img src="/img/btlo_thekey_q9.png" alt="q9_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q9.png" alt="q9_answer">
                     </p>
                     <h2 id="post__content__title">VPN Service</h2>
                     <p>
@@ -312,10 +282,7 @@
                         in the folder <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User Data\Default\Extensions</span>. The folder names are all
                         obfuscated and the quickest way to retrieve information on the installed extensions is by going into the <span id="inline-code">_locales</span> folder and
                         opening the <span id="inline-code">messages.json</span> file. By doing this, we discover that Prime VPN is used by Peter.
-                        <div>
-                            <img src="/img/btlo_thekey_q10.png" alt="q10_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q10.png" alt="q10_answer">
                     </p>
                     <h2 id="post__content__title">Peter's Secret Project</h2>
                     <p>
@@ -327,10 +294,7 @@
                         Figuring out the answer to this question proofed to be quite the challenge and you will need multiple puzzle pieces to solve it. First of all, refer
                         back to question 10, where we used the BrowsingHistoryView tool to analyze the WebCacheV01.dat file. Attentive people will have noticed that there were
                         references to files stored on the <span id="inline-code">D:\</span> drive as well as two files stored in Peter's Documents folder referring to BitLocker.
-                        <div>
-                            <img src="/img/btlo_thekey_q11_0.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q11_0.png" alt="q11_answer">
                         <br>
                         Additionally, from the challenge description we know that there is a secret drive that is encrypted. I was under the assumption that the secret drive
                         was attached in the E01 image as partition 4. However, I also noticed that the host OS has drives D, E, F and G which in other investigations has not
@@ -338,10 +302,7 @@
                         never used that piece of software before. I <a href="https://arsenalrecon.com/products/arsenal-image-mounter">read up</a> on it, and then figured out
                         that you can mount images to your location system. If we mount the disk image using the online mode, we see that all volumes are already mounted to
                         the four previous drives (D, E, F and G) that we had noticed earlier. Additionally, we identify that the second volume has a volume shadow copy.
-                        <div>
-                            <img src="/img/btlo_thekey_q11_1.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q11_1.png" alt="q11_answer">
                         <br>
                         A <a href="https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service">Volume Shadow Copy</a> are snapshots
                         captured by the operating system and store copies of files and volumes at specific points in time, enabling users to restore previous versions of
@@ -353,17 +314,11 @@
                         drive drive. One copy is identified, which we would be able to restore using the make link command in Windows: <span id="inline-code">mklink /D C:\vssrestore \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\</span>.
                         Since we executed these commands in an administrator CMD session, we will use the terminal to dive into the contents, with the focus on the Documents folder.
                         In said folder, we identify the <span id="inline-code">Bit.TXT</span> file, which holds the Bitlocker Recovery Key.
-                        <div>
-                            <img src="/img/btlo_thekey_q11_2.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q11_2.png" alt="q11_answer">
                         <br>
                         We can use that key, to unlock BitLocker encrypted drive <span id="inline-code">F:</span> drive, by selecting to use the BitLocker Recovery Key. With the
                         access we have obtained, we can browse through the drive and identify Peter's project to be "Save Data Save World".
-                        <div>
-                            <img src="/img/btlo_thekey_q11_3.png" alt="q12_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q11_3.png" alt="q12_answer">
                     </p>
                     <h2 id="post__content__title">Peter's Project Theme</h2>
                     <p>
@@ -373,10 +328,7 @@
                             </div>
                         </div>
                         We can use the same document we used to answer question 11 and discover that the theme is "Revolution"
-                        <div>
-                            <img src="/img/btlo_thekey_q11_3.png" alt="q12_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q11_3.png" alt="q12_answer">
                     </p>
                     <h2 id="post__content__title">Cloud Credentials</h2>
                     <p>
@@ -387,10 +339,7 @@
                         </div>
                         Inside the decrypted <span id="inline-code">F:</span> drive, we identify a file called CID (Client identifying Information) which initially
                         seemed to only contain his username, but if we use "select all", we identify white-colored text containing his password.
-                        <div>
-                            <img src="/img/btlo_thekey_q13.png" alt="q13_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q13.png" alt="q13_answer">
                     </p>
                     <h2 id="post__content__title">Discord Malware Name</h2>
                     <p>
@@ -405,10 +354,7 @@
                         <span id="inline-code">NTUSER.dat></span> file and examine it with FRED. Since it's a software package, we can search under the SOFTWARE key. Note that WinSCP
                         is developed by Martin Prikryl, which is the main key the WinSCP configuration and session data is stored under. We identify a Sessions key which contains
                         one object containing the username and hostname that were connected to: <span id="inline-code">ubuntu@172.16.0.16</span>
-                        <div>
-                            <img src="/img/btlo_thekey_q14.png" alt="q14_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q14.png" alt="q14_answer">
                     </p>
                     <h2 id="post__content__title">BitLocker Recovery Key</h2>
                     <p>
@@ -418,10 +364,7 @@
                             </div>
                         </div>
                         In order to answer this question, refer back to the writeup for question 11. Here, we had already identified the BitLocker Recovery Key.
-                        <div>
-                            <img src="/img/btlo_thekey_q11_2.png" alt="q15_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q11_2.png" alt="q15_answer">
                     </p>
                     <h2 id="post__content__title">BitLocker Password</h2>
                     <p>
@@ -433,10 +376,7 @@
                         Figuring out the BitLocker Password required some brute-forcing but we were given a valuable hint to refer back to the answer for question 2.
                         In that light, I figured it must be either one specific answer to one of the three security questions or a combination of them. Eventually, the latter
                         appeared to be true with the password being a combination of the first and second question: <span id="inline-code">ChichulaTokyo-LoveTheLife</span>
-                        <div>
-                            <img src="/img/btlo_thekey_q2.png" alt="q16_answer" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_thekey_q2.png" alt="q16_answer">
                     </p>
                 </div>
             </article>

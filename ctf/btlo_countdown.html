@@ -91,8 +91,7 @@
                             <div class="post__bottom">
                                 <div class="post__author">
                                     <a href="/contact/" aria-label="GraymanRe">
-                                        <img class="post__author-image"
-                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
@@ -141,7 +140,7 @@
                         In most, if not all, cases E01 and EWF image files are accompanied by a secondary file in txt format which contains basic information pertaining to the disk image.
                         If we therefore open the <span id="inline-code">Zerry.E01.txt</span>, we are presented with the information that is requested to answer question 1. The Sector Count is: <span id="inline-code">25165824</span> and the
                         MD5 hash that is calculated over the disk image is: <span id="inline-code">5c4e94315039f890e839d6992aeb6c58</span>
-                        <img src="/img/btlo_countdown_q1.png" alt="q1_answer">
+                        <img class="lazy" data-src="/img/btlo_countdown_q1.png" alt="q1_answer">
                     </p>
                     <h2 id="post__content__title">Finding the Decryption Key</h2>
                     <p>
@@ -158,13 +157,13 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col col-4">
-                                    <img src="/img/btlo_countdown_q2_1.png" alt="autopsy1">
+                                    <img class="lazy" data-src="/img/btlo_countdown_q2_1.png" alt="autopsy1">
                                 </div>
                                 <div class="col col-4">
-                                    <img src="/img/btlo_countdown_q2_2.png" alt="autopsy2">
+                                    <img class="lazy" data-src="/img/btlo_countdown_q2_2.png" alt="autopsy2">
                                 </div>
                                 <div class="col col-4">
-                                    <img src="/img/btlo_countdown_q2_3.png" alt="autopsy3">
+                                    <img class="lazy" data-src="/img/btlo_countdown_q2_3.png" alt="autopsy3">
                                 </div>
                             </div>
                         </div>
@@ -174,7 +173,7 @@
                         The remaining volumes are 2 and 3. Those familiar with Windows operating systems, will conclude that the main operating system is located in volume 3, since volume 2 starts at <span id="inline-code">0x2048</span>,
                         which for modern Windows systems, signals the bootloader section. Additionally, the size in bytes for volume 3 (24125556 - 104448) is significantly larger than that of volume 2: 104447 - 2048.
                         <br>
-                        <img src="/img/btlo_countdown_q2_0.png" alt="volume_structure">
+                        <img class="lazy" data-src="/img/btlo_countdown_q2_0.png" alt="volume_structure">
                         <br><br>
                         Applications and programs on Microsoft Windows use three main folders to store their data. The first folder is likely familiar to everyone reading this, the
                         <span id="inline-code">C:\Program Files</span> folder, which should be used to store an application's read-only files. Applications that use persistent data that should be read and written
@@ -195,7 +194,7 @@
                         see that it contains a single line entry: <span id="inline-code">{"key": "c2a0e8d6f0853449cfcf4b75176c277535b3677de1bb59186b32f0dc6ed69998"}</span>. A quick Google search for the <span id="inline-code">config.json</span>
                         file in combination with the keyword "Signal", brings us to <a href="https://www.reddit.com/r/privacy/comments/fwux29/signal_desktop_stores_the_encryption_key_in_a/">this Reddit post</a>, claiming suggesting that we have found the encryption key.
                         <br>
-                        <img src="/img/btlo_countdown_q2.png" alt="q2_answer">
+                        <img class="lazy" data-src="/img/btlo_countdown_q2.png" alt="q2_answer">
                         <br>
                     </p>
                     <h2 id="post__content__title">Discovering Zerry's profile information</h2>
@@ -210,17 +209,17 @@
                         to continue our search: <span id="inline-code">databases</span> and <span id="inline-code">sql</span>, and the observant reader will claim that the folders <span id="inline-code">blob_storage</span>,
                         <span id="inline-code">sql</span>and <span id="inline-code">Local Storage</span> might also hold valuable information. During my research, I discovered <a href="https://www.linkedin.com/pulse/signal-desktop-digital-forensics-perspective-surya-teja-masanam/">this post</a>
                         detailing how to perform digital forensic analysis on Signal. It denotes that the main Signal database is <span id="inline-code">C:\Users\ZerryD\AppData\Roaming\Signal\sql\db.sqlite</span>.
-                        <img src="/img/btlo_countdown_q3.png" alt="db.sqlite">
+                        <img class="lazy" data-src="/img/btlo_countdown_q3.png" alt="db.sqlite">
                         Therefore, we extract this file from Autopsy and open it in the SQLite viewer that's included in the Tools folder on the desktop. When trying to open the database, we are met with a prompt for a password.
                         To be able to decrypt the contents of the database, we will need the encryption key we have discovered earlier. In the menu, set the authentication method from Password to Raw Key. Notice that it prompts
                         to add <span id="inline-code">0x</span> in front of the key, meaning that the actual decryption key is <span id="inline-code">0xc2a0e8d6f0853449cfcf4b75176c277535b3677de1bb59186b32f0dc6ed69998</span>.
                         <br>
-                        <img src="/img/btlo_countdown_q3_2.png" alt="sqlite_decrypt">
+                        <img class="lazy" data-src="/img/btlo_countdown_q3_2.png" alt="sqlite_decrypt">
                         <br>
                         Now that we have obtained access to the database, we can browse through the tables. Specifically in the <span id="inline-code">conversations</span> table, we find a single entry containing both
                         the profile name and the telephone number that were used by Zerry: <span id="inline-code">ZerryThe</span> and <span id="inline-code">+13026482364</span>.
                         <br>
-                        <img src="/img/btlo_countdown_q3_3.png" alt="q3_answer">
+                        <img class="lazy" data-src="/img/btlo_countdown_q3_3.png" alt="q3_answer">
                         <br>
                     </p>
                     <h2 id="post__content__title">Looking for Zerry's email address</h2>
@@ -235,7 +234,7 @@
                         conversation. The specific messages that were sent are stored in the column <span id="inline-code">body</span>. In this column, we can search for the <span id="inline-code">@</span> sign, since
                         this is quite a unique indicator of an email address. Here we find one result: <span id="inline-code">eekurk@baybabes.com</span>
                         <br>
-                        <img src="/img/btlo_countdown_q4.png" alt="q4_answer">
+                        <img class="lazy" data-src="/img/btlo_countdown_q4.png" alt="q4_answer">
                         <br>
                     </p>
                     <h2 id="post__content__title">Identifying the email attachment</h2>
@@ -252,7 +251,7 @@
                         scroll through the <span id="inline-code">Web Downloads</span>, <span id="inline-code">Web History</span> and <span id="inline-code">Web search</span> but could not find any further leads. Per accident,
                         after disregarding it previously, I looked into the <span id="inline-code">Recent Documents</span> and found <span id="inline-code">⏳📅.lnk</span> pointing to <span id="inline-code">C:\Users\ZerryD\ud83d\udca3\ud83d\udd25\Downloads\*icon*\ud83d\udcc5.PNG</span>.
                         Submitting this as the filename of the file that was downloaded appeared to be the correct answer.
-                        <img src="/img/btlo_countdown_q5.png" alt="q5_answer">
+                        <img class="lazy" data-src="/img/btlo_countdown_q5.png" alt="q5_answer">
                     </p>
                     <h2 id="post__content__title">Attack date and time</h2>
                     <p>
@@ -271,7 +270,7 @@
                         woud rule out 21:00 as the potential answer. However, <span id="inline-code">01-02-2021 09:00</span> is incorrect. I then tried <span id="inline-code">01-02-2021 09:00AM</span>, before discovering that
                         the correct answer should be: <span id="inline-code">01-02-2021 9:00AM</span>.
                         <br>
-                        <img src="/img/btlo_countdown_q6.png" alt="q6_answer">
+                        <img class="lazy" data-src="/img/btlo_countdown_q6.png" alt="q6_answer">
                     </p>
                     <h2 id="post__content__title">Attack GPS Location</h2>
                     <p>

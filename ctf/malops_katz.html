@@ -118,7 +118,7 @@
                     </p>
                     <h3 id="post__content__title">Q1) What is the size in bytes of the memory block containing the sequence of pointers to country code strings?</h3>
                     <p>
-                        Now that we have identified the location of the country code strings (`140010DA0`), we can easily calculate the size of the memory block by subtracting the 
+                        Now that we have identified the location of the country code strings (</span>140010DA0</span>), we can easily calculate the size of the memory block by subtracting the 
                         end address of the block by the start address. In our case that equals to <span id="inline-code">140010DE8 - 140010DA0</span> which results in <span id="inline-code">0x48</span> or 72.
                     </p>
                     <h3 id="post__content__title">Q2) What is the name of the enumeration type for the first parameter of GetLocaleInfoA?</h3>
@@ -128,45 +128,45 @@
                         section. Here, we select the function name and find all cross references using "X". The function is called exactly twice, in quick succession.
                         <br><br>
                         To be frank, this question threw me off. It asks for the name of the enumeration type for the first parameter. To me, this seemed to translate to the name given to the
-                        <span id="inline-code">enum</span> which lists all values for the first parameter. In this case, looking at the MSDN documentation, the enumeration type name would be <span id="inline-code">LCID</span> or <span id="inline-code">Locale`.
-                        However, after some trial and error, the actual question is to define what the corresponding name is for the <span id="inline-code">0x400</span> value in the second call to <span id="inline-code">GetLocaleInfoA`.
+                        <span id="inline-code">enum</span> which lists all values for the first parameter. In this case, looking at the MSDN documentation, the enumeration type name would be <span id="inline-code">LCID</span> or <span id="inline-code">Locale</span>.
+                        However, after some trial and error, the actual question is to define what the corresponding name is for the <span id="inline-code">0x400</span> value in the second call to <span id="inline-code">GetLocaleInfoA</span>.
                         The <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getlocaleinfoa">MSDN documentation</a>, describes six predefined values that can be used for
                         the first parameter. Further, analyzing the winnls header, we discover that no hardcoded hex values for each parameter name exist. However, we can create a simple C++ \
                         program that calls GetLocalInfoA using each of the six predefined values, compiling the program and passing it through to IDA. After doing this, we see that 
-                        <span id="inline-code">LOCALE_USER_DEFAULT</span> corresponds to the value of <span id="inline-code">0x400`
+                        <span id="inline-code">LOCALE_USER_DEFAULT</span> corresponds to the value of <span id="inline-code">0x400</span>
                     </p>
                     <h3 id="post__content__title">Q3) What protocol is used by the malware to communicate with the C2 server?</h3>
                     <p>
                         We will once again rely on the Imports section in IDA to search for any function with the string "connect". We identify that the <span id="inline-code">connect</span> function from the <span id="inline-code">WS2_32.dll</span> is
                         imported. Using the aforementioned cross-reference technique we see that <span id="inline-code">connect</span> is only called once. Navigating to this call, we have to traverse the call stack back up,
-                        to identify where the initial connection is set up. Here, we identify a call to <span id="inline-code">socket`. The third argument denotes the specific protocol to use. 
+                        to identify where the initial connection is set up. Here, we identify a call to <span id="inline-code">socket</span>. The third argument denotes the specific protocol to use. 
                         <br><br>
                         We notice that the value for the protocol is 0. Based on the <a href="">MSDN</a> documentation, setting the protocol value to 0 means that the caller does not wish to specify
                         a protocol and the service provider will choose the protocol to use. Even though this may be the case, we can still infer a likely protocol based on the first two arguments of
                         the <span id="inline-code">socket</span> function. The first argument denotes the address family specification. In the malware's case, this is <span id="inline-code">AF_INET</span> representing IPv4 addresses. The second argument 
-                        denotes the type specification of the socket. In the malware's case, this is <span id="inline-code">SOCK_STREAM`. 
+                        denotes the type specification of the socket. In the malware's case, this is <span id="inline-code">SOCK_STREAM</span>. 
                         <br><br>
                         Based on these parameters, the potential protocols that can be used are narrowed down. ICMP, IGMP, RFCOMM, ICMPv6 and RM all do not support the combination of <span id="inline-code">AF_INET</span> and
-                         <span id="inline-code">SOCK_STREAM`. This leaves us with both <span id="inline-code">TCP</span> and <span id="inline-code">UDP`. We assume that since it is a C2 connection, it is a connection-oriented, reliable connection. That leaves us with TCP.
+                         <span id="inline-code">SOCK_STREAM</span>. This leaves us with both <span id="inline-code">TCP</span> and <span id="inline-code">UDP</span>. We assume that since it is a C2 connection, it is a connection-oriented, reliable connection. That leaves us with TCP.
                     </p>
                     <h3 id="post__content__title">Q4) What is the port number used by the malware to connect to the C2 server in decimal?</h3>
                     <p>
-                        By answering question 3, we identified the <span id="inline-code">connect</span> function from <span id="inline-code">WS2_32.dll`. Shortly before the call to <span id="inline-code">connect`, the <span id="inline-code">htons</span> function is called. This function can be used
-                        to convert an IP port number in host byte order to the network byte order. This function takes only one argument, which in this case is <span id="inline-code">3131`. As this is the only call to <span id="inline-code">htons`,
-                        we can conlude that the port number used by the malware to connect to the C2 server is <span id="inline-code">3131`.
+                        By answering question 3, we identified the <span id="inline-code">connect</span> function from <span id="inline-code">WS2_32.dll</span>. Shortly before the call to <span id="inline-code">connect</span>, the <span id="inline-code">htons</span> function is called. This function can be used
+                        to convert an IP port number in host byte order to the network byte order. This function takes only one argument, which in this case is <span id="inline-code">3131</span>. As this is the only call to <span id="inline-code">htons</span>,
+                        we can conlude that the port number used by the malware to connect to the C2 server is <span id="inline-code">3131</span>.
                     </p>
                     <h3 id="post__content__title">Q5) What is the maximum chunk size the malware uses to download the injected DLL in hex?</h3>
                     <p>
-                        The maximum chunkc size the malware uses is 0x1000. We see an initial call to the <span id="inline-code">printf</span> function that sets the full path for the <span id="inline-code">received_dll.dll`. Next, an initial 
+                        The maximum chunkc size the malware uses is 0x1000. We see an initial call to the <span id="inline-code">printf</span> function that sets the full path for the <span id="inline-code">received_dll.dll</span>. Next, an initial 
                         <span id="inline-code">recv</span> takes place upon which we enter a loop that will keep calling <span id="inline-code">recv</span> for each received chunk size of 0x1000. 
                     </p>
                     <h3 id="post__content__title">Q6) What is the address of the function responsible for launching browsers for injection in hex ?</h3>
                     <p>
-                        So far, we have analysed the main program execution flow in <span id="inline-code">sub_`. Shortly after the <span id="inline-code">recv</span> calls to download the <span id="inline-code">received_dll.dll</span> we see string compares taking place
-                        for a couple of browsers (around <span id="inline-code">0x1400074D7`). In the assembly, we notice that the value <span id="inline-code">[rsp+40h+Str]</span> is used to store the identified browser. Following execution flow,
-                        we see that this variable is passed to function which is being called at <span id="inline-code">0x1400075C0`. Specifically the function <span id="inline-code">sub_140002AEB</span> is called. When we dive into this function,
-                        it becomes apparent that the input to this function is the browser that subsequently gets started using a call to <span id="inline-code">CreateProcessW`. Therefore, the address of the function
-                        responsible for launching browsers is: <span id="inline-code">0x140002AEB`.
+                        So far, we have analysed the main program execution flow in <span id="inline-code">sub_</span>. Shortly after the <span id="inline-code">recv</span> calls to download the <span id="inline-code">received_dll.dll</span> we see string compares taking place
+                        for a couple of browsers (around <span id="inline-code">0x1400074D7</span>). In the assembly, we notice that the value <span id="inline-code">[rsp+40h+Str]</span> is used to store the identified browser. Following execution flow,
+                        we see that this variable is passed to function which is being called at <span id="inline-code">0x1400075C0</span>. Specifically the function <span id="inline-code">sub_140002AEB</span> is called. When we dive into this function,
+                        it becomes apparent that the input to this function is the browser that subsequently gets started using a call to <span id="inline-code">CreateProcessW</span>. Therefore, the address of the function
+                        responsible for launching browsers is: <span id="inline-code">0x140002AEB</span>.
                     </p>
                     <h3 id="post__content__title">Q7) What is the address of the start of the loop that checks if a process matches the target browser executable name in hex?</h3>
                     <p>
@@ -174,8 +174,8 @@
                     </p>
                     <h3 id="post__content__title">Q8) What is the maximum chunk size the malware uses when sending the file contents to the C2 server in hex?</h3>
                     <p>
-                        This question is relatively similar to Q5. Instead of looking for calls to <span id="inline-code">recv</span> however, we now look for calls to <span id="inline-code">send`. We notice that a custom wrapper around <span id="inline-code">send`
-                        has been created, specifically called <span id="inline-code">sub_1400019C5`. In the assembly we further discern that <span id="inline-code">send</span> is being called in a loop, where the data to be send, is read in chunks
+                        This question is relatively similar to Q5. Instead of looking for calls to <span id="inline-code">recv</span> however, we now look for calls to <span id="inline-code">send</span>. We notice that a custom wrapper around <span id="inline-code">send</span>
+                        has been created, specifically called <span id="inline-code">sub_1400019C5</span>. In the assembly we further discern that <span id="inline-code">send</span> is being called in a loop, where the data to be send, is read in chunks
                         of 4096 bytes, or 0x1000 in hex.
 
                     </p>
@@ -185,10 +185,10 @@
                     </p>
                     <h3 id="post__content__title">Q10) What is the maximum number of retries for uploading the cookies copy to the C2?</h3>
                     <p>
-                        We have already established that the <span id="inline-code">send</span> function is wrapped by <span id="inline-code">sub_1400019C5`. Therefore, we now need to correlate a call to this function, with a buffer containing
+                        We have already established that the <span id="inline-code">send</span> function is wrapped by <span id="inline-code">sub_1400019C5</span>. Therefore, we now need to correlate a call to this function, with a buffer containing
                         a copy of the cookies. We rely once again on the Strings section in IDA to search for the keyword "cookies". Multiple results are found, including two results referencing
-                        "Cookies_copy.db". We cross reference and see that both results are in close proximity to each other and both times they are used in calls to <span id="inline-code">printf`. The final output 
-                        buffer is then used in a call to <span id="inline-code">sub_1400019C5`, which is the send wrapper. By analyzing the assembly, we further notice that depending on the result of the <span id="inline-code">send`
+                        "Cookies_copy.db". We cross reference and see that both results are in close proximity to each other and both times they are used in calls to <span id="inline-code">printf</span>. The final output 
+                        buffer is then used in a call to <span id="inline-code">sub_1400019C5</span>, which is the send wrapper. By analyzing the assembly, we further notice that depending on the result of the <span id="inline-code">send</span>
                         wrapper, <span id="inline-code">DeleteFileA</span> or <span id="inline-code">GetLastError</span> is called. In the block of <span id="inline-code">GetLastError</span> we further see that the register <span id="inline-code">r12d</span> is decremented until it is zero and based on
                         if <span id="inline-code">r12d</span> is zero, we either loop and the <span id="inline-code">send</span> wrapper gets called again or we exit the loop and <span id="inline-code">DeleteFileA</span> is called. Just before the call to the <span id="inline-code">send</span> wrapper,
                         <span id="inline-code">r12d</span> is set to the value of 3. Based on this, we can conclude that the maximum number of retries for uploading cookies copy is 3. 
@@ -207,12 +207,12 @@
                     <h3 id="post__content__title">Q13) What is the address of the function that used to search about the telegram data?</h3>
                     <p>
                         As the malware authors have hardcoded a lot of strings, the easiest avenue to start looking for the function that is used to search for Telegram data, is by referring
-                        back to the Strings section in IDA and look through all findings for the keyword "Telegram". Surprisingly, only two hits occur. The first hit: <span id="inline-code">%s\\Telegram Desktop\\tdata`,
+                        back to the Strings section in IDA and look through all findings for the keyword "Telegram". Surprisingly, only two hits occur. The first hit: <span id="inline-code">%s\\Telegram Desktop\\tdata</span>,
                         we can immediately ignore as this will highly likely only be used in a <span id="inline-code">printf</span> function to create a full path. The other string is "Telegram-tdata". If we browse to This
-                        usage, we see that it is used as a parameter for a function at <span id="inline-code">0x140001AB2`. Additionally, looking a few lines before we see the <span id="inline-code">printf</span> taking place. 
+                        usage, we see that it is used as a parameter for a function at <span id="inline-code">0x140001AB2</span>. Additionally, looking a few lines before we see the <span id="inline-code">printf</span> taking place. 
                         <br><br>
-                        If we then dive into <span id="inline-code">0x140001AB2`, we see that the file path to the <span id="inline-code">tdata</span> folder is used to loop over all files. Based on this finding, we can conclude that the function
-                        to search for the Telegram data is located at <span id="inline-code">0x140001AB2`.
+                        If we then dive into <span id="inline-code">0x140001AB2</span>, we see that the file path to the <span id="inline-code">tdata</span> folder is used to loop over all files. Based on this finding, we can conclude that the function
+                        to search for the Telegram data is located at <span id="inline-code">0x140001AB2</span>.
                     </p>
                     <h3 id="post__content__title">Q14) When the malware writes the CPU core count to the file, which function does it call immediately before writing?</h3>
                     <p>
@@ -226,9 +226,9 @@
                     <p>
                         By now we have seen that the threat actor is quite verbose in their naming scheme. As such, we can work with the assumption that to save all WiFi profiles on the system,
                         the threat actor is likely using a naming scheme for the output file that might include the word "wifi". We once again rely on the Strings section in IDA to see if this
-                        assumption is true. As expected, we identify a filename called "WiFi_Information.txt". Finding the cross references we end up in <span id="inline-code">sub_140005491`. If we analyze the function
-                        we see multiple strings starting with <span id="inline-code">netsh</span> and subsequent calls to <span id="inline-code">sub_140005263`. By diving into this function, we see that it creates a new process using the Windows
-                        API <span id="inline-code">CreateProcessA`. The <span id="inline-code">lpCommandLine</span> argument for this function originates from a hardcoded string starting with <span id="inline-code">cmd.exe /c</span> and to it is appended one the hardcoded
+                        assumption is true. As expected, we identify a filename called "WiFi_Information.txt". Finding the cross references we end up in <span id="inline-code">sub_140005491</span>. If we analyze the function
+                        we see multiple strings starting with <span id="inline-code">netsh</span> and subsequent calls to <span id="inline-code">sub_140005263</span>. By diving into this function, we see that it creates a new process using the Windows
+                        API <span id="inline-code">CreateProcessA</span>. The <span id="inline-code">lpCommandLine</span> argument for this function originates from a hardcoded string starting with <span id="inline-code">cmd.exe /c</span> and to it is appended one the hardcoded
                         strings that was given as input to the function. In our case, the <span id="inline-code">netsh</span> strings. 
                         <div>
                             <img src="/img/malops_katz_16.png" alt="q4_answer" onclick="window.open(this.src, '_blank');"
@@ -237,7 +237,7 @@
 
                         Now, we need to analyze which of these commands will show us the saved WiFi profiles. The <span id="inline-code">netsh</span> command is documented in <a href="https://learn.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts">MSDN</a>.
                         At the bottom of the page we see that you can find the name and indeex of all connected interfaces by using the <span id="inline-code">show profiles</span> subcommands. Therefore, we can conclude that
-                        the command to list all saved WiFi profiles is: <span id="inline-code">netsh wlan show profiles`.
+                        the command to list all saved WiFi profiles is: <span id="inline-code">netsh wlan show profiles</span>.
                         <div>
                             <img src="/img/malops_katz_16_1.png" alt="q4_answer" onclick="window.open(this.src, '_blank');"
                                 width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">

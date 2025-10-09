@@ -92,8 +92,7 @@
                             <div class="post__bottom">
                                 <div class="post__author">
                                     <a href="/contact/" aria-label="GraymanRe">
-                                        <img class="post__author-image"
-                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
@@ -138,10 +137,7 @@
                         <br><br>
                         Using WinDBG, Time Travel Debugging can easily be configured by starting the debugging process, selecting "Launch executable (advanced)" and
                         checking the "Record with Time Travel Debugging" checkbox, before configuring the location to save the trace, as shown below.
-                        <div>
-                            <img src="/img/ttd.png" alt="AFL Time Travel Debugging" onclick="wi+ndow.open(this.src, '_blank');"
-                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/ttd.png" alt="AFL Time Travel Debugging">
                     </p>
 
                     <h3 id="post__content__title">Setting the scene</h3>
@@ -251,20 +247,14 @@ EXPORTS
                         Then, include the relative path to this file in the Model Definition File field within your linker. See the example below for including it in the
                         linker process for Visual Studio 2022.
                         <br><br>
-                        <div>
-                            <img src="/img/mod_def_file.png" alt="Linker Model Definition File" onclick="wi+ndow.open(this.src, '_blank');"
-                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/mod_def_file.png" alt="Linker Model Definition File">
                         <br>
                         Now, we can compile our extension, load it into the WinDBG session and execute our custom API <span id="inline-code">demo_ext</span>. Note,
                         that we load the extension DLL from the default folder that Visual Studio will put the compiled binary in, as such requiring us to include
                         the full path as opposed to first copying the compiled DLL to a <span id="inline-code">winext</span> folder and then including it directly
                         from that specific folder. Additionally, we need to call the API using the name of the DLL and adding the API function to it.
                         <br><br>
-                        <div>
-                            <img src="/img/load_call_ext.png" alt="Load and call extension in WinDBG" onclick="wi+ndow.open(this.src, '_blank');"
-                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/load_call_ext.png" alt="Load and call extension in WinDBG">
                     </p>
 
                     <h3 id="post__content__title">Handling EventCallbacks</h3>
@@ -326,10 +316,7 @@ EXPORTS
                         extension has been loaded, we can run the program by executing the command <span id="inline-code">r</span> and we will see that the breakpoint
                         gets hit automatically. Based on the output we can determine that one of the DLLs loaded by Notepad.exe during the startup of the program is
                         <span id="inline-code">comctl32.dll</span>.
-                        <div>
-                            <img src="/img/windbg_ext_demo.png" alt="Load and call extension in WinDBG" onclick="wi+ndow.open(this.src, '_blank');"
-                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/windbg_ext_demo.png" alt="Load and call extension in WinDBG">
                     </p>
 
                     <h3 id="post__content__title">Including additional functionality - Creating a Stacktrace</h3>

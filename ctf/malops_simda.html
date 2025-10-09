@@ -126,10 +126,7 @@
                         and <span id="inline-code">GetProcAddress</span>. When cross-referencing calls to <span id="inline-code">GetProcAddress</span>, we
                         see that it is actually only used once, in the function <span id="inline-code">sub_4016B0</span> and it is used to import 
                         <span id="inline-code">VirtualAllocEx</span>, which gets called soon after.
-                        <div>
-                            <img src="/img/malops_simda_1.png" alt="q1_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_1.png" alt="q1_answer">
                     </p>
                     <h3 id="post__content__title">Q2) What does the second parameter given to RegOpenKeyA call point to?</h3>
                     <p>
@@ -140,10 +137,7 @@
                         Now, arguments are passed from last to first, meaning the second argument given to the function, will be the second to last in our IDA view. Furthermore,
                         because this is an x86 executable, the arguments are given to a function using the instruction <span id="inline-code">push</span>. Thus, we see that the
                         second to last push operation obtains its value from the variable <span id="inline-code">off_4CA040</span> which represents the string <span id="inline-code">clsid\{d66d6f99-cdaa-11d0-b822-00c04fc9b31f}</span>.
-                        <div>
-                            <img src="/img/malops_simda_2.png" alt="q2_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_2.png" alt="q2_answer">
                     </p>
                     <h3 id="post__content__title">Q3) The malware dynamically resolves Windows API function names in memory, and decrypts a large blob of data, which function is responsible for grabbing the encrypted blobs? Provide address in hex</h3>
                     <p>
@@ -158,10 +152,7 @@
                         The initial decryption key that is being used is <span id="inline-code">0xB0B6</span>. In function <span id="inline-code">sub_401650</span>, we identify a XOR
                         operation which is performed on the encrypted blobs. The static value initially supplied to this function represents the initial decryption key. As <span id="inline-code">sub_401000</span>
                         is the caller, we identify in this function that the value <span id="inline-code">0xB0B6</span> is passed to it.
-                        <div>
-                            <img src="/img/malops_simda_4.png" alt="q4_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_4.png" alt="q4_answer">
                     </p>
                     <h3 id="post__content__title">Q5) What is the name of the first Windows API function decrypted?</h3>
                     <p>
@@ -177,10 +168,7 @@
                         Since all of this happens in a loop, we can safely traverse the loop a few times and see the changes being written to the address which 
                         <span id="inline-code">dword_4CA230</span> points to. Note that the offset is calculated using the incremented value stored in <span id="inline-code">dword_4CA230</span>.
                         Finally, we discover that the first decrypted value is a Windows API corresponding to <span id="inline-code">GetProcAddress</span>.
-                        <div>
-                            <img src="/img/malops_simda_5.png" alt="q5_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_5.png" alt="q5_answer">
                     </p>
                     <h3 id="post__content__title">Q6) What is the address of the ret instruction responsible for jumping to decrypted shellcode?</h3>
                     <p>
@@ -190,19 +178,13 @@
                         <br><br>
                         By analyzing <span id="inline-code">sub_401130</span>, we see that the pointer to the shellcode in <span id="inline-code">dword_4CA094</span> is pushed onto the stack
                         and then the function returns. Once again, this means that execution is transferred to the shellcode. 
-                        <div>
-                            <img src="/img/malops_simda_6.png" alt="q6_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <<img class="lazy" data-src="/img/malops_simda_6.png" alt="q6_answer">
                     </p>
                     <h3 id="post__content__title">Q7) Based on the memory allocated by the malware, what is the offset of the first instruction executed after decryption in hex?</h3>
                     <p>
                         By answering question 6, we identified that the address pointing to the start of the decrypted shellcode blob was stored in 
                         <span id="inline-code">dword_4CA094</span>. This address was incremented with a hardcoded offset: <span id="inline-code">0x86ED0</span>.
-                        <div>
-                            <img src="/img/malops_simda_7.png" alt="q7_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_7.png" alt="q7_answer">
                     </p>
                     <h3 id="post__content__title">Q8) What is the second API called by the malware after decryption?</h3>
                     <p>
@@ -219,10 +201,7 @@
                         is stored in <span id="inline-code">[ebp+var_28]</span> which is then loaded into <span id="inline-code">eax</span>. Furthermore we also
                         see that <span id="inline-code">kernel32.dll</span> is stored into a variable. Therefore, we can conclude that it is likely that a pointer
                         to the function <span id="inline-code">LoadLibraryExA</span> in <span id="inline-code">kernel32.dll</span> gets loaded and subsequently calls.
-                        <div>
-                            <img src="/img/malops_simda_8.png" alt="q8_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_8.png" alt="q8_answer">
                     </p>
                     <h3 id="post__content__title">Q9) The malware decrypts another part in memory with another dynamic key, what is the fixed addition value to the key in hex (word size)?</h3>
                     <p>
@@ -231,10 +210,7 @@
                         is setting up the functions to allocate some memory in which the second encrypted part is stored. Eventually, we notice that in 
                         <span id="inline-code">sub_900</span>, this block is decrypted. In this decryption loop, we see a straightforward <span id="inline-code">add</span>
                         operation which adds <span id="inline-code">0x03E9</span> to the dynamic key.
-                        <div>
-                            <img src="/img/malops_simda_9.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_9.png" alt="q9_answer">
                     </p>
                     <h3 id="post__content__title">Q10) There are 3 hardcoded IPs, list them in the format: IP1,IP2,IP3 (same order as found)</h3>
                     <p>
@@ -259,10 +235,7 @@
                         anti-malware processes. Subsequently, the malware loops over a list of registry keys for sandboxes and malware processes and checks if they exist.
                         <br>
                         Therefore, we can conclude that the function <span id="inline-code">sub_401B98</span> is performing anti-analysis checks.
-                        <div>
-                            <img src="/img/malops_simda_11.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_11.png" alt="q11_answer">
                     </p>
                     <h3 id="post__content__title">Q12) The malware will use completely different 3 IPs than the hardcoded ones, list them in order: 7x.xxx.xx.xxx,2xx.xx.xx.xx,1xx.xxx.xx.xxx</h3>
                     <p>
@@ -281,10 +254,7 @@
                         When we analyze the code of the function <span id="inline-code">sub_405C5F</span>, we see that the string is passed to <span id="inline-code">ExpandEnvironmentStringA</span>
                         before the result is then passed to the <span id="inline-code">CopyFileA</span> API, which takes as input the original file, which points to
                         the malware sample in the current directory, as well as the destination file, which is the <span id="inline-code">%appdata%</span> folder.
-                        <div>
-                            <img src="/img/malops_simda_13.png" alt="q13_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_13.png" alt="q13_answer">
                     </p>
                     <h3 id="post__content__title">Q14) What is the registry key the malware uses for persistence?</h3>
                     <p>
@@ -297,10 +267,7 @@
                         <span id="inline-code">opt</span> and the new binary name stored in the <span id="inline-code">%appdata%</span> folder.
                         Therefore, we can conclude that the registry key <span id="inline-code">HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</span> is
                         used to create persistence.
-                        <div>
-                            <img src="/img/malops_simda_14.png" alt="q14_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_14.png" alt="q14_answer">
                     </p>
                     <h3 id="post__content__title">Q15) What is the argument the malware will launch itself with?</h3>
                     <p>
@@ -308,10 +275,7 @@
                         combined with the argument <span id="inline-code">opt</span>.
                         We can further verify this by going back to the section where the commandline was parsed as here we notice that the supplied value is compared
                         against the static string <span id="inline-code">opt</span>.
-                        <div>
-                            <img src="/img/malops_simda_15.png" alt="q15_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_simda_15.png" alt="q15_answer">
                     </p>
                 </div>
             </article>

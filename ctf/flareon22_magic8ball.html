@@ -136,10 +136,7 @@
                                 <pre class="highlight"><code>Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL/Direct3D/Metal/Vulkan. It is used by video playback software, emulators, and popular games including Valve's award winning catalog and many Humble Bundle games.</code></pre>
                             </div>
                         </div>
-                        <div>
-                            <img src="/img/flareon22_8ball-imports.png" alt="8Ball Imports" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/flareon22_8ball-imports.png" alt="8Ball Imports">
                         The main entrypoint of the application is the <span id="inline-code">WinMain</span> function which calls a single function <span id="inline-code">sub_403690</span>.
                         Analyzing this function, we can identify that it will check if any command line arguments are given, handle those and will then call
                         <span id="inline-code">SDL_SetMainReady</span> before calling <span id="inline-code">sub_4027A0</span>. Based on the documentation, we
@@ -163,10 +160,8 @@
                         user-input will be handled. After some trial-and-error, it appeared that setting a breakpoint on <span id="inline-code">Magic8Ball+26B9</span>,
                         before execution, then using the arrow keys and entering the question and pressing "ENTER" would result in the execution flow ending up here.
                         From hereonwards, we see a nested <span id="inline-code">if</span> structure, which eventually result in a call to <span id="inline-code">strncmp</span>.
-                        <div>
-                            <img src="/img/flareon22_8ball-pattern.png" alt="8Ball Pattern" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <br>
+                        <img class="lazy" data-src="/img/flareon22_8ball-pattern.png" alt="8Ball Pattern">
                         <br>
                         For every <span id="inline-code">if-statement</span>, it is checked if the value in <span id="inline-code">[ecx+x]</span> where <span id="inline-code">x</span>
                         is an incrementing number starting at 0, is equal to a certain hex-value. Checking all the <span id="inline-code">if-statements</span> it became
@@ -178,10 +173,8 @@
                         <br><br>
                         Thus, by inputting the arrow key combination "LLURULDUL" and asking the question "gimme flag pls?" we obtain the flag for this challenge:
                         <span id="inline-code">U_cRackeD_th1$_maG1cBaLL_!!_@flare-on.com</span>. And with that, we have completed the third Flare-On challenge!
-                        <div>
-                            <img src="/img/flareon22_8ball-flag.png" alt="8Ball Flag" onclick="window.open(this.src, '_blank');"
-                                 width="250" , height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <br>
+                        <img class="lazy" data-src="/img/flareon22_8ball-flag.png" alt="8Ball Flag">
                     </p>
                 </div>
             </article>

@@ -93,8 +93,7 @@
                             <div class="post__bottom">
                                 <div class="post__author">
                                     <a href="/contact/" aria-label="GraymanRe">
-                                        <img class="post__author-image"
-                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
@@ -164,10 +163,7 @@
                         However, the entry that we have identified, is used to decompress/unzip a file. As no other applicable files are found, I focus on EventID 1, which
                         corresponds to process creation events. Here, I apply a filter to search for WinRAR only: <span id="inline-code">Event_EventData_Image: *WinRAR*</span>
                         Only 2 processes remain, of which one is actually a compression operation, confirming that the program that is used is <span id="inline-code">C:\Program Files\WinRAR\WinRAR.exe</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q1.png" alt="q1_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q1.png" alt="q1_answer">
                     </p>
                     <h2 id="post__content__title">Q2) Compressed File Name</h2>
                     <p>
@@ -178,10 +174,7 @@
                         </div>
                         Now that we have identified the program that is used, we can closely examine the command line to figure out what the name of the compressed file is.
                         We see that the files/folders "gatherings" and "folder" were compressed into <span id="inline-code">gatherings.rar</span>.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q1.png" alt="q2_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q1.png" alt="q2_answer">
                     </p>
                     <h2 id="post__content__title">Q3) Registry File Add</h2>
                     <p>
@@ -199,10 +192,7 @@
                         these are related to Windows Defender and appear to be legitimate. The sole event for T1060 points to a file in the Windows Temp directory, namely:
                         <span id="inline-code">C:\Windows\Temp\process.exe</span>. Additionally, that file is added to a generic, and somewhat suspicious sounding, object
                         <span id="inline-code">WindowsProcess</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q3.png" alt="q3_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q3.png" alt="q3_answer">
                     </p>
                     <h2 id="post__content__title">Q4) Registry Value</h2>
                     <p>
@@ -212,10 +202,7 @@
                             </div>
                         </div>
                         As identified in question 3, the file <span id="inline-code">C:\Windows\Temp\process.exe</span> is added to the RegValue of <span id="inline-code">WindowsProcess</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q3.png" alt="q4_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q3.png" alt="q4_answer">
                     </p>
                     <h2 id="post__content__title">Q5) Log Clearing Timestamp</h2>
                     <p>
@@ -232,10 +219,7 @@
                         We also <a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1102">learn</a>
                         that we can identify clearing of the audit logs by searching for Event ID 1102 in the Security log. So we change our view in Kibana to the security log
                         and apply that filter, which returns exactly one result. The log was cleared at <span id="inline-code">2021-05-28T00:26:29</span>.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q5.png" alt="q5_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q5.png" alt="q5_answer">
                     </p>
                     <h2 id="post__content__title">Q6) Log Source Confirmation</h2>
                     <p>
@@ -246,10 +230,7 @@
                         </div>
                         As discussed whilst answering question 5, we had to utilize the <span id="inline-code">winevent-security</span> log and search for
                         <span id="inline-code">Event_System_EventID: 1102</span> to confirm the log clearing event.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q5.png" alt="q6_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q5.png" alt="q6_answer">
                     </p>
                     <h2 id="post__content__title">Q7) Firewall rule addition</h2>
                     <p>
@@ -261,10 +242,7 @@
                         We can search for Firewall events using the winevent-sysmon log and searching for process creation events. The programs that I am familiar with, all require
                         you to use some variant of the word "firewall" or "rule" to add firewall rules. So I will add a specific query which includes the usage of these two words
                         in the CommandLine and we identify only two commands that apply. We see that to add firewall rules, the program <span id="inline-code">netsh.exe</span> was used.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q7.png" alt="q7_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q7.png" alt="q7_answer">
                     </p>
                     <h2 id="post__content__title">Q8) Firewall Rule Name</h2>
                     <p>
@@ -274,10 +252,7 @@
                             </div>
                         </div>
                         As identified in question 7, the rule that was added was named: <span id="inline-code">Zoop TCP Port 80</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q7.png" alt="q8_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q7.png" alt="q8_answer">
                     </p>
                     <h2 id="post__content__title">Q9) Malware Downloader</h2>
                     <p>
@@ -291,10 +266,7 @@
                         Only one event is identified, which shows us that <span id="inline-code">bitsadmin.exe</span> was used to download a file from pastebin and store it on
                         the local system as a powershell file. Bitsadmin is a <a href="https://lolbas-project.github.io/lolbas/Binaries/Bitsadmin/">living-off-the-land binary</a>
                         which can be used to download files from remote sources.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q9.png" alt="q9_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q9.png" alt="q9_answer">
                     </p>
                     <h2 id="post__content__title">Q10) Download URL</h2>
                     <p>
@@ -304,10 +276,7 @@
                             </div>
                         </div>
                         As identified in question 9, the suspicious file is downloaded from the url <span id="inline-code">https://pastebin.com/raw/AGdtReXJ0</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q9.png" alt="q10_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q9.png" alt="q10_answer">
                     </p>
                     <h2 id="post__content__title">Q11) Darkside Ransomware</h2>
                     <p>
@@ -320,10 +289,7 @@
                         This stood out to me and has now allowed me to search for the specific hash in the winevent-sysmon events specifically focussing on EventID 1 as sysmon
                         automatically includes MD5, SHA256 and IMPHASH hashes in each log entry. As such we identify that the DarkSide ransomware sample has MD5 hash:
                         <span id="inline-code">9D418ECC0F3BF45029263B0944236884</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q11.png" alt="q11_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q11.png" alt="q11_answer">
                     </p>
                     <h2 id="post__content__title">Q12) Command execution</h2>
                     <p>
@@ -334,10 +300,7 @@
                         </div>
                         Once again, we remain with the sysmon event logs, focussing on process creation (EventID 1) and search for all command lines containing "DllHost". We find
                         only one such event whose full command line is: <span id="inline-code">C:\Windows\SysWOW64\DllHost.exe /Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q12.png" alt="q12_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q12.png" alt="q12_answer">
                     </p>
                     <h2 id="post__content__title">Q13) Malware delection command</h2>
                     <p>
@@ -352,10 +315,7 @@
                         no other log entries are found that indicator removal. So I applied the same filter but then using "nexus" as the CommandLine filter. Here, we discover
                         an event that points to malware removal. The command used, uses Windows' 8.3 naming rules for creating short file name aliases as documented
                         <a href="https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file">here</a>.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q13.png" alt="q13_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q13.png" alt="q13_answer">
                     </p>
                     <h2 id="post__content__title">Q14) Mining Server</h2>
                     <p>
@@ -368,10 +328,7 @@
                         Whilst doing this, and analyzing the events, I already stumbled upon the execution of the executable <span id="inline-code">xmrig.exe</span>. I know from
                         experience that this is an cryptominer that is used for legitimate and illegitimate purposes. Searching for all process creation events involving xmrig,
                         a total of 5 events are found. Only one however, starts the miner and includes the username: <span id="inline-code">42PkwcWLCjheUAaXy2h6CndY9DoKvv4pQ6QogCxgnFFF268ueYNb2FXiLCgQeds64jAytuaXzFTctbsujZYzUuaRVhn8Cjd</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q14.png" alt="q14_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q14.png" alt="q14_answer">
                     </p>
                     <h2 id="post__content__title">Q15) Mining version</h2>
                     <p>
@@ -382,10 +339,7 @@
                         </div>
                         In the command line of the xmrig miner, we see that the exectuable is located in <span id="inline-code">C:\ProgramData\xmrig-6.12.1\xmrig.exe</span>,
                         as such we can assume that 6.12.1 is the version of the miner.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q14.png" alt="q15_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q14.png" alt="q15_answer">
                     </p>
                     <h2 id="post__content__title">Q16) Stopping Windows Defender</h2>
                     <p>
@@ -397,10 +351,7 @@
                         A quick Google search reveals that the Microsoft Defender Antivirus Service is called <a href="https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-antivirus-windows#microsoft-defender-antivirus-processes-and-services">WinDefend</a>.
                         Using our reliable Event ID 1 within the sysmon event logs with the filter <span id="inline-code">Event_EventData_CommandLine: *WinDefend*</span> we identify
                         multiple commands aiming to stop the service such as: <span id="inline-code">C:\Windows\system32\net1 STOP WinDefend</span> and <span id="inline-code">"C:\Windows\system32\net.exe" STOP WinDefend</span>
-                        <div>
-                            <img src="/img/btlo_socalpha3_q16.png" alt="q16_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q16.png" alt="q16_answer">
                     </p>
                     <h2 id="post__content__title">Q17) Targeted Services</h2>
                     <p>
@@ -416,10 +367,7 @@
                         mention I have not found a reliable source indicating that the <span id="inline-code">/y</span> switch is used for bypassing prompts.
                         However, since it specifically suits our scenario, my assumption is that we can rely on the information on the aforementioned webpage,
                         and we have identified which three services were stopped by the attacker using the bypass prompt flag.
-                        <div>
-                            <img src="/img/btlo_socalpha3_q17.png" alt="q17_answer" onclick="window.open(this.src, '_blank');"
-                                 width="400" , height="400" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/btlo_socalpha3_q17.png" alt="q17_answer">
                     </p>
                 </div>
             </article>

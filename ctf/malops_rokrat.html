@@ -221,20 +221,14 @@ print("BL = 0x%02X" %bl_val)</code></pre><br>
                         constant.
                         <br><br>
                         Based on this finding, we can assume that the memory protection constant used for allocating memory for the shellcode is: <span id="inline-code">0x40</span>.
-                        <div>
-                            <img src="/img/malops_rokrat_4.png" alt="q4_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                         </div>
+                        <img class="lazy" data-src="/img/malops_rokrat_4.png" alt="q4_answer">
                     </p>
                     <h3 id="post__content__title">Q5) What is the hash value used to find the VirtualAlloc function in hex?</h3>
                     <p>
                         By answering question 4, we identified that <span id="inline-code">sub_401041</span> is the function responsible for finding the correct API to perform the
                         shellcode injection. Additionally, we identified that the first function was VirtualAlloc as it used the memory protection constant. Therefore, the hash value 
                         used to find the VirtualAlloc function was: <span id="inline-code">0xAA7ADB76</span>.
-                        <div>
-                            <img src="/img/malops_rokrat_5.png" alt="q5_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_rokrat_5.png" alt="q5_answer">
                     </p>
                     <h3 id="post__content__title">Q6) How many bits does the DLL name hash algorithm rotate right (ROR) by in hex?</h3>
                     <p>
@@ -242,9 +236,7 @@ print("BL = 0x%02X" %bl_val)</code></pre><br>
                         the ror instruction is used twice. Tracing the input hash value which was supplied as one of the function's arguments, we can conclude that the 
                         <span id="inline-code">ror</span> instruction uses the fixed size of <span id="inline-code">0xB</span> to rotate the DLL name hash right.
                         <div>
-                        <img src="/img/malops_rokrat_6.png" alt="q6_answer" onclick="window.open(this.src, '_blank');"
-                            width="350", height="350" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_rokrat_6.png" alt="q6_answer">
                     </p>
                     <h3 id="post__content__title">Q7) What value is checked to verify a valid PE header in hex?</h3>
                     <p>
@@ -262,10 +254,7 @@ print("BL = 0x%02X" %bl_val)</code></pre><br>
                         <br><br>
                         We subsequently see a compare taking place, comparing the just read buffer against <span id="inline-code">0x4550</span>. Therefore, we can conclude that the value that is being
                         checked to verify a valid PE header in hex is <span id="inline-code">0x4550</span>.
-                        <div>
-                            <img src="/img/malops_rokrat_7.png" alt="q7_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>             
+                        <img class="lazy" data-src="/img/malops_rokrat_7.png" alt="q7_answer">        
                     </p>
                     <h3 id="post__content__title">Q8) What is the hexadecimal offset value used in the code to access the export directory in the PE file's Optional Header data directory?</h3>
                     <p>
@@ -276,10 +265,7 @@ print("BL = 0x%02X" %bl_val)</code></pre><br>
                         We have previously identified the function at <span id="inline-code">0x401041</span> to be the import hashing function. Using IDA, we can cross reference the 
                         amount of times that this function is being called. To do so, we navigate (CTRL+G) to the address 0x401041. We then click on <span id="inline-code">sub_401041</span>
                         and hit "X". This brings up the window, showing that the function has been called a total of 7 times.
-                        <div>
-                            <img src="/img/malops_rokrat_9.png" alt="q9_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_rokrat_9.png" alt="q9_answer">
                     </p>
                     <h3 id="post__content__title">Q10) How many bytes of headers are skipped to reach the start of the decrypted data?</h3>
                     <p>
@@ -289,10 +275,7 @@ print("BL = 0x%02X" %bl_val)</code></pre><br>
                         we see that the subsequent 4 bytes are being stored in <span id="inline-code">edx</span>, which later gets moved to <span id="inline-code">esi</span> and is decremented for each byte that gets decrypted. Then, the 
                         pointer in <span id="inline-code">ecx</span> is incremented by 5, moving the pointer to the actual start of the buffer. Therefore, we can conclude that 5 bytes of headers (1 byte
                         for the XOR key and 4 bytes for the length of data) are skipped to reach the start of the decrypted data.
-                        <div>
-                            <img src="/img/malops_rokrat_10.png" alt="q10_answer" onclick="window.open(this.src, '_blank');"
-                                width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
-                        </div>
+                        <img class="lazy" data-src="/img/malops_rokrat_10.png" alt="q10_answer">
                     </p>
                 </div>
             </article>
