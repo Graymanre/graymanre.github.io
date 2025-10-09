@@ -78,5 +78,21 @@
     "url": "re/mamona_analysis.html",
     "date": "22 August 2025",
     "content": "Deep dive and technical analysis of the new Mamona ransomware strain by GLOBAL GROUP."
+  },
+  {
+    "title": "Simda Botnet MalOps Challenge",
+    "category": "CTF",
+    "tags": "Simda, Botnet, Malware, Reverse Engineering",
+    "url": "ctf/simda_analysis.html",
+    "date": "08 October 2025",
+    "content": "Reverse engineering the Simda Botnet malware sample and solving the MalOps challenge."
+  },
+  {
+    "title": "Deploying a VLAN on a Proxmox VM using pfSense and Netgear",
+    "category": "Projects",
+    "tags": "pfsense, proxmox, netgear, vlan, network",
+    "url": "projects/vlans_proxmox_pfsense.html",
+    "date": "09 October 2025",
+    "content": "Learn how to set up VLANs for Proxmox VMs using pfSense and a Netgear switch."
   }
 ]
