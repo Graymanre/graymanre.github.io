@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="GraymanRe - Deploying OpenVPN on pfSense using LDAP" />
+    <meta property="og:description" content="Deploying OpenVPN on pfSense using LDAP" />
+    <meta property="og:image" content="https://graymanre.github.io/img/openvpn.webp" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="description" content="Blog post describing how to deploy OpenVPN on pfSense using LDAP"/>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/openvpn.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRe - Deploying OpenVPN on pfSense using LDAP</title>
+
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date" datetime="2024-12-29T00:00:00+02:00">- 29 December 2024</time>
+                            </div>
+                            <h2 class="post__title">Deploying OpenVPN on pfSense using LDAP</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="/img/banner.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/projects" class="post__tag">Projects</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Introduction</h3>
+                    <p>
+                        In this blog post, we will dive into setting up a VLAN connection from a dedicated Proxmox VM through pfSense to ensure
+                        network separation. For example, when analyzing malware, an internet connection is sometimes required and this connection
+                        should be as secure and separate from all other traffic on the network as possible, to avoid conflicts, accidental infections
+                        and other unwanted side effects.
+                        <br><br>
+                        For this demonstration of setting up a VLAN throughout your network to separate the network traffic coming from a specific VM,
+                        we will use a very basic network layout as depicted below. We have an incoming WAN internet connection to our pfSense from
+                        the internet. Subsequently, on the LAN side of the pfSense, a managed switch is connected, which connects directly to the Proxmox
+                        host. 
+                        <img class="lazy" data-src="/img/vlans_1.png" alt="VLAN-Network-Layout">
+                    </p>
+
+                    <h3 id="post__content__title">Table of Contents</h3>
+                    <div class="nav">
+                        <a href="#section1" class="btn">1. Configuring the Switch</a><br>
+                        <a href="#section2" class="btn">2. Configuring pfSense</a><br>
+                        <a href="#section3" class="btn">3. Configuring Proxmox</a><br>
+                        <br>
+                    </div>
+
+                    <h3 id="section1">Configuring the Switch</h3>
+                    <p>
+                        First, we will configure the switch to ensure we have a network port dedicated to VLAN traffic. In this example,
+                        we will be using the Netgear GS308EPP managed switch. Furthermore, the LAN interface of the pfSense is connected to 
+                        port number 1 on the switch, and the Proxmox host is connected to port 3 on the switch.
+                        <br>
+                        We will now complete the following steps:
+                    </p>
+
+                    <h5>Create a VLAN</h5>
+                    <p>
+                        The Netgear managed switch by default has one VLAN configured: VLAN 1. This VLAN is the default VLAN that carries all untagged
+                        traffic over. This is important to note as, by default, this VLAN is used on all ports.
+                        <ol>
+                            <li>Go to "Switching" > "VLAN" in the switch's management interface and select "Advanced 802.1Q VLAN"</li>
+                            <li>Click "Add VLAN" and add a VLAN name and VLAN ID (e.g. 40)</li>
+                        </ol>
+                        <b>NOTE:</b> for our setup, we want Proxmox to receive both the normal LAN traffic as well as the tagged VLAN traffic.
+                        Additionally, we will configure the pfSense to differentiate between tagged and untagged traffic. Thus, we will need to
+                        tag port 1 and port 3 in the VLAN. For other use cases, it may be required to untag a specific port. This all depends
+                        on your specific needs.                        
+                        <ul>
+                            <li>Tag both port 1 and port 3</li>
+                        </ul>
+
+                        Because of our current setup, we will not need to configure the PVID table. Since all untagged traffic by default will use
+                        VLAN ID 1, we have achieved the goal of our use case.
+                        <img class="lazy" data-src="/img/vlans_2.png" alt="VLAN-Creation">
+                    </p>
+
+                    <h3 id="section2">Configuring pfSense</h3>
+                    <p>
+                        Now that the switch is configured, we can move on to our pfSense. Here we need to complete the following steps:
+                    </p>
+
+                    <h5>1. Creating the VLAN</h5>
+                    <p>
+                        To create the VLAN, complete the steps below:
+                        <ol>
+                            <li>In your pfSense dashboard, go to "Interfaces" > "Assignments" > "VLANs".</li>
+                            <li>Click on the "+" button to add a new VLAN.</li>
+                            <li>Choose the appropriate parent interface. In our case, the interface connected to the switch, which is the LAN interface.</li>
+                            <li>Enter the VLAN ID created on the switch (e.g. 40).</li>
+                            <li>Provide a description as needed.</li>
+                            <li>Click "Save".</li>
+                        </ol>
+                        <img class="lazy" data-src="/img/vlans_3.png" alt="VLAN-Creation">
+                    </p>
+
+                    <h5>2. Assign and Enable the Network Interface</h5>
+                    <p>
+                        In the previous step, we have created a new network interface on LAN. We now need to assign and enable this interface
+                        <ol>
+                            <li>Go to "Interfaces" > "Assignments".</li>
+	                        <li>Add a new interface assignment for the VLAN you created and click "Save".</li>
+	                        <li>Go to the settings of the new interface (e.g., OPT1, OPT2), enable it, and configure it.</li>
+	                        <li>Ensure the "Static IPv4 Configuration" is selected, and assign an IP address that falls within the VLAN's subnet (e.g. 192.168.40.1/24 for VLAN 40).</li>
+                        </ol>
+                        <img class="lazy" data-src="/img/vlans_4.png" alt="VLAN-Creation">
+                        <img class="lazy" data-src="/img/vlans_5.png" alt="VLAN-Creation">
+                    </p>
+
+                    <h5>3. Configure Firewall Rules</h5>
+                    <p>
+                        This step is required in the sense that you would need at least one rule: an allow any<->any rule.
+                        <br>
+                        However, in our use case for malware analysis, we want to ensure that network traffic from this VLAN cannot communicate
+                        with any other network. So we will be adding the following rules:
+                        <ol>
+                            <li>Go to "Firewall" > "Rules" and select the interface corresponding to your new VLAN.</li>
+                            <li>Add a new BLOCK rule from your OPT* net to "invert match" LAN net.</li>
+                        </ol>
+                    </p>
+
+                    <h5>4. Configure the DHCP Server</h5>
+                    <p>
+                        We want to ensure that devices connecting to the assigned VLAN are also obtaining a valid IP address in the VLAN-defined
+                        IP address range. In our example, this is <span id="inline-code">192.168.40.1/24</span>.
+                        <ol>
+                            <li>Go to "Services" > "DHCP Server" and select the interface corresponding to your new VLAN.</li>
+                            <li>Enable the DHCP server and set a range of IP addresses to hand out (e.g. 192.168.40.100 - 192.168.40.254).</li>
+                        </ol>
+                        <img class="lazy" data-src="/img/vlans_7.png" alt="VLAN-Creation">
+                    </p>
+
+                    <h5>5. Configure Outbound NAT</h5>
+                    <p>
+                        The steps below only need to be completed when your Outbound NAT configuration is set to "Hybrid". In this case,
+                        you need to add a new mapping for the VLAN subnet:
+                        <ul>
+                            <li>Go to "Firewall" > "NAT" > "Outbound" and add a new mapping with the source being the VLAN's subnet (e.g. 192.168.30.1/24).</li>
+                        </ul>
+                        <img class="lazy" data-src="/img/vlans_8.png" alt="VLAN-Creation">
+                    </p>
+
+                    <h5>6. Configure DNS Resolver</h5>
+                    <p>
+                        This step only needs to be completed if you have an ISP Modem connected to the WAN interface of pfSense. In that case,
+                        it is likely that your devices will obtain a valid IP address and they can ping other (external) IP addresses but resolving
+                        hostnames fails (e.g. <span id="inline-code">nslookup</span>). If this is the case, you will need to enable DNS Query Forwarding:
+                        <ul>
+                            <li>Go to "Services" > "DNS Resolver" > "DNS Query Forwarding" and enable the checkbox.</li>
+                        </ul>
+                        <img class="lazy" data-src="/img/vlans_9.png" alt="VLAN-Creation">
+                    </p>
+
+                    <h3 id="section3">Configuring Proxmox</h3>
+                    <p>
+                        Finally, we arrive at the Proxmox host. Here, we need to update the network configuration which can be found at
+                        <span id="inline-code">/etc/network/interfaces</span>. On the main network interface, we need to make it VLAN-aware,
+                        and we need to add another network interface specific to the VLAN.
+                        <br>
+                        <img class="lazy" data-src="/img/vlans_10.png" alt="VLAN-Creation">
+                        <br><br>
+                        After making this change, you will need to either restart the Proxmox host or restart the network interface using
+                        the command <span id="inline-code">systemctl restart networking</span>.
+                        <br>
+                        Now, specific to the Virtual Machine we are targeting, we need to set the VLAN Tag to be used. 
+                        <img class="lazy" data-src="/img/vlans_11.png" alt="VLAN-Creation">
+                    </p>
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/re/" class="set-1">Reverse Engineering</a>
+                            <a href="/projects/" class="set-1">Projects</a>
+                            <a href="/ctf/" class="set-1">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+            });
+        }
+    </script>
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
+</body>
+
+</html>

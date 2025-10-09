@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="GraymanRe - Automating fuzz harness generation" />
+    <meta property="og:description" content="Automating fuzz harness generation using C++, WinDBG and WinAFL" />
+    <meta property="og:image" content="https://graymanre.github.io" />
+    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@grayman_re" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRe - Automating fuzz harness generation</title>
+
+    <link rel="canonical" href="https://graymanre.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                   placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date" datetime="2023-09-25T00:00:00+02:00">25 September 2023</time> <!-- CHANGE ME -->
+                            </div>
+                            <h2 class="post__title">Time Travel Debugging to Develop Fuzzing Harnesses</h2> <!-- Change me -->
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="../contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image"
+                                             src="../img/logo.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="../contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="../ctf/" class="post__tag">projects</a> <!-- Change me -->
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Researching the applicability of automating the development of fuzzing harnesses with Time Travel Debugging</h3>
+                    <p>
+                        As part of a research process, I invested some time into automating the development of fuzzing harnesses specifically in the scenario where
+                        the targeted application is a Windows 10/11 OS-based user-land application which performs file operations using a third-party DLL which is
+                        determined to be suitable for fuzz testing.
+                    </p>
+
+                    <h3 id="post__content__title">The fuzzing process</h3>
+                    <p>
+                        Since the realm of vulnerability research and consequently fuzzing is vast, the research was heavily scoped. In order to understand this scoping,
+                        I will shortly explain the fuzzing process specific to the scope of Windows 10/11 OS-based user-land applications using a third-party DLL to perform
+                        certain file operations that are suitable to fuzz.
+                        <br><br>
+                        The process of fuzz testing begins with identifying the fuzzing target, which is approached from a bottom-up approach: beginning with the software
+                        package that will be subjected to the vulnerability research. Depending on the goal of the researcher this can either be chosen freely or is a
+                        preselected or appointed software application or code base. Within the process of fuzzing a Windows OS-based user-land software application, the
+                        target selection process narrows down to identifying functionality within specific libraries that are deemed suitable for fuzz testing.
+                        <br><br>
+                        Next, depending on the type of the fuzzer either the researcher creates a predefined set of test cases (seeds) that the fuzzer can utilize during the
+                        fuzzing process, or the fuzzer generates a baseline itself. The fuzzer will then take over the main process of fuzzing the application. Firstly,
+                        the fuzzing instance will start the target program, which it will do by directly calling the program or using a harness. A fuzzing harness serves
+                        as an interface between the fuzzing instance and the software under test, which will be later discussed in more detail.
+                        <br><br>
+                        The test case, seed, will be served to the target program and whilst the program executes. In the case of grey-box fuzzing methodologies, specific
+                        function(s) or sections of the program are targeted, since fuzzing is aimed at specific protocol or format (such as PNG file parsing functionality).
+                        Whilst the test case is run, the fuzzing instance will monitor code coverage and program health. If the program did not crash or stall, the test case
+                        will be mutated, incorporating the logic the fuzzing instance gleaned from the previous test case run.
+                        <br><br>
+                        In case of the occurrence of undefined or unexpected behaviour, the fuzzing instance will log the conditions that triggered the behaviour as well as
+                        the specific behaviour itself and any results due to the behaviour for further analysis. Subsequently, the vulnerability researcher will determine the
+                        exploitability of the application based on the data that triggered the crash. The aforementioned fuzzing steps can be clearly identified in the fuzzing
+                        process of the AFL fuzzing framework depicted in the figure below.
+                        <div>
+                            <img src="../img/AFL_fuzzing.png" alt="AFL Fuzzing Process" onclick="wi+ndow.open(this.src, '_blank');"
+                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                    </p>
+
+                    <h3 id="post__content__title">Harness Generation Overview</h3>
+                    <p>
+                        Fuzzers cannot be aware of all intricacies of all possible types of software. As such, it is inevitable that fuzzers will fail and trigger crashes
+                        that are caused by the input format not adhering to software-specific requirements instead of actual weaknesses in the software that can lead to
+                        vulnerabilities. By developing and utilizing a fuzzing harness to assist the fuzzing framework can overcome the unintended failing of fuzzing
+                        frameworks.
+                        <br><br>
+                        A fuzzing harness serves as an interface between the fuzzing instance and the software under test, mimicking the software under test as precisely
+                        as possible whilst allowing flexibility for the fuzzing framework to dynamically modify parameters and variables and thus more closely adhering to
+                        the specific requirements of the software.
+                        <br><br>
+                        In its most simplistic form, a fuzzing harness serves as a single-entry point for the fuzzing framework with predefined required input values. The
+                        target function within the application is then called from within the single entry point using the provided input values "as is" to the application.
+                        This example mirrors a basic example of a fuzzing harness as defined by the LibFuzzer framework, accepting an array of bytes from the fuzzing
+                        framework, and doing "something interesting" with those bytes using the interface of the application under test. The example provided in the code
+                        below visualises this harness.
+                        <div class="language-plaintext highlighter-rouge">
+                            <div class="highlight">
+                                <pre class="highlight"><code>extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)<br>{<br>    DoSomethingInterestingWithMyAPI(Data, Size);<br>    return 0;<br>}</code></pre>
+                            </div>
+                        </div>
+                        This basic layout serves as a guideline for vulnerability researchers and offers full flexibility within the LLVMFuzzerTestOneInput fuzz-target
+                        function. Google, the developers of the WinAFL fuzzing framework have further detailed, specific to file-based applications, four criteria that
+                        a fuzz-target function should adhere to:
+                        <br>
+                        &emsp; 1. The fuzz-target function should open the input file during its lifetime;
+                        <br>
+                        &emsp; 2. The fuzz-target function should parse the input file during its lifetime;
+                        <br>
+                        &emsp; 3. The fuzz-target function should close the input file during its lifetime; and
+                        <br>
+                        &emsp; 4. The fuzz-target function should return normally after the three predefined criteria have taken place.
+                        <br><br>
+                        Specific to Windows operating systems, fuzzing harnesses allow for the circumventing of graphical user interfaces (GUI) within the application.
+                        As GUI applications require userinteraction and thus cannot be easily assessed automatically, it is trivial that the GUI-part of the application
+                        is bypassed during the fuzzing process. GUI operations have a significant impact on resource allocation, taking up clock cycles and available RAM
+                        space, which fuzzing frameworks utilize to enhance their fuzzing process. As such, fuzzing frameworks benefit from being able to bypass resource-
+                        intensive GUI operations and optimize their own processes.
+                        <br><br>
+                    </p>
+
+                    <h3 id="post__content__title">Time Travel Debugging</h3>
+                    <p>
+                        Time Travel Debugging is a relatively new feature in the arsenal of the Windows Debugger (WinDBG) which allows for recording a full run trace
+                        of an application. The subsequent capture is stored and allows for unlimited replays of the behaviour of the application during the application.
+                        Although changing memory layouts and similar actions are not possible, it allows for fine-grained control over the execution process. Its main
+                        feature is of course the possibility to replay the behaviour. This ensures that in debugging and other use cases, the application does not need
+                        to be rerun over an over again with all of its negative effects and uncertainties and inconsistencies. I opted to include this specific feature
+                        into the research process. Therefore, fully focussing on automating the fuzzing harness generation by parsing run traces captured with the
+                        WinDBG and attempting to derive a fuzzing harness based on the cardinal requirements to fuzz the application with WinAFL.
+                        <br><br>
+                        Using WinDBG, Time Travel Debugging can easily be configured by starting the debugging process, selecting "Launch executable (advanced)" and
+                        checking the "Record with Time Travel Debugging" checkbox, before configuring the location to save the trace, as shown below.
+                        <div>
+                            <img src="../img/ttd.png" alt="AFL Time Travel Debugging" onclick="wi+ndow.open(this.src, '_blank');"
+                                 width="500" , height="500" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        </div>
+                        <br><br>
+                        Additionally, analyzing a previously saved time travel debugging trace, can be accomplished by selecting "Open trace file" and supplying the
+                        location of the stored trace.
+                    </p>
+
+                    <h3 id="post__content__title">Using C++ to interface with WinDBG and TTD</h3>
+                    <p>
+                        Within the scope of the research one of the key focus points is "process automation". Early on, I discovered the Windows Debugger exposes multiple
+                        header files that can be used to develop against the application and achieve some form/level of automation. I have found the documentation on
+                        the <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/">Windows Learn website</a> to be of some use.
+                        <br><br>
+                        Based on the information on the Windows Learn page, it is possible to write your own WindDBG extension in C++ as a DLL. Using the command
+                        <span id="inline-code">.load</span> and supplying the location of the extension DLL file, WinDBG will be able to add a new "feature" to WinDBG
+                        which can then be called. A lot of the things that I learned were based on <a href="https://www.codeproject.com/Articles/6522/Debug-Tutorial-Part-4-Writing-WINDBG-Extensions">this blog</a>
+                        from 2004(!) which provided the essential baseline. To get started, one needs to inlude the <span id="inline-code"></span>
+                        <br><br>
+                    </p>
+
+                    <h3 id="post__content__title">Gathering all prerequisites</h3>
+                    <p>
+
+                    </p>
+
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="../re" class="set-1">Reverse Engineering</a>
+                            <a href="../projects" class="set-1">Projects</a>
+                            <a href="../ctf/" class="set-5">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="../js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="../js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="../js/vendors/jquery.fitvids.js"></script>
+    <script src="../js/vendors/lazyload.min.js"></script>
+    <script src="../js/vendors/transition.js"></script>
+    <script src="../js/vendors/zoom.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/readingtime.js"></script>
+    <script>
+        var base_url = "",
+            pagination_next_url = base_url + '/page2',
+            pagination_next_page_number = '',
+            pagination_available_pages_number = '1';
+    </script>
+</body>
+
+</html>
