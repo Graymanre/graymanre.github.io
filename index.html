@@ -2,6 +2,65 @@
 <html lang="en">
 
 <head>
+    <title>GraymanRe - Personal Portfolio, Projects and Writeups</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Personal Portfolio, Projects and Writeups" />
+
+    <meta property="og:title" content="GraymanRe - Personal Portfolio, Projects and Writeups" />
+    <meta property="og:description" content="Personal Portfolio, Projects and Writeups" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://graymanre.github.io/img/logo.webp" />
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/logo.webp" />
+    <meta property="og:image:width" content="300" />
+    <meta property="og:image:height" content="300" />
+    <meta property="og:image:alt" content="logo" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/index.html" />
+    <meta property="og:updated_time" content="2025-11-09T15:35:00+00:00" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/logo.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://graymanre.github.io/index.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<head>
     <meta property="og:title" content="GraymanRe - Personal Portfolio, Projects and Writeups" />
     <meta property="og:description" content="Personal Portfolio, Projects and Writeups" />
     <meta property="og:image" content="https://graymanre.github.io" />
@@ -63,7 +122,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Blog</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -103,14 +163,18 @@
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">5 min read</span>
-                                            <time class="article__date" datetime="2025-10-09T00:00:00+02:00">09 October 2025</time>
+                                            <time class="article__date" datetime="2025-10-09T00:00:00+02:00">09 October
+                                                2025</time>
                                         </div>
-                                        <h2 class="article__title">Deploying a VLAN on a Proxmox VM using pfSense and Netgear</h2>
-                                        <p class="article__excerpt">Learn how to set up VLANs for Proxmox VMs using pfSense and a Netgear switch...</p>
+                                        <h2 class="article__title">Deploying a VLAN on a Proxmox VM using pfSense and
+                                            Netgear</h2>
+                                        <p class="article__excerpt">Learn how to set up VLANs for Proxmox VMs using
+                                            pfSense and a Netgear switch...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
                                                 <a href="/contact/" aria-label="GraymanRe">
-                                                    <img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture">
+                                                    <img class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture">
                                                 </a>
                                             </div>
                                             <div class="article__bottom-meta">
@@ -134,14 +198,18 @@
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">8 min read</span>
-                                            <time class="article__date" datetime="2025-10-08T00:00:00+02:00">08 October 2025</time>
+                                            <time class="article__date" datetime="2025-10-08T00:00:00+02:00">08 October
+                                                2025</time>
                                         </div>
-                                        <h2 class="article__title">Analyzing the Simda Botnet Malware - MalOps Challenge</h2>
-                                        <p class="article__excerpt">Today we are analyzing Simda Botnet whilst solving the Simda Malware Challenge by MalOps...</p>
+                                        <h2 class="article__title">Analyzing the Simda Botnet Malware - MalOps Challenge
+                                        </h2>
+                                        <p class="article__excerpt">Today we are analyzing Simda Botnet whilst solving
+                                            the Simda Malware Challenge by MalOps...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
                                                 <a href="/contact/" aria-label="GraymanRe">
-                                                    <img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture">
+                                                    <img class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture">
                                                 </a>
                                             </div>
                                             <div class="article__bottom-meta">
@@ -165,14 +233,17 @@
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">8 min read</span>
-                                            <time class="article__date" datetime="2025-08-22T00:00:00+02:00">22 August 2025</time>
+                                            <time class="article__date" datetime="2025-08-22T00:00:00+02:00">22 August
+                                                2025</time>
                                         </div>
                                         <h2 class="article__title">Analyzing a new Mamona Ransomware variant</h2>
-                                        <p class="article__excerpt">Today we are analyzing a new strain of the Mamona ransomware used by GLOBAL GROUP...</p>
+                                        <p class="article__excerpt">Today we are analyzing a new strain of the Mamona
+                                            ransomware used by GLOBAL GROUP...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
                                                 <a href="/contact/" aria-label="GraymanRe">
-                                                    <img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture">
+                                                    <img class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture">
                                                 </a>
                                             </div>
                                             <div class="article__bottom-meta">
@@ -196,14 +267,18 @@
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">8 min read</span>
-                                            <time class="article__date" datetime="2025-06-04T00:00:00+02:00">4 June 2025</time>
+                                            <time class="article__date" datetime="2025-06-04T00:00:00+02:00">4 June
+                                                2025</time>
                                         </div>
-                                        <h2 class="article__title">Analyzing APT-37's RokRat malware - MalOps Challenge</h2>
-                                        <p class="article__excerpt">Today we are analyzing RokRat whilst solving the RokRat Loader Malware Challenge by MalOps...</p>
+                                        <h2 class="article__title">Analyzing APT-37's RokRat malware - MalOps Challenge
+                                        </h2>
+                                        <p class="article__excerpt">Today we are analyzing RokRat whilst solving the
+                                            RokRat Loader Malware Challenge by MalOps...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
                                                 <a href="/contact/" aria-label="GraymanRe">
-                                                    <img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture">
+                                                    <img class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture">
                                                 </a>
                                             </div>
                                             <div class="article__bottom-meta">
@@ -222,19 +297,23 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/ctf/btlo_soc_alpha_3.html">
-                                        <img class="lazy" data-src="/img/btlo_socalpha3.webp" alt="BTLO - SOC Alpha 3 Writeup">
+                                        <img class="lazy" data-src="/img/btlo_socalpha3.webp"
+                                            alt="BTLO - SOC Alpha 3 Writeup">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">9 min read</span>
-                                            <time class="article__date" datetime="2025-01-04T00:00:00+02:00">4 January 2025</time>
+                                            <time class="article__date" datetime="2025-01-04T00:00:00+02:00">4 January
+                                                2025</time>
                                         </div>
                                         <h2 class="article__title">Blue Team Labs Online - SOC Alpha 3 Writeup</h2>
-                                        <p class="article__excerpt">Today we will be walking through one of the Blue Team Labs Online Investigations: SOC Alpha 3...</p>
+                                        <p class="article__excerpt">Today we will be walking through one of the Blue
+                                            Team Labs Online Investigations: SOC Alpha 3...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
                                                 <a href="/contact/" aria-label="GraymanRe">
-                                                    <img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture">
+                                                    <img class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture">
                                                 </a>
                                             </div>
                                             <div class="article__bottom-meta">
@@ -253,11 +332,13 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/projects/ldap_pfsense_vpn.html">
-                                        <img class="lazy" data-src="/img/openvpn.webp" alt="Deploying OpenVPN on pfSense using LDAP">
+                                        <img class="lazy" data-src="/img/openvpn.webp"
+                                            alt="Deploying OpenVPN on pfSense using LDAP">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
-                                            <span class="article__minutes">9 min read <time class="article__date" datetime="2024-12-29T00:00:00+02:00">29 December 2024</time></span>
+                                            <span class="article__minutes">9 min read <time class="article__date"
+                                                    datetime="2024-12-29T00:00:00+02:00">29 December 2024</time></span>
                                         </div>
                                         <h2 class="article__title">Deploying OpenVPN on pfSense using LDAP</h2>
                                         <p class="article__excerpt">
@@ -266,7 +347,9 @@
                                         </p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -284,20 +367,25 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/projects/windbg_dev_extension.html">
-                                        <img class="lazy" data-src="/img/windbg.webp" alt="Developing a WinDBG Extension in C++">
+                                        <img class="lazy" data-src="/img/windbg.webp"
+                                            alt="Developing a WinDBG Extension in C++">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
-                                            <span class="article__minutes">17 min read <time class="article__date" datetime="2024-07-12T00:00:00+02:00">12 July 2024</time></span>
+                                            <span class="article__minutes">17 min read <time class="article__date"
+                                                    datetime="2024-07-12T00:00:00+02:00">12 July 2024</time></span>
                                         </div>
                                         <h2 class="article__title">Developing a WinDBG Extension in C++</h2>
                                         <p class="article__excerpt">
                                             WinDBG supports custom extensions, which you can build yourself,
-                                            using the published header files to add helpful functions to your debug session...
+                                            using the published header files to add helpful functions to your debug
+                                            session...
                                         </p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -320,13 +408,17 @@
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">11 min read</span>
-                                            <time class="article__date" datetime="2024-07-03T00:00:00+02:00">7 July 2024</time>
+                                            <time class="article__date" datetime="2024-07-03T00:00:00+02:00">7 July
+                                                2024</time>
                                         </div>
                                         <h2 class="article__title">Blue Team Labs Online - The Key Writeup</h2>
-                                        <p class="article__excerpt">Today we will be walking through one of the Blue Team Labs Online Investigations: The Key...</p>
+                                        <p class="article__excerpt">Today we will be walking through one of the Blue
+                                            Team Labs Online Investigations: The Key...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -344,18 +436,23 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/ctf/flareon22_darnmice.html">
-                                        <img class="lazy" data-src="/img/flareon.png" alt="Flare-On 22 - Darn Mice Writeup">
+                                        <img class="lazy" data-src="/img/flareon.png"
+                                            alt="Flare-On 22 - Darn Mice Writeup">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">2 min read</span>
-                                            <time class="article__date" datetime="2024-06-28T00:00:00+02:00">June 28, 2024</time>
+                                            <time class="article__date" datetime="2024-06-28T00:00:00+02:00">June 28,
+                                                2024</time>
                                         </div>
                                         <h2 class="article__title">Flare-On 22 - Darn Mice Writeup</h2>
-                                        <p class="article__excerpt">Blast from the past: Solving Flare-On9's the Darn Mice challenge ...</p>
+                                        <p class="article__excerpt">Blast from the past: Solving Flare-On9's the Darn
+                                            Mice challenge ...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -373,18 +470,23 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/ctf/flareon22_magic8ball.html">
-                                        <img class="lazy" data-src="/img/flareon.png" alt="Flare-On 22 - Magic 8 Ball Writeup">
+                                        <img class="lazy" data-src="/img/flareon.png"
+                                            alt="Flare-On 22 - Magic 8 Ball Writeup">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">3 min read</span>
-                                            <time class="article__date" datetime="2024-06-26T00:00:00+02:00">26 June 2024</time>
+                                            <time class="article__date" datetime="2024-06-26T00:00:00+02:00">26 June
+                                                2024</time>
                                         </div>
                                         <h2 class="article__title">Flare-On 22 - Magic 8 Ball Writeup</h2>
-                                        <p class="article__excerpt">Blast from the past: Solving Flare-On9's the Magic 8 Ball challenge ...</p>
+                                        <p class="article__excerpt">Blast from the past: Solving Flare-On9's the Magic 8
+                                            Ball challenge ...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -402,18 +504,23 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/ctf/btlo_badlogic.html">
-                                        <img class="lazy" data-src="/img/btlo_badlogic.webp" alt="BTLO - Bad Logic Writeup">
+                                        <img class="lazy" data-src="/img/btlo_badlogic.webp"
+                                            alt="BTLO - Bad Logic Writeup">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">8 min read</span>
-                                            <time class="article__date" datetime="2022-12-11T00:00:00+02:00">26 March 2024</time>
+                                            <time class="article__date" datetime="2022-12-11T00:00:00+02:00">26 March
+                                                2024</time>
                                         </div>
                                         <h2 class="article__title">Blue Team Labs Online - Bad Logic Writeup</h2>
-                                        <p class="article__excerpt">Today we will be walking through one of the Blue Team Labs Online Investigations: Bad Logic...</p>
+                                        <p class="article__excerpt">Today we will be walking through one of the Blue
+                                            Team Labs Online Investigations: Bad Logic...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -431,18 +538,23 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/ctf/btlo_countdown.html">
-                                        <img class="lazy" data-src="/img/btlo_countdown.webp" alt="Flare-On 22 - Pixel Poker Writeup">
+                                        <img class="lazy" data-src="/img/btlo_countdown.webp"
+                                            alt="Flare-On 22 - Pixel Poker Writeup">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">11 min read</span>
-                                            <time class="article__date" datetime="2022-12-11T00:00:00+02:00">23 March 2024</time>
+                                            <time class="article__date" datetime="2022-12-11T00:00:00+02:00">23 March
+                                                2024</time>
                                         </div>
                                         <h2 class="article__title">Blue Team Labs Online - Countdown Writeup</h2>
-                                        <p class="article__excerpt">Today we will be walking through one of the Blue Team Labs Online Investigations: Countdown...</p>
+                                        <p class="article__excerpt">Today we will be walking through one of the Blue
+                                            Team Labs Online Investigations: Countdown...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -459,46 +571,15 @@
                             <!-- Article Begin -->
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
-                                    <a class="article__image" href="/projects/automating_tenant_assessments.html">
-                                        <img class="lazy" data-src="/img/entra_tenant_assessment.webp"
-                                             alt="Automating a M365 Tenant Security Maturity Assessment">
-                                    </a>
-                                    <div class="article__content">
-                                        <div class="article__meta">
-                                            <span class="article__minutes">7 min read <time class="article__date" datetime="2023-09-10T00:00:00+02:00">25 September 2023</time></span>
-                                        </div>
-                                        <h2 class="article__title">Automating a M365 Tenant Security Maturity Assessment</h2>
-                                        <p class="article__excerpt">
-                                            The Microsoft Graph API is the ideal candidate to use for automating the
-                                            assessment of the security maturity ...
-                                        </p>
-                                        <div class="article__bottom">
-                                            <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
-                                            </div>
-                                            <div class="article__bottom-meta">
-                                                <a href="/contact/" class="article__author-link">GraymanRe</a>
-                                                <span>in</span>
-                                                <span class="article-tags">
-                                                    <a href="/projects" class="article__tag">Projects</a>
-
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Article End -->
-                            <!-- Article Begin -->
-                            <div class="article col col-6 col-t-12 grid__post animate article--big">
-                                <div class="article__inner">
                                     <a class="article__image" href="/ctf/flareon22_pixelpoker.html">
-                                        <img class="lazy" data-src="/img/flareon.png" alt="Flare-On 22 - Pixel Poker Writeup">
+                                        <img class="lazy" data-src="/img/flareon.png"
+                                            alt="Flare-On 22 - Pixel Poker Writeup">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">2 min read</span>
-                                            <time class="article__date" datetime="2022-12-11T00:00:00+02:00">11 December 2022</time>
+                                            <time class="article__date" datetime="2022-12-11T00:00:00+02:00">11 December
+                                                2022</time>
                                         </div>
                                         <h2 class="article__title">Flare-On 22 - Pixel Poker Writeup</h2>
                                         <p class="article__excerpt">
@@ -507,7 +588,9 @@
                                         </p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
