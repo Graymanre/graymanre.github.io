@@ -2,31 +2,45 @@
 <html lang="en">
 
 <head>
+    <title>GraymanRe - RokRat Loader MalOps Challenge</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Analyzing the RokRat Loader - MalOps Challenge" />
+
     <meta property="og:title" content="GraymanRe - RokRat Loader MalOps Challenge" />
     <meta property="og:description" content="Analyzing the RokRat Loader - MalOps Challenge" />
-    <meta property="og:image" content="https://graymanre.github.io/img/RokRat.webp" />
-    <meta property="og:url" content="https://graymanre.github.io/" />
-    <meta name="description" content="Writeup for the RokRat Loader challenge by MalOps"/>
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://graymanre.github.io/img/malops_rokrat.webp" />
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/malops_rokrat.webp" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1536" />
+    <meta property="og:image:alt" content="malops rokrat" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/ctf/malops_rokrat.html" />
+    <meta property="og:updated_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:published_time" content="2025-06-03T00:00:00+00:00" />
+    <meta property="article:modified_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:section" content="ctf" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://graymanre.github.io/img/RokRat.webp" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/malops_rokrat.webp" />
     <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>GraymanRe - RokRat Loader MalOps Challenge</title>
+    <link rel="canonical" href="https://graymanre.github.io/ctf/malops_rokrat.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
 
-    <link rel="canonical" href="https://graymanre.github.io/">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/prism.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -66,7 +80,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -86,14 +101,14 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span id="time"></span> min read <time class="post__date" datetime="2025-06-03T00:00:00+02:00">03 June 2025</time>
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2025-06-03T00:00:00+00:00">03 June 2025</time>
                             </div>
                             <h2 class="post__title">Analyzing APT-37's RokRat malware - MalOps Challenge</h2>
                             <div class="post__bottom">
                                 <div class="post__author">
                                     <a href="/contact/" aria-label="GraymanRe">
-                                        <img class="post__author-image"
-                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
@@ -116,30 +131,44 @@
                 <div class="post__content">
                     <h3 id="post__content__title">Introduction</h3>
                     <p>
-                        Today we are analyzing RokRat whilst solving the RokRat Loader Malware Challenge by MalOps. RokRat is a tool used by APT37, a state-sponsored hacking group linked to North Korea.
-                        The RokRat tool is a multifaceted tool, amongst which one of the features is a shellcode loader. Specifically this shellcode loading mechanism is featured in this challenge write-up as we
+                        Today we are analyzing RokRat whilst solving the RokRat Loader Malware Challenge by MalOps.
+                        RokRat is a tool used by APT37, a state-sponsored hacking group linked to North Korea.
+                        The RokRat tool is a multifaceted tool, amongst which one of the features is a shellcode loader.
+                        Specifically this shellcode loading mechanism is featured in this challenge write-up as we
                         try and understand how it decrypts, loads and executes the embedded shellcode blob in memory.
                     </p>
                     <h3 id="post__content__title">Q1) What is the MD5 hash of the binary?</h3>
                     <p>
-                        We can retrieve the MD5 hash of any given file on a Windows system, using the built-in PowerShell feature <span id="inline-code">Get-FileHash</span>.
-                        Using the full command: <span id="inline-code">Get-FileHash -Algorithm MD5 .\sample</span>, we retrieve the following MD5: <b>CF28EF5CEDA2AA7D7C149864723E5890</b>.
+                        We can retrieve the MD5 hash of any given file on a Windows system, using the built-in
+                        PowerShell feature <span id="inline-code">Get-FileHash</span>.
+                        Using the full command: <span id="inline-code">Get-FileHash -Algorithm MD5 .\sample</span>, we
+                        retrieve the following MD5: <b>CF28EF5CEDA2AA7D7C149864723E5890</b>.
                     </p>
                     <h3 id="post__content__title">Q2) What is the entry point address of the binary in hex?</h3>
                     <p>
-                        The entry point address in a binary can be calculated by adding the value of the <span id="inline-code">AddressOfEntryPoint</span> field to the value of 
+                        The entry point address in a binary can be calculated by adding the value of the <span
+                            id="inline-code">AddressOfEntryPoint</span> field to the value of
                         the <span id="inline-code">ImageBase</span> field within the Optional Header of a PE/COFF file.
-                        The <span id="inline-code">AddressOfEntryPoint</span> is located at 16 bytes from the start of the Optional Header and has a size of 4 bytes, whilst the 
-                        <span id="inline-code">ImageBase</span> is located at either 24 or 28 bytes from the start of the Optional Header.
-                        This depends on whether the file is PE32 or PE32+. Subsequently, the size of the field is either 4 or 8 bytes respectively. We can use tools such as <a href="https://www.winitor.com/download">PEstudio</a> to 
-                        retrieve the values for these fields. Alternatively, we could also load the binary into IDA. IDA will, by default, place us at the entry point of the binary and
+                        The <span id="inline-code">AddressOfEntryPoint</span> is located at 16 bytes from the start of
+                        the Optional Header and has a size of 4 bytes, whilst the
+                        <span id="inline-code">ImageBase</span> is located at either 24 or 28 bytes from the start of
+                        the Optional Header.
+                        This depends on whether the file is PE32 or PE32+. Subsequently, the size of the field is either
+                        4 or 8 bytes respectively. We can use tools such as <a
+                            href="https://www.winitor.com/download">PEstudio</a> to
+                        retrieve the values for these fields. Alternatively, we could also load the binary into IDA. IDA
+                        will, by default, place us at the entry point of the binary and
                         display the corresponding address.
-                        Regardless of the chosen method, the entry point is located at <span id="inline-code">0x401000</span>.
+                        Regardless of the chosen method, the entry point is located at <span
+                            id="inline-code">0x401000</span>.
                     </p>
-                    <h3 id="post__content__title">Q3) What XOR key is used to decrypt the embedded shellcode in hex?</h3>
+                    <h3 id="post__content__title">Q3) What XOR key is used to decrypt the embedded shellcode in hex?
+                    </h3>
                     <p>
-                        XOR, exclusive OR, is a logical operator which can be used as a valid assembly instruction. Therefore, with the sample loaded into IDA, we can search for all XOR 
-                        operators within the binary. Since the binary for this challenge is relatively small, the result should not yield an abundance of results. In larger samples, 
+                        XOR, exclusive OR, is a logical operator which can be used as a valid assembly instruction.
+                        Therefore, with the sample loaded into IDA, we can search for all XOR
+                        operators within the binary. Since the binary for this challenge is relatively small, the result
+                        should not yield an abundance of results. In larger samples,
                         other, more refined techniques might be required instead of the simple IDA Python code below:
                     </p>
                     <pre class="language-python"><code>
@@ -163,19 +192,29 @@ while ea != idaapi.BADADDR and ea < end_ea:
     else:
         ea = idaapi.next_head(ea, end_ea)</code></pre><br>
                     <p>
-                        A total of 14 XOR operators were found. As you will see, for most of the identified XOR operators, the source and destination operands are the same register, 
-                        effectively clearing all data in the register. Therefore, we could clean up the code and negate all XOR instructions where the source and destination operand
-                        are the same register. This leaves us with a total of 2 results (<span id="inline-code">0x4010EA</span> and <span id="inline-code">0x401149</span>).
+                        A total of 14 XOR operators were found. As you will see, for most of the identified XOR
+                        operators, the source and destination operands are the same register,
+                        effectively clearing all data in the register. Therefore, we could clean up the code and negate
+                        all XOR instructions where the source and destination operand
+                        are the same register. This leaves us with a total of 2 results (<span
+                            id="inline-code">0x4010EA</span> and <span id="inline-code">0x401149</span>).
                         <br><br>
-                        To narrow down our results, we reflect on the challenge question. Since we know that some form of data (embedded shellcode) is being decrypted, we are 
-                        looking for an XOR operation inside a small blob which is continuously iterated over. Furthermore, based on the challenge question, we can assume that the XOR value 
-                        remains constant. 
+                        To narrow down our results, we reflect on the challenge question. Since we know that some form
+                        of data (embedded shellcode) is being decrypted, we are
+                        looking for an XOR operation inside a small blob which is continuously iterated over.
+                        Furthermore, based on the challenge question, we can assume that the XOR value
+                        remains constant.
                         <br><br>
-                        We see that within the loop that calls the XOR at <span id="inline-code">0x4010EA</span>, the XOR value in <span id="inline-code">esi</span>
-                        is updated. Therefore, we can safely conclude that the XOR operation at <span id="inline-code">0x401149</span>, which does not update the value in
-                        <span id="inline-code">bl</span> at all, contains the key that we are looking for. Based on static debugging, it is hard to identify the XOR key. As dynamic
-                        debugging would yield results in a faster manner, we will place a breakpoint on <span id="inline-code">0x401149</span> and run the binary to identify the value.
-                        Our breakpoint is successfully hit upon execution and using IDA Python we can retrieve the value for the <span id="inline-code">bl</span> register:
+                        We see that within the loop that calls the XOR at <span id="inline-code">0x4010EA</span>, the
+                        XOR value in <span id="inline-code">esi</span>
+                        is updated. Therefore, we can safely conclude that the XOR operation at <span
+                            id="inline-code">0x401149</span>, which does not update the value in
+                        <span id="inline-code">bl</span> at all, contains the key that we are looking for. Based on
+                        static debugging, it is hard to identify the XOR key. As dynamic
+                        debugging would yield results in a faster manner, we will place a breakpoint on <span
+                            id="inline-code">0x401149</span> and run the binary to identify the value.
+                        Our breakpoint is successfully hit upon execution and using IDA Python we can retrieve the value
+                        for the <span id="inline-code">bl</span> register:
                     </p>
                     <pre class="language-python"><code>
 import idaapi
@@ -188,96 +227,158 @@ print("BL = 0x%02X" %bl_val)</code></pre><br>
                     </p>
                     <div>
                         <img src="/img/malops_rokrat_3.png" alt="q3_answer" onclick="window.open(this.src, '_blank');"
-                            width="250", height="250" onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                            width="250" , height="250" onmouseover="this.style.cursor='zoom-in'"
+                            onmouseout="this.style.cursor='default'">
                     </div><br>
-                    <h3 id="post__content__title">Q4) What is the memory protection constant used when allocating memory for the payload in hex?</h3>
+                    <h3 id="post__content__title">Q4) What is the memory protection constant used when allocating memory
+                        for the payload in hex?</h3>
                     <p>
-                        Whilst answering the previous question we have identified that shellcode was being decrypted. Working with the assumption that the decrypted shellcode will be 
-                        executed, we can analyze how this can be achieved. One way to achieve execution of shellcode is by injecting it into an existing process. To achieve shellcode 
-                        injection in a straightforward way, a simple three step process needs to be followed: 
-                        <ol>
-                            <li>Allocate space in a process, often done using <span id="inline-code">VirtualAlloc</span>,</li>
-                            <li>Write the shellcode into the allocated memory space, using <span id="inline-code">WriteProcessMemory</span></li>
-                            <li>Execute the injected shellcode by calling <span id="inline-code">CreateRemoteThread</span></li>
-                        </ol>
-                        Since this method is well-known and classed as the <a href="https://www.elastic.co/blog/ten-process-injection-techniques-technical-survey-common-and-trending-process">classic injection</a>, detection engines are capable of detecting the execution of these three calls in succession and would block the injection 
-                        behavior. One way malware authors obfuscate these calls is by using Windows API hashing. API hashing is used to avoid the straightforward inspection of API 
-                        function calls in the Import Address Table of a binary. Malware authors use the Process Environment Block (PEB) which contains information about loaded modules
-                        (like kernel32.dll) mapped into the address space. During runtime, the Process Environment Block can be used to dynamically resolve functions in a particular DLL. 
-                        To obfuscate the names that are looked for, the function names (API's) are hashed by the malware authors. 
-                        <br><br>
-                        Based on this knowledge, we can continue our analysis. We already determined that the shellcode decryption takes place in <span id="inline-code">sub_401134</span>.
-                        We see that directly after the decryption, <span id="inline-code">sub_4012C2</span> is called. This function calls <span id="inline-code">sub_401041</span> multiple
-                        times where the first argument is always a hex string. We see that at the beginning of <span id="inline-code">sub_401041</span>, the Flink of the InLoadOrderModuleList
-                        is retrieved from the PEB. As a result, we can conclude that the first argument for each call to <span id="inline-code">sub_401041</span> is the API hash of a module. 
-                        <br><br>
-                        Now, the question specifically asks for the memory protection constant. This is the final argument of the <span id="inline-code">VirtualAlloc</span> API, as documented
-                        by <a href="https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc">MSDN</a>. In order to both write and execute the shellcode, the 
-                        protection constant should, at least, contain the <span id="inline-code">PAGE_EXECUTE_READWRITE</span> constant, or <span id="inline-code">0x40</span> in hex.
-                        <br><br>
-                        If we closely inspect the <span id="inline-code">VirtualAlloc</span> function, we see that the second to last argument is the memory allocation type parameter. This 
-                        parameter requires at least <span id="inline-code">MEM_COMMIT</span> and <span id="inline-code">MEM_RESERVE</span>, or <span id="inline-code">0x3000</span> in hex. 
-                        Upon closer inspection of all calls to <span id="inline-code">sub_401041</span>, we discover that the first one exactly matches both the allocation type and protection 
-                        constant.
-                        <br><br>
-                        Based on this finding, we can assume that the memory protection constant used for allocating memory for the shellcode is: <span id="inline-code">0x40</span>.
-                        <img class="lazy" data-src="/img/malops_rokrat_4.png" alt="q4_answer">
+                        Whilst answering the previous question we have identified that shellcode was being decrypted.
+                        Working with the assumption that the decrypted shellcode will be
+                        executed, we can analyze how this can be achieved. One way to achieve execution of shellcode is
+                        by injecting it into an existing process. To achieve shellcode
+                        injection in a straightforward way, a simple three step process needs to be followed:
+                    <ol>
+                        <li>Allocate space in a process, often done using <span id="inline-code">VirtualAlloc</span>,
+                        </li>
+                        <li>Write the shellcode into the allocated memory space, using <span
+                                id="inline-code">WriteProcessMemory</span></li>
+                        <li>Execute the injected shellcode by calling <span id="inline-code">CreateRemoteThread</span>
+                        </li>
+                    </ol>
+                    Since this method is well-known and classed as the <a
+                        href="https://www.elastic.co/blog/ten-process-injection-techniques-technical-survey-common-and-trending-process">classic
+                        injection</a>, detection engines are capable of detecting the execution of these three calls in
+                    succession and would block the injection
+                    behavior. One way malware authors obfuscate these calls is by using Windows API hashing. API hashing
+                    is used to avoid the straightforward inspection of API
+                    function calls in the Import Address Table of a binary. Malware authors use the Process Environment
+                    Block (PEB) which contains information about loaded modules
+                    (like kernel32.dll) mapped into the address space. During runtime, the Process Environment Block can
+                    be used to dynamically resolve functions in a particular DLL.
+                    To obfuscate the names that are looked for, the function names (API's) are hashed by the malware
+                    authors.
+                    <br><br>
+                    Based on this knowledge, we can continue our analysis. We already determined that the shellcode
+                    decryption takes place in <span id="inline-code">sub_401134</span>.
+                    We see that directly after the decryption, <span id="inline-code">sub_4012C2</span> is called. This
+                    function calls <span id="inline-code">sub_401041</span> multiple
+                    times where the first argument is always a hex string. We see that at the beginning of <span
+                        id="inline-code">sub_401041</span>, the Flink of the InLoadOrderModuleList
+                    is retrieved from the PEB. As a result, we can conclude that the first argument for each call to
+                    <span id="inline-code">sub_401041</span> is the API hash of a module.
+                    <br><br>
+                    Now, the question specifically asks for the memory protection constant. This is the final argument
+                    of the <span id="inline-code">VirtualAlloc</span> API, as documented
+                    by <a
+                        href="https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc">MSDN</a>.
+                    In order to both write and execute the shellcode, the
+                    protection constant should, at least, contain the <span
+                        id="inline-code">PAGE_EXECUTE_READWRITE</span> constant, or <span id="inline-code">0x40</span>
+                    in hex.
+                    <br><br>
+                    If we closely inspect the <span id="inline-code">VirtualAlloc</span> function, we see that the
+                    second to last argument is the memory allocation type parameter. This
+                    parameter requires at least <span id="inline-code">MEM_COMMIT</span> and <span
+                        id="inline-code">MEM_RESERVE</span>, or <span id="inline-code">0x3000</span> in hex.
+                    Upon closer inspection of all calls to <span id="inline-code">sub_401041</span>, we discover that
+                    the first one exactly matches both the allocation type and protection
+                    constant.
+                    <br><br>
+                    Based on this finding, we can assume that the memory protection constant used for allocating memory
+                    for the shellcode is: <span id="inline-code">0x40</span>.
+                    <img class="lazy" data-src="/img/malops_rokrat_4.png" alt="q4_answer">
                     </p>
-                    <h3 id="post__content__title">Q5) What is the hash value used to find the VirtualAlloc function in hex?</h3>
+                    <h3 id="post__content__title">Q5) What is the hash value used to find the VirtualAlloc function in
+                        hex?</h3>
                     <p>
-                        By answering question 4, we identified that <span id="inline-code">sub_401041</span> is the function responsible for finding the correct API to perform the
-                        shellcode injection. Additionally, we identified that the first function was VirtualAlloc as it used the memory protection constant. Therefore, the hash value 
+                        By answering question 4, we identified that <span id="inline-code">sub_401041</span> is the
+                        function responsible for finding the correct API to perform the
+                        shellcode injection. Additionally, we identified that the first function was VirtualAlloc as it
+                        used the memory protection constant. Therefore, the hash value
                         used to find the VirtualAlloc function was: <span id="inline-code">0xAA7ADB76</span>.
                         <img class="lazy" data-src="/img/malops_rokrat_5.png" alt="q5_answer">
                     </p>
-                    <h3 id="post__content__title">Q6) How many bits does the DLL name hash algorithm rotate right (ROR) by in hex?</h3>
+                    <h3 id="post__content__title">Q6) How many bits does the DLL name hash algorithm rotate right (ROR)
+                        by in hex?</h3>
                     <p>
-                        Now that we have identified the DLL name hash algorithm function, we can easily search for the <span id="inline-code">ror</span> instruction. We identify that 
-                        the ror instruction is used twice. Tracing the input hash value which was supplied as one of the function's arguments, we can conclude that the 
-                        <span id="inline-code">ror</span> instruction uses the fixed size of <span id="inline-code">0xB</span> to rotate the DLL name hash right.
-                        <div>
+                        Now that we have identified the DLL name hash algorithm function, we can easily search for the
+                        <span id="inline-code">ror</span> instruction. We identify that
+                        the ror instruction is used twice. Tracing the input hash value which was supplied as one of the
+                        function's arguments, we can conclude that the
+                        <span id="inline-code">ror</span> instruction uses the fixed size of <span
+                            id="inline-code">0xB</span> to rotate the DLL name hash right.
+                    <div>
                         <img class="lazy" data-src="/img/malops_rokrat_6.png" alt="q6_answer">
-                    </p>
-                    <h3 id="post__content__title">Q7) What value is checked to verify a valid PE header in hex?</h3>
-                    <p>
-                        Previously, we have identified that the function at <span id="inline-code">0x401134</span> decrypts the embedded shellcode. This function subsequently calls the 
-                        function at <span id="inline-code">0x4012C2</span>. We have identified that this function is responsible for calling the import hashing function. However, during
-                        our analysis, we have disregarded the first call being made by <span id="inline-code">0x401CC2C</span> to the function at <span id="inline-code">0x4011F9</span>.
-                        If we dive into this function we identify that it loads the first 2 bytes from the decrypted shellcode into registers before calling <span id="inline-code">0x401164</span>. 
-                        <br><br>
-                        By analyzing <span id="inline-code">0x401164</span> we learn that a check will take place to ensure the first two bytes are corresponding to <span id="inline-code">0x4A5D</span>
-                        or the well-known <span id="inline-code">MZ</span>-header. However, the MZ-header is not part of the PE-header. If we continue our analysis, we see a second 
-                        function being called from <span id="inline-code">0x4011F9</span>. If the <span id="inline-code">MZ</span>-header cannot be found, it will call 
-                        <span id="inline-code">0x401197</span>, which will first try another method to identify the <span id="inline-code">MZ-header</span>. If that fails, it will read 
-                        a 32-bit value (4-bytes) from the decrypted shellcode at offset <span id="inline-code">0x3C</span>. This offset is the default offset and length for the PE 
-                        identifier: <span id="inline-code">PE\0\0</span>. 
-                        <br><br>
-                        We subsequently see a compare taking place, comparing the just read buffer against <span id="inline-code">0x4550</span>. Therefore, we can conclude that the value that is being
-                        checked to verify a valid PE header in hex is <span id="inline-code">0x4550</span>.
-                        <img class="lazy" data-src="/img/malops_rokrat_7.png" alt="q7_answer">        
-                    </p>
-                    <h3 id="post__content__title">Q8) What is the hexadecimal offset value used in the code to access the export directory in the PE file's Optional Header data directory?</h3>
-                    <p>
-                        By default, the Export Directory's Relative Virtual Address can be found at offset <span id="inline-code">0x78</span> from the start of the NT headers.
-                    </p>
-                    <h3 id="post__content__title">Q9) How many API functions are resolved using hashing in the entire binary?</h3>
-                    <p>
-                        We have previously identified the function at <span id="inline-code">0x401041</span> to be the import hashing function. Using IDA, we can cross reference the 
-                        amount of times that this function is being called. To do so, we navigate (CTRL+G) to the address 0x401041. We then click on <span id="inline-code">sub_401041</span>
-                        and hit "X". This brings up the window, showing that the function has been called a total of 7 times.
-                        <img class="lazy" data-src="/img/malops_rokrat_9.png" alt="q9_answer">
-                    </p>
-                    <h3 id="post__content__title">Q10) How many bytes of headers are skipped to reach the start of the decrypted data?</h3>
-                    <p>
-                        We did not previously properly describe the analysis of the decryption function <span id="inline-code">sub_401134</span>. If we have a closer look at this function, we can state that the 
-                        blob of shellcode resides in the <span id="inline-code">eax</span> register within the decryption loop in the decryption function. However, it originates from <span id="inline-code">ecx</span>. If we then look at
-                        all the usages of <span id="inline-code">ecx</span> within <span id="inline-code">sub_401134</span> we see that the first byte of the blob is used to set <span id="inline-code">bl</span>, which corresponds to the XOR decryption key. Furthermore, 
-                        we see that the subsequent 4 bytes are being stored in <span id="inline-code">edx</span>, which later gets moved to <span id="inline-code">esi</span> and is decremented for each byte that gets decrypted. Then, the 
-                        pointer in <span id="inline-code">ecx</span> is incremented by 5, moving the pointer to the actual start of the buffer. Therefore, we can conclude that 5 bytes of headers (1 byte
-                        for the XOR key and 4 bytes for the length of data) are skipped to reach the start of the decrypted data.
-                        <img class="lazy" data-src="/img/malops_rokrat_10.png" alt="q10_answer">
-                    </p>
-                </div>
+                        </p>
+                        <h3 id="post__content__title">Q7) What value is checked to verify a valid PE header in hex?</h3>
+                        <p>
+                            Previously, we have identified that the function at <span id="inline-code">0x401134</span>
+                            decrypts the embedded shellcode. This function subsequently calls the
+                            function at <span id="inline-code">0x4012C2</span>. We have identified that this function is
+                            responsible for calling the import hashing function. However, during
+                            our analysis, we have disregarded the first call being made by <span
+                                id="inline-code">0x401CC2C</span> to the function at <span
+                                id="inline-code">0x4011F9</span>.
+                            If we dive into this function we identify that it loads the first 2 bytes from the decrypted
+                            shellcode into registers before calling <span id="inline-code">0x401164</span>.
+                            <br><br>
+                            By analyzing <span id="inline-code">0x401164</span> we learn that a check will take place to
+                            ensure the first two bytes are corresponding to <span id="inline-code">0x4A5D</span>
+                            or the well-known <span id="inline-code">MZ</span>-header. However, the MZ-header is not
+                            part of the PE-header. If we continue our analysis, we see a second
+                            function being called from <span id="inline-code">0x4011F9</span>. If the <span
+                                id="inline-code">MZ</span>-header cannot be found, it will call
+                            <span id="inline-code">0x401197</span>, which will first try another method to identify the
+                            <span id="inline-code">MZ-header</span>. If that fails, it will read
+                            a 32-bit value (4-bytes) from the decrypted shellcode at offset <span
+                                id="inline-code">0x3C</span>. This offset is the default offset and length for the PE
+                            identifier: <span id="inline-code">PE\0\0</span>.
+                            <br><br>
+                            We subsequently see a compare taking place, comparing the just read buffer against <span
+                                id="inline-code">0x4550</span>. Therefore, we can conclude that the value that is being
+                            checked to verify a valid PE header in hex is <span id="inline-code">0x4550</span>.
+                            <img class="lazy" data-src="/img/malops_rokrat_7.png" alt="q7_answer">
+                        </p>
+                        <h3 id="post__content__title">Q8) What is the hexadecimal offset value used in the code to
+                            access the export directory in the PE file's Optional Header data directory?</h3>
+                        <p>
+                            By default, the Export Directory's Relative Virtual Address can be found at offset <span
+                                id="inline-code">0x78</span> from the start of the NT headers.
+                        </p>
+                        <h3 id="post__content__title">Q9) How many API functions are resolved using hashing in the
+                            entire binary?</h3>
+                        <p>
+                            We have previously identified the function at <span id="inline-code">0x401041</span> to be
+                            the import hashing function. Using IDA, we can cross reference the
+                            amount of times that this function is being called. To do so, we navigate (CTRL+G) to the
+                            address 0x401041. We then click on <span id="inline-code">sub_401041</span>
+                            and hit "X". This brings up the window, showing that the function has been called a total of
+                            7 times.
+                            <img class="lazy" data-src="/img/malops_rokrat_9.png" alt="q9_answer">
+                        </p>
+                        <h3 id="post__content__title">Q10) How many bytes of headers are skipped to reach the start of
+                            the decrypted data?</h3>
+                        <p>
+                            We did not previously properly describe the analysis of the decryption function <span
+                                id="inline-code">sub_401134</span>. If we have a closer look at this function, we can
+                            state that the
+                            blob of shellcode resides in the <span id="inline-code">eax</span> register within the
+                            decryption loop in the decryption function. However, it originates from <span
+                                id="inline-code">ecx</span>. If we then look at
+                            all the usages of <span id="inline-code">ecx</span> within <span
+                                id="inline-code">sub_401134</span> we see that the first byte of the blob is used to set
+                            <span id="inline-code">bl</span>, which corresponds to the XOR decryption key. Furthermore,
+                            we see that the subsequent 4 bytes are being stored in <span id="inline-code">edx</span>,
+                            which later gets moved to <span id="inline-code">esi</span> and is decremented for each byte
+                            that gets decrypted. Then, the
+                            pointer in <span id="inline-code">ecx</span> is incremented by 5, moving the pointer to the
+                            actual start of the buffer. Therefore, we can conclude that 5 bytes of headers (1 byte
+                            for the XOR key and 4 bytes for the length of data) are skipped to reach the start of the
+                            decrypted data.
+                            <img class="lazy" data-src="/img/malops_rokrat_10.png" alt="q10_answer">
+                        </p>
+                    </div>
             </article>
         </div>
         <!-- end post -->

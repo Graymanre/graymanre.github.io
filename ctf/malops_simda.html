@@ -2,30 +2,45 @@
 <html lang="en">
 
 <head>
+    <title>GraymanRe - Simda Botnet MalOps Challenge</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Analyzing the Simda Botnet Malware - MalOps Challenge" />
+
     <meta property="og:title" content="GraymanRe - Simda Botnet MalOps Challenge" />
     <meta property="og:description" content="Analyzing the Simda Botnet Malware - MalOps Challenge" />
-    <meta property="og:image" content="https://graymanre.github.io/img/simdabotnet.webp" />
-    <meta property="og:url" content="https://graymanre.github.io/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://graymanre.github.io/img/malops_simda.webp" />
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/malops_simda.webp" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content="malops simda" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/ctf/malops_simda.html" />
+    <meta property="og:updated_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:published_time" content="2025-10-08T00:00:00+00:00" />
+    <meta property="article:modified_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:section" content="ctf" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://graymanre.github.io/img/simdabotnet.webp" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/malops_simda.webp" />
     <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>GraymanRe - Simda Botnet Malware Analysis MalOps Challenge</title>
+    <link rel="canonical" href="https://graymanre.github.io/ctf/malops_simda.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
 
-    <link rel="canonical" href="https://graymanre.github.io/">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/prism.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -65,7 +80,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -85,14 +101,14 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span id="time"></span> min read <time class="post__date" datetime="2025-10-08T00:00:00+02:00">08 October 2025</time>
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2025-10-08T00:00:00+02:00">08 October 2025</time>
                             </div>
                             <h2 class="post__title">Analyzing Simda Botnet Malware - MalOps Challenge</h2>
                             <div class="post__bottom">
                                 <div class="post__author">
                                     <a href="/contact/" aria-label="GraymanRe">
-                                        <img class="post__author-image"
-                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
@@ -115,166 +131,263 @@
                 <div class="post__content">
                     <h3 id="post__content__title">Introduction</h3>
                     <p>
-                        MalOps released a new challenge and that means it is CTF time again! 
-                        This time around, we are analyzing the Simda botnet malware using IDA Pro using both static and dynamic debugging.
-                        Strap in, because we are going on a rollercoaster ride of encrypted payloads and anti-analysis techniques.
+                        MalOps released a new challenge and that means it is CTF time again!
+                        This time around, we are analyzing the Simda botnet malware using IDA Pro using both static and
+                        dynamic debugging.
+                        Strap in, because we are going on a rollercoaster ride of encrypted payloads and anti-analysis
+                        techniques.
                     </p>
-                    <h3 id="post__content__title">Q1) What is the first windows API used by the malware to allocate memory?</h3>
+                    <h3 id="post__content__title">Q1) What is the first windows API used by the malware to allocate
+                        memory?</h3>
                     <p>
-                        The first Windows API that is used by the malware to allocate memory is <span id="inline-code">VirtualAllocEx</span>. After analyzing
-                        the imports, it appears very likely that all required APIs are imported using a combination of <span id="inline-code">LoadLibrayA</span>
-                        and <span id="inline-code">GetProcAddress</span>. When cross-referencing calls to <span id="inline-code">GetProcAddress</span>, we
-                        see that it is actually only used once, in the function <span id="inline-code">sub_4016B0</span> and it is used to import 
+                        The first Windows API that is used by the malware to allocate memory is <span
+                            id="inline-code">VirtualAllocEx</span>. After analyzing
+                        the imports, it appears very likely that all required APIs are imported using a combination of
+                        <span id="inline-code">LoadLibrayA</span>
+                        and <span id="inline-code">GetProcAddress</span>. When cross-referencing calls to <span
+                            id="inline-code">GetProcAddress</span>, we
+                        see that it is actually only used once, in the function <span id="inline-code">sub_4016B0</span>
+                        and it is used to import
                         <span id="inline-code">VirtualAllocEx</span>, which gets called soon after.
                         <img class="lazy" data-src="/img/malops_simda_1.png" alt="q1_answer">
                     </p>
-                    <h3 id="post__content__title">Q2) What does the second parameter given to RegOpenKeyA call point to?</h3>
+                    <h3 id="post__content__title">Q2) What does the second parameter given to RegOpenKeyA call point to?
+                    </h3>
                     <p>
-                        The second parameter given to <span id="inline-code">RegOpenKeyA</span> points to the string <span id="inline-code">clsid\{d66d6f99-cdaa-11d0-b822-00c04fc9b31f}</span>.
-                        In the function <span id="inline-code">sub_401170</span>, we identify that the function <span id="inline-code">RegOpenKeyA</span> is stored into the
-                        variable <span id="inline-code">dword_4CA0DC</span>. If we cross-reference this variable, we see that is called twice. 
+                        The second parameter given to <span id="inline-code">RegOpenKeyA</span> points to the string
+                        <span id="inline-code">clsid\{d66d6f99-cdaa-11d0-b822-00c04fc9b31f}</span>.
+                        In the function <span id="inline-code">sub_401170</span>, we identify that the function <span
+                            id="inline-code">RegOpenKeyA</span> is stored into the
+                        variable <span id="inline-code">dword_4CA0DC</span>. If we cross-reference this variable, we see
+                        that is called twice.
                         <br>
-                        Now, arguments are passed from last to first, meaning the second argument given to the function, will be the second to last in our IDA view. Furthermore,
-                        because this is an x86 executable, the arguments are given to a function using the instruction <span id="inline-code">push</span>. Thus, we see that the
-                        second to last push operation obtains its value from the variable <span id="inline-code">off_4CA040</span> which represents the string <span id="inline-code">clsid\{d66d6f99-cdaa-11d0-b822-00c04fc9b31f}</span>.
+                        Now, arguments are passed from last to first, meaning the second argument given to the function,
+                        will be the second to last in our IDA view. Furthermore,
+                        because this is an x86 executable, the arguments are given to a function using the instruction
+                        <span id="inline-code">push</span>. Thus, we see that the
+                        second to last push operation obtains its value from the variable <span
+                            id="inline-code">off_4CA040</span> which represents the string <span
+                            id="inline-code">clsid\{d66d6f99-cdaa-11d0-b822-00c04fc9b31f}</span>.
                         <img class="lazy" data-src="/img/malops_simda_2.png" alt="q2_answer">
                     </p>
-                    <h3 id="post__content__title">Q3) The malware dynamically resolves Windows API function names in memory, and decrypts a large blob of data, which function is responsible for grabbing the encrypted blobs? Provide address in hex</h3>
+                    <h3 id="post__content__title">Q3) The malware dynamically resolves Windows API function names in
+                        memory, and decrypts a large blob of data, which function is responsible for grabbing the
+                        encrypted blobs? Provide address in hex</h3>
                     <p>
-                        The function responsible for grabbing the encrypted blobs is located at address <span id="inline-code">0x4011B0</span>.
+                        The function responsible for grabbing the encrypted blobs is located at address <span
+                            id="inline-code">0x4011B0</span>.
                         <br>
-                        It was previously identified that <span id="inline-code">sub_4016B0</span> imports the <span id="inline-code">VirtualAllocEx</span> function and calls it. The result is the base
-                        address of the allocated region pages. This result is used in a <span id="inline-code">while (1)</span> loop as it is passed to the function <span id="inline-code">sub_4011B0</span>.
+                        It was previously identified that <span id="inline-code">sub_4016B0</span> imports the <span
+                            id="inline-code">VirtualAllocEx</span> function and calls it. The result is the base
+                        address of the allocated region pages. This result is used in a <span id="inline-code">while
+                            (1)</span> loop as it is passed to the function <span id="inline-code">sub_4011B0</span>.
                         By analyzing this function, we see that it reads <span id="inline-code">0x20B</span> bytes.
                     </p>
-                    <h3 id="post__content__title">Q4) The malware uses a dynamic key for decryption, What is the initial decryption key used to decrypt the encrypted blobs (word size)?</h3>
+                    <h3 id="post__content__title">Q4) The malware uses a dynamic key for decryption, What is the initial
+                        decryption key used to decrypt the encrypted blobs (word size)?</h3>
                     <p>
-                        The initial decryption key that is being used is <span id="inline-code">0xB0B6</span>. In function <span id="inline-code">sub_401650</span>, we identify a XOR
-                        operation which is performed on the encrypted blobs. The static value initially supplied to this function represents the initial decryption key. As <span id="inline-code">sub_401000</span>
-                        is the caller, we identify in this function that the value <span id="inline-code">0xB0B6</span> is passed to it.
+                        The initial decryption key that is being used is <span id="inline-code">0xB0B6</span>. In
+                        function <span id="inline-code">sub_401650</span>, we identify a XOR
+                        operation which is performed on the encrypted blobs. The static value initially supplied to this
+                        function represents the initial decryption key. As <span id="inline-code">sub_401000</span>
+                        is the caller, we identify in this function that the value <span id="inline-code">0xB0B6</span>
+                        is passed to it.
                         <img class="lazy" data-src="/img/malops_simda_4.png" alt="q4_answer">
                     </p>
                     <h3 id="post__content__title">Q5) What is the name of the first Windows API function decrypted?</h3>
                     <p>
-                        So far, we know that function <span id="inline-code">sub_4016B0</span> is responsible for retrieving the encrypted blobs. Furthermore, we
-                        know that the pointer to the encrypted blobs is then stored in <span id="inline-code">dword_4CA0C8</span>. This variable is then passed
-                        as input to function <span id="inline-code">sub_401000</span> which subsequently retrieves a fixed set of bytes and supplies this together
-                        with the initial decryption key to <span id="inline-code">sub_401650</span>. 
+                        So far, we know that function <span id="inline-code">sub_4016B0</span> is responsible for
+                        retrieving the encrypted blobs. Furthermore, we
+                        know that the pointer to the encrypted blobs is then stored in <span
+                            id="inline-code">dword_4CA0C8</span>. This variable is then passed
+                        as input to function <span id="inline-code">sub_401000</span> which subsequently retrieves a
+                        fixed set of bytes and supplies this together
+                        with the initial decryption key to <span id="inline-code">sub_401650</span>.
                         <br><br>
-                        We can use dynamic debugging to then follow the decryption process. In <span id="inline-code">sub_401000</span>, the register <span id="inline-code">[ebp+arg_0]</span>
-                        holds the pointer to the encrypted blob. So we can add a breakpoint on address <span id="inline-code">0x401046</span> and analyze <span id="inline-code">eax</span>
-                        to see the encrypted data. Following along, the hardcoded key <span id="inline-code">0xB0B6</span> gets incremented before it is passed to <span id="inline-code">sub_401650</span>.
+                        We can use dynamic debugging to then follow the decryption process. In <span
+                            id="inline-code">sub_401000</span>, the register <span id="inline-code">[ebp+arg_0]</span>
+                        holds the pointer to the encrypted blob. So we can add a breakpoint on address <span
+                            id="inline-code">0x401046</span> and analyze <span id="inline-code">eax</span>
+                        to see the encrypted data. Following along, the hardcoded key <span
+                            id="inline-code">0xB0B6</span> gets incremented before it is passed to <span
+                            id="inline-code">sub_401650</span>.
                         <br><br>
-                        Since all of this happens in a loop, we can safely traverse the loop a few times and see the changes being written to the address which 
-                        <span id="inline-code">dword_4CA230</span> points to. Note that the offset is calculated using the incremented value stored in <span id="inline-code">dword_4CA230</span>.
-                        Finally, we discover that the first decrypted value is a Windows API corresponding to <span id="inline-code">GetProcAddress</span>.
+                        Since all of this happens in a loop, we can safely traverse the loop a few times and see the
+                        changes being written to the address which
+                        <span id="inline-code">dword_4CA230</span> points to. Note that the offset is calculated using
+                        the incremented value stored in <span id="inline-code">dword_4CA230</span>.
+                        Finally, we discover that the first decrypted value is a Windows API corresponding to <span
+                            id="inline-code">GetProcAddress</span>.
                         <img class="lazy" data-src="/img/malops_simda_5.png" alt="q5_answer">
                     </p>
-                    <h3 id="post__content__title">Q6) What is the address of the ret instruction responsible for jumping to decrypted shellcode?</h3>
+                    <h3 id="post__content__title">Q6) What is the address of the ret instruction responsible for jumping
+                        to decrypted shellcode?</h3>
                     <p>
-                        Once <span id="inline-code">0x401167</span> returns, we see that the offset to jump to in the shellcode is stored in <span id="inline-code">dword_4CA094</span>.
-                        Subsequently, the address of <span id="inline-code">sub_401130</span> is stored in eax, it is then pushed onto the stack and then <span id="inline-code">start</span>
-                        returns. This means basically, that instead of exiting, it actually points <span id="inline-code">eip</span> to <span id="inline-code">sub_401130</span>.
+                        Once <span id="inline-code">0x401167</span> returns, we see that the offset to jump to in the
+                        shellcode is stored in <span id="inline-code">dword_4CA094</span>.
+                        Subsequently, the address of <span id="inline-code">sub_401130</span> is stored in eax, it is
+                        then pushed onto the stack and then <span id="inline-code">start</span>
+                        returns. This means basically, that instead of exiting, it actually points <span
+                            id="inline-code">eip</span> to <span id="inline-code">sub_401130</span>.
                         <br><br>
-                        By analyzing <span id="inline-code">sub_401130</span>, we see that the pointer to the shellcode in <span id="inline-code">dword_4CA094</span> is pushed onto the stack
-                        and then the function returns. Once again, this means that execution is transferred to the shellcode. 
+                        By analyzing <span id="inline-code">sub_401130</span>, we see that the pointer to the shellcode
+                        in <span id="inline-code">dword_4CA094</span> is pushed onto the stack
+                        and then the function returns. Once again, this means that execution is transferred to the
+                        shellcode.
                         <img class="lazy" data-src="/img/malops_simda_6.png" alt="q6_answer">
                     </p>
-                    <h3 id="post__content__title">Q7) Based on the memory allocated by the malware, what is the offset of the first instruction executed after decryption in hex?</h3>
+                    <h3 id="post__content__title">Q7) Based on the memory allocated by the malware, what is the offset
+                        of the first instruction executed after decryption in hex?</h3>
                     <p>
-                        By answering question 6, we identified that the address pointing to the start of the decrypted shellcode blob was stored in 
-                        <span id="inline-code">dword_4CA094</span>. This address was incremented with a hardcoded offset: <span id="inline-code">0x86ED0</span>.
+                        By answering question 6, we identified that the address pointing to the start of the decrypted
+                        shellcode blob was stored in
+                        <span id="inline-code">dword_4CA094</span>. This address was incremented with a hardcoded
+                        offset: <span id="inline-code">0x86ED0</span>.
                         <br>
                         <img class="lazy" data-src="/img/malops_simda_7.png" alt="q7_answer">
                     </p>
-                    <h3 id="post__content__title">Q8) What is the second API called by the malware after decryption?</h3>
+                    <h3 id="post__content__title">Q8) What is the second API called by the malware after decryption?
+                    </h3>
                     <p>
-                        Now, we are still debugging and have entered the shellcode. If we analyze the memory buffer in ecx, we are at the top of the initial/main
-                        function in the shellcode. Furthermore, by analyzing the instructions, we see multiple calls to addresses lower on the stack. By doing some
-                        analysis, we can determine the exact range of the shellcode. The start of the shellcode is at <span id="inline-code">0x2306580</span> and
+                        Now, we are still debugging and have entered the shellcode. If we analyze the memory buffer in
+                        ecx, we are at the top of the initial/main
+                        function in the shellcode. Furthermore, by analyzing the instructions, we see multiple calls to
+                        addresses lower on the stack. By doing some
+                        analysis, we can determine the exact range of the shellcode. The start of the shellcode is at
+                        <span id="inline-code">0x2306580</span> and
                         ends at <span id="inline-code">0x2306FC8</span>.
                         <br><br>
-                        To make my own life easier, I select this entire block in memory, save it to a new executable and open this new executable in IDA.
-                        Then, I go to the last function <span id="inline-code">sub_950</span> because this is the entrypoint of the shellcode. Now, we can
+                        To make my own life easier, I select this entire block in memory, save it to a new executable
+                        and open this new executable in IDA.
+                        Then, I go to the last function <span id="inline-code">sub_950</span> because this is the
+                        entrypoint of the shellcode. Now, we can
                         analyze which functions are called and what the second API call is.
                         <br><br>
-                        The second call the malware makes is to <span id="inline-code">sub_F0</span>, where we see that <span id="inline-code">LoadLibraryExA</span>
-                        is stored in <span id="inline-code">[ebp+var_28]</span> which is then loaded into <span id="inline-code">eax</span>. Furthermore we also
-                        see that <span id="inline-code">kernel32.dll</span> is stored into a variable. Therefore, we can conclude that it is likely that a pointer
-                        to the function <span id="inline-code">LoadLibraryExA</span> in <span id="inline-code">kernel32.dll</span> gets loaded and subsequently calls.
+                        The second call the malware makes is to <span id="inline-code">sub_F0</span>, where we see that
+                        <span id="inline-code">LoadLibraryExA</span>
+                        is stored in <span id="inline-code">[ebp+var_28]</span> which is then loaded into <span
+                            id="inline-code">eax</span>. Furthermore we also
+                        see that <span id="inline-code">kernel32.dll</span> is stored into a variable. Therefore, we can
+                        conclude that it is likely that a pointer
+                        to the function <span id="inline-code">LoadLibraryExA</span> in <span
+                            id="inline-code">kernel32.dll</span> gets loaded and subsequently calls.
                         <img class="lazy" data-src="/img/malops_simda_8.png" alt="q8_answer">
                     </p>
-                    <h3 id="post__content__title">Q9) The malware decrypts another part in memory with another dynamic key, what is the fixed addition value to the key in hex (word size)?</h3>
+                    <h3 id="post__content__title">Q9) The malware decrypts another part in memory with another dynamic
+                        key, what is the fixed addition value to the key in hex (word size)?</h3>
                     <p>
-                        By now, we can either continue statically analzying the binary, or performing dynamic analysis by running & debugging the shellcode.
-                        Whatever the preferred option, we will notice that the <span id="inline-code">main</span> function performs multiple actions, one of which
-                        is setting up the functions to allocate some memory in which the second encrypted part is stored. Eventually, we notice that in 
-                        <span id="inline-code">sub_900</span>, this block is decrypted. In this decryption loop, we see a straightforward <span id="inline-code">add</span>
+                        By now, we can either continue statically analzying the binary, or performing dynamic analysis
+                        by running & debugging the shellcode.
+                        Whatever the preferred option, we will notice that the <span id="inline-code">main</span>
+                        function performs multiple actions, one of which
+                        is setting up the functions to allocate some memory in which the second encrypted part is
+                        stored. Eventually, we notice that in
+                        <span id="inline-code">sub_900</span>, this block is decrypted. In this decryption loop, we see
+                        a straightforward <span id="inline-code">add</span>
                         operation which adds <span id="inline-code">0x03E9</span> to the dynamic key.
                         <img class="lazy" data-src="/img/malops_simda_9.png" alt="q9_answer">
                     </p>
-                    <h3 id="post__content__title">Q10) There are 3 hardcoded IPs, list them in the format: IP1,IP2,IP3 (same order as found)</h3>
+                    <h3 id="post__content__title">Q10) There are 3 hardcoded IPs, list them in the format: IP1,IP2,IP3
+                        (same order as found)</h3>
                     <p>
-                        Whilst debugging, we will now have set a breakpoint on the <span id="inline-code">mov esp, ebp</span> operation after the decryption block.
-                        This would allow us to select the memory, for me starting at <span id="inline-code">2590000</span>, and save it to another file. As we notice,
-                        the binary data this time around starts with the header <span id="inline-code">MZ</span> which clearly denotes an executable.
-                        
-                        Once again, we can select the designated memory section containing the newly decrypted memory and save it to another executable. If we open a 
-                        new IDA session. We are working with the hypothesis that the signifance of 'hardcoded' means that if we run the strings utility, it will very
-                        likely show us the IP addresses. So this is the first starting point, and as expected, we find the following hardcoded IP addresses.
+                        Whilst debugging, we will now have set a breakpoint on the <span id="inline-code">mov esp,
+                            ebp</span> operation after the decryption block.
+                        This would allow us to select the memory, for me starting at <span
+                            id="inline-code">2590000</span>, and save it to another file. As we notice,
+                        the binary data this time around starts with the header <span id="inline-code">MZ</span> which
+                        clearly denotes an executable.
+
+                        Once again, we can select the designated memory section containing the newly decrypted memory
+                        and save it to another executable. If we open a
+                        new IDA session. We are working with the hypothesis that the signifance of 'hardcoded' means
+                        that if we run the strings utility, it will very
+                        likely show us the IP addresses. So this is the first starting point, and as expected, we find
+                        the following hardcoded IP addresses.
                         <span id="inline-code">212.117.176.187,79.133.196.94,69.57.173.222</span>
                     </p>
-                    <h3 id="post__content__title">Q11) What is the address of the function that perform anti analysis checks</h3>
+                    <h3 id="post__content__title">Q11) What is the address of the function that perform anti analysis
+                        checks</h3>
                     <p>
-                        To answer this question, we are working with the hypothesis that whenever the anti-analysis is performed, it will be performed quickly
-                        after initial execution of the malware as not to give away too many features and other indicators of compromise. 
+                        To answer this question, we are working with the hypothesis that whenever the anti-analysis is
+                        performed, it will be performed quickly
+                        after initial execution of the malware as not to give away too many features and other
+                        indicators of compromise.
                         <br>
-                        By analyzing the graph, we notice that at <span id="inline-code">0x402728</span> a large potentially continuous loop is entered. As such,
-                        we set the cut-off for looking for the anti-analysis checks at this address. Then, we go through all calls prior to this address and 
-                        we end up in function <span id="inline-code">sub_401B98</span>. Here, we see that a specific file <span id="inline-code">c:\\cgvi5r6i\\vgdgfd.72g</span>
-                        is checked for its existence and if the file does not exist, first the malware will loop over a list of processes and compare them against known 
-                        anti-malware processes. Subsequently, the malware loops over a list of registry keys for sandboxes and malware processes and checks if they exist.
+                        By analyzing the graph, we notice that at <span id="inline-code">0x402728</span> a large
+                        potentially continuous loop is entered. As such,
+                        we set the cut-off for looking for the anti-analysis checks at this address. Then, we go through
+                        all calls prior to this address and
+                        we end up in function <span id="inline-code">sub_401B98</span>. Here, we see that a specific
+                        file <span id="inline-code">c:\\cgvi5r6i\\vgdgfd.72g</span>
+                        is checked for its existence and if the file does not exist, first the malware will loop over a
+                        list of processes and compare them against known
+                        anti-malware processes. Subsequently, the malware loops over a list of registry keys for
+                        sandboxes and malware processes and checks if they exist.
                         <br>
-                        Therefore, we can conclude that the function <span id="inline-code">sub_401B98</span> is performing anti-analysis checks.
+                        Therefore, we can conclude that the function <span id="inline-code">sub_401B98</span> is
+                        performing anti-analysis checks.
                         <img class="lazy" data-src="/img/malops_simda_11.png" alt="q11_answer">
                     </p>
-                    <h3 id="post__content__title">Q12) The malware will use completely different 3 IPs than the hardcoded ones, list them in order: 7x.xxx.xx.xxx,2xx.xx.xx.xx,1xx.xxx.xx.xxx</h3>
+                    <h3 id="post__content__title">Q12) The malware will use completely different 3 IPs than the
+                        hardcoded ones, list them in order: 7x.xxx.xx.xxx,2xx.xx.xx.xx,1xx.xxx.xx.xxx</h3>
                     <p>
-                        We continue our analysis from <span id="inline-code">0x402295</span> onwards. If the anti-analysis checks fail, we end up at <span id="inline-code">0x402728</span>
-                        which results in the malware halting. If we pass the checks, we continue on towards <span id="inline-code">0x4022B0</span>. 
-                        Now, we previously identified the hardcoded IP addresses, two of which were found in <span id="inline-code">0x40A839</span> which is called at
-                        location <span id="inline-code">0x40243D</span>. Before this call though, we see multiple instances where dynamic string are loaded.
-                        If we run the debugger to this operation, we identify that the dynamic strings at <span id="inline-code">0x4023E0</span> and <span id="inline-code">0x4023E6</span>
-                        contain two IP addresses. If we then inspect the adjecent memory, we identify the third IP address which matches the expected pattern:
+                        We continue our analysis from <span id="inline-code">0x402295</span> onwards. If the
+                        anti-analysis checks fail, we end up at <span id="inline-code">0x402728</span>
+                        which results in the malware halting. If we pass the checks, we continue on towards <span
+                            id="inline-code">0x4022B0</span>.
+                        Now, we previously identified the hardcoded IP addresses, two of which were found in <span
+                            id="inline-code">0x40A839</span> which is called at
+                        location <span id="inline-code">0x40243D</span>. Before this call though, we see multiple
+                        instances where dynamic string are loaded.
+                        If we run the debugger to this operation, we identify that the dynamic strings at <span
+                            id="inline-code">0x4023E0</span> and <span id="inline-code">0x4023E6</span>
+                        contain two IP addresses. If we then inspect the adjecent memory, we identify the third IP
+                        address which matches the expected pattern:
                         <span id="inline-code">79.142.66.239,217.23.12.63,109.236.87.106</span>
                     </p>
-                    <h3 id="post__content__title">Q13) To which Windows environment variable-based folder does the malware copy itself?</h3>
+                    <h3 id="post__content__title">Q13) To which Windows environment variable-based folder does the
+                        malware copy itself?</h3>
                     <p>
-                        The lazy approach I opted for in this case was to search the hardcoded strings for the <span id="inline-code">%</span>-character as this
-                        is commonly used to identify variable-based folders. Luckily for us, only one result is found: <span id="inline-code">%appdata%\ScanDisc.exe</span>.
-                        When we analyze the code of the function <span id="inline-code">sub_405C5F</span>, we see that the string is passed to <span id="inline-code">ExpandEnvironmentStringA</span>
-                        before the result is then passed to the <span id="inline-code">CopyFileA</span> API, which takes as input the original file, which points to
-                        the malware sample in the current directory, as well as the destination file, which is the <span id="inline-code">%appdata%</span> folder.
+                        The lazy approach I opted for in this case was to search the hardcoded strings for the <span
+                            id="inline-code">%</span>-character as this
+                        is commonly used to identify variable-based folders. Luckily for us, only one result is found:
+                        <span id="inline-code">%appdata%\ScanDisc.exe</span>.
+                        When we analyze the code of the function <span id="inline-code">sub_405C5F</span>, we see that
+                        the string is passed to <span id="inline-code">ExpandEnvironmentStringA</span>
+                        before the result is then passed to the <span id="inline-code">CopyFileA</span> API, which takes
+                        as input the original file, which points to
+                        the malware sample in the current directory, as well as the destination file, which is the <span
+                            id="inline-code">%appdata%</span> folder.
                         <img class="lazy" data-src="/img/malops_simda_13.png" alt="q13_answer">
                     </p>
                     <h3 id="post__content__title">Q14) What is the registry key the malware uses for persistence?</h3>
                     <p>
-                        To answer this question, we are working with the hypothesis that the malware uses at least <span id="inline-code">RegCreateKey*</span>.
-                        By looking for all cross-references of this Windows API function, we notice three distinct ones and the one in <span id="inline-code">sub_4038E3</span>
-                        immediately jumps out to me as the <span id="inline-code">RunOnce</span> key is a popular persistence mechansim.
+                        To answer this question, we are working with the hypothesis that the malware uses at least <span
+                            id="inline-code">RegCreateKey*</span>.
+                        By looking for all cross-references of this Windows API function, we notice three distinct ones
+                        and the one in <span id="inline-code">sub_4038E3</span>
+                        immediately jumps out to me as the <span id="inline-code">RunOnce</span> key is a popular
+                        persistence mechansim.
                         <br>
-                        We debug the code and set a breakpoint on the creation of the registry key, when we then analyze the remaining part of the function, we see subsequently
-                        a call to <span id="inline-code">RegSetValueExW</span>. Just before this API call, <span id="inline-code">wsprintfW</span> is used to combine the value
-                        <span id="inline-code">opt</span> and the new binary name stored in the <span id="inline-code">%appdata%</span> folder.
-                        Therefore, we can conclude that the registry key <span id="inline-code">HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</span> is
+                        We debug the code and set a breakpoint on the creation of the registry key, when we then analyze
+                        the remaining part of the function, we see subsequently
+                        a call to <span id="inline-code">RegSetValueExW</span>. Just before this API call, <span
+                            id="inline-code">wsprintfW</span> is used to combine the value
+                        <span id="inline-code">opt</span> and the new binary name stored in the <span
+                            id="inline-code">%appdata%</span> folder.
+                        Therefore, we can conclude that the registry key <span
+                            id="inline-code">HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</span>
+                        is
                         used to create persistence.
                         <img class="lazy" data-src="/img/malops_simda_14.png" alt="q14_answer">
                     </p>
                     <h3 id="post__content__title">Q15) What is the argument the malware will launch itself with?</h3>
                     <p>
-                        By answering the previous question, we noticed that the value written to the <span id="inline-code">RunOnce</span> key is the malware executable
+                        By answering the previous question, we noticed that the value written to the <span
+                            id="inline-code">RunOnce</span> key is the malware executable
                         combined with the argument <span id="inline-code">opt</span>.
-                        We can further verify this by going back to the section where the commandline was parsed as here we notice that the supplied value is compared
+                        We can further verify this by going back to the section where the commandline was parsed as here
+                        we notice that the supplied value is compared
                         against the static string <span id="inline-code">opt</span>.
                         <img class="lazy" data-src="/img/malops_simda_15.png" alt="q15_answer">
                     </p>
