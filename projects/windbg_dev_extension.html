@@ -2,31 +2,45 @@
 <html lang="en">
 
 <head>
+    <title>GraymanRe - Developing a WinDBG Extension in C++</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Deep dive into developing a custom extension for WinDBG in C++" />
+
     <meta property="og:title" content="GraymanRe - Developing a WinDBG Extension in C++" />
     <meta property="og:description" content="Developing a WinDBG Extension in C++" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
     <meta property="og:image" content="https://graymanre.github.io/img/windbg.webp" />
-    <meta property="og:url" content="https://graymanre.github.io/" />
-    <meta name="description" content="Deep dive into developing a custom extension for WinDBG in C++"/>
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/windbg.webp" />
+    <meta property="og:image:width" content="1680" />
+    <meta property="og:image:height" content="692" />
+    <meta property="og:image:alt" content="windbg" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/projects/windbg_dev_extension.html" />
+    <meta property="og:updated_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:published_time" content="2024-07-12T00:00:00+00:00" />
+    <meta property="article:modified_time" content="2025-11-09T15:35:00+00:00" />
+    <meta property="article:section" content="projects" />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://graymanre.github.io/img/windbg.webp" />
     <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>GraymanRe - Developing a WinDBG Extension in C++</title>
+    <link rel="canonical" href="https://graymanre.github.io/projects/windbg_dev_extension.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
 
-    <link rel="canonical" href="https://graymanre.github.io/">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/prism.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -66,7 +80,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -86,7 +101,8 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span id="time"></span> min read <time class="post__date" datetime="2024-07-12T00:00:00+02:00">- 12 July 2024</time>
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2024-07-12T00:00:00+02:00">- 12 July 2024</time>
                             </div>
                             <h2 class="post__title">Building a WinDBG extension in C++</h2>
                             <div class="post__bottom">
@@ -115,96 +131,137 @@
                 <div class="post__content">
                     <h3 id="post__content__title">Developing our own WinDBG extension</h3>
                     <p>
-                        The Windows Debugger (WinDBG) is a debugger developed by Microsoft and offers several features such as analyzing crash dumps, live debugging of
-                        user-mode and kernel-mode code and examining both CPU registers as well as memory. Although it doesn't offer the full-fledged capabilities such
-                        as IDA Pro and Ghidra offer, it is quite versatile. I have used WinDBG in multiple occasions and come to like its scripting capabilities, as well
+                        The Windows Debugger (WinDBG) is a debugger developed by Microsoft and offers several features
+                        such as analyzing crash dumps, live debugging of
+                        user-mode and kernel-mode code and examining both CPU registers as well as memory. Although it
+                        doesn't offer the full-fledged capabilities such
+                        as IDA Pro and Ghidra offer, it is quite versatile. I have used WinDBG in multiple occasions and
+                        come to like its scripting capabilities, as well
                         as its still relatively new support for Time Travel Debugging (TTD).
                         <br><br>
-                        Over a period of about 9 months, I spent quite a chunk of my time researching if one could automate the process of generating fuzzing harnesses. I
-                        will likely write a separate blog post about this in the future. During this research, I utilized WinDBG mainly for generating TTD traces, as well
-                        as the main topic of this blog post: building my own WinDBG extension. The goal of the WinDBG extension was to assist in the automated generation
-                        of fuzzing harnesses based on a captured run trace of an application that was subjected to fuzzing efforts. Let's shortly dive into TTD before we
+                        Over a period of about 9 months, I spent quite a chunk of my time researching if one could
+                        automate the process of generating fuzzing harnesses. I
+                        will likely write a separate blog post about this in the future. During this research, I
+                        utilized WinDBG mainly for generating TTD traces, as well
+                        as the main topic of this blog post: building my own WinDBG extension. The goal of the WinDBG
+                        extension was to assist in the automated generation
+                        of fuzzing harnesses based on a captured run trace of an application that was subjected to
+                        fuzzing efforts. Let's shortly dive into TTD before we
                         continue with how to build your own WinDBG extension.
                     </p>
                     <h3 id="post__content__title">Time Travel Debugging</h3>
                     <p>
-                        One of the main features of WinDBG is its Time Travel Debugging mode. Time Travel Debugging is a relatively new feature in the arsenal of the
-                        Windows Debugger (WinDBG) which allows for recording a full run trace of an application. The subsequent capture is stored and allows for
-                        unlimited replays of the behaviour of the application during the application. Although changing memory layouts and similar actions are not possible,
-                        it allows for fine-grained control over the execution process. Its main feature is of course the possibility to replay the behaviour. This ensures
-                        that in debugging and other use cases, the application does not need to be rerun over and over again with all of its corresponding negative effects
+                        One of the main features of WinDBG is its Time Travel Debugging mode. Time Travel Debugging is a
+                        relatively new feature in the arsenal of the
+                        Windows Debugger (WinDBG) which allows for recording a full run trace of an application. The
+                        subsequent capture is stored and allows for
+                        unlimited replays of the behaviour of the application during the application. Although changing
+                        memory layouts and similar actions are not possible,
+                        it allows for fine-grained control over the execution process. Its main feature is of course the
+                        possibility to replay the behaviour. This ensures
+                        that in debugging and other use cases, the application does not need to be rerun over and over
+                        again with all of its corresponding negative effects
                         as well as uncertainties and inconsistencies between multiple runs.
                         <br><br>
-                        Using WinDBG, Time Travel Debugging can easily be configured by starting the debugging process, selecting "Launch executable (advanced)" and
-                        checking the "Record with Time Travel Debugging" checkbox, before configuring the location to save the trace, as shown below.
+                        Using WinDBG, Time Travel Debugging can easily be configured by starting the debugging process,
+                        selecting "Launch executable (advanced)" and
+                        checking the "Record with Time Travel Debugging" checkbox, before configuring the location to
+                        save the trace, as shown below.
                         <img class="lazy" data-src="/img/ttd.png" alt="AFL Time Travel Debugging">
                     </p>
 
                     <h3 id="post__content__title">Setting the scene</h3>
                     <p>
-                        Within the scope of my aforementioned research one of the key focus points was "process automation". Since at the time I had limited experience
-                        with WinDBG, I went out on a journey to better understand what WinDBG has to offer. Amongst others, I discovered that the Windows Debugger exposes
-                        multiple header files that can be used to develop an extension which in turn would be able to assist my research in achieving some form/level of
-                        automation. I have found the documentation on the <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/">Windows Learn website</a>
-                        to be of some use. Simultaneously, this documentation is very limiting and barely describes how to setup your development environment, how a plugin
+                        Within the scope of my aforementioned research one of the key focus points was "process
+                        automation". Since at the time I had limited experience
+                        with WinDBG, I went out on a journey to better understand what WinDBG has to offer. Amongst
+                        others, I discovered that the Windows Debugger exposes
+                        multiple header files that can be used to develop an extension which in turn would be able to
+                        assist my research in achieving some form/level of
+                        automation. I have found the documentation on the <a
+                            href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/">Windows Learn
+                            website</a>
+                        to be of some use. Simultaneously, this documentation is very limiting and barely describes how
+                        to setup your development environment, how a plugin
                         base frame looks like and how to deploy it within the Windows Debugger.
                         <br><br>
-                        Please do note, that in my personal opinion, my experience is still limited, and I am sure that individuals with more C/C++ programming experience
-                        undoubtedly will be able to point out misconceptions, flaws and other inconsistencies. The goal of this blog post is mainly to serve as a guiding
+                        Please do note, that in my personal opinion, my experience is still limited, and I am sure that
+                        individuals with more C/C++ programming experience
+                        undoubtedly will be able to point out misconceptions, flaws and other inconsistencies. The goal
+                        of this blog post is mainly to serve as a guiding
                         hand on how to get started.
                     </p>
 
                     <h3 id="post__content__title">Loading an extension in WinDBG</h3>
                     <p>
-                        WinDBG extensions can be found aplenty on the internet and subsequently loaded into the WinDBG instance. There are two distinct locations to store
-                        an extension and subsequently load it. Basically, any directory on your operating system will do. Using the <span id="inline-code">.load</span>
-                        command in the debugger an extension can be loaded using the full path to the location of the extension. Alternatively, one can first use the
-                        <span id="inline-code">.extpath</span> command, to obtain a full list of paths where WinDBG will automatically load extensions from. Placing the
-                        extension into one of these folders subverts the requirement to use the full path to load the extension.
+                        WinDBG extensions can be found aplenty on the internet and subsequently loaded into the WinDBG
+                        instance. There are two distinct locations to store
+                        an extension and subsequently load it. Basically, any directory on your operating system will
+                        do. Using the <span id="inline-code">.load</span>
+                        command in the debugger an extension can be loaded using the full path to the location of the
+                        extension. Alternatively, one can first use the
+                        <span id="inline-code">.extpath</span> command, to obtain a full list of paths where WinDBG will
+                        automatically load extensions from. Placing the
+                        extension into one of these folders subverts the requirement to use the full path to load the
+                        extension.
 
-                        Based on the information on the Windows Learn page, it is possible to write your own WinDBG extension in C++ as a DLL. Using the command
-                        <span id="inline-code">.load</span> and supplying the location of the extension DLL file, WinDBG will be able to add a new "feature" to WinDBG
-                        which can then be called. A lot of the things that I learned were based on <a href="https://www.codeproject.com/Articles/6522/Debug-Tutorial-Part-4-Writing-WINDBG-Extensions">this blog</a>
+                        Based on the information on the Windows Learn page, it is possible to write your own WinDBG
+                        extension in C++ as a DLL. Using the command
+                        <span id="inline-code">.load</span> and supplying the location of the extension DLL file, WinDBG
+                        will be able to add a new "feature" to WinDBG
+                        which can then be called. A lot of the things that I learned were based on <a
+                            href="https://www.codeproject.com/Articles/6522/Debug-Tutorial-Part-4-Writing-WINDBG-Extensions">this
+                            blog</a>
                         from 2004(!) which provided the essential baseline.
                     </p>
 
                     <h3 id="post__content__title">Starting the development process</h3>
                     <p>
-                        WinDBG extensions are essentially Dynamic-Link Libraries (DLL) that add complementary functionality to your WinDBG sessions. As such, we can use
-                        Visual Studio to create a new Dynamic-Link Library project which will already create a <span id="inline-code">dllmain.cpp</span> file and set
-                        several compiler features that will ensure we can directly build a DLL. As we will be using WdbgExts Extension Callbacks, more on this later,
-                        we can follow the guidance given by <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/using-wdbgexts-extension-callbacks">Microsoft</a>.
+                        WinDBG extensions are essentially Dynamic-Link Libraries (DLL) that add complementary
+                        functionality to your WinDBG sessions. As such, we can use
+                        Visual Studio to create a new Dynamic-Link Library project which will already create a <span
+                            id="inline-code">dllmain.cpp</span> file and set
+                        several compiler features that will ensure we can directly build a DLL. As we will be using
+                        WdbgExts Extension Callbacks, more on this later,
+                        we can follow the guidance given by <a
+                            href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/using-wdbgexts-extension-callbacks">Microsoft</a>.
                         <br>
-                        We are required to export certain functions in addition to the default <span id="inline-code">APIENTRY DllMain</span>:
+                        We are required to export certain functions in addition to the default <span
+                            id="inline-code">APIENTRY DllMain</span>:
+                    <ul style="margin-bottom: 0;">
+                        <li>A function named <span id="inline-code">WinDbgExtensionDllInit</span> with three arguments:
+                        </li>
                         <ul style="margin-bottom: 0;">
-                            <li>A function named <span id="inline-code">WinDbgExtensionDllInit</span> with three arguments:</li>
-                            <ul style="margin-bottom: 0;">
-                                <li>A pointer to a <span id="inline-code">WINDBG_EXTENSION_APIS</span> structure</li>
-                                <li>A major version number</li>
-                                <li>A minor version number</li>
-                            </ul>
-                            <li>A function called <span id="inline-code">ExtensionApiVersion</span></li>
-                            <li>
-                                And lastly, quite straightforward, at least one function declared using the <span id="inline-code">DECLARE_API</span> macro that can be
-                                called from within WinDBG.
-                            </li>
+                            <li>A pointer to a <span id="inline-code">WINDBG_EXTENSION_APIS</span> structure</li>
+                            <li>A major version number</li>
+                            <li>A minor version number</li>
                         </ul>
-                        <br>
-                        Let's assemble each of these three pieces separately before then combining them into one functioning piece of code:
-                        The WinDbgExtensionDllInit function:
+                        <li>A function called <span id="inline-code">ExtensionApiVersion</span></li>
+                        <li>
+                            And lastly, quite straightforward, at least one function declared using the <span
+                                id="inline-code">DECLARE_API</span> macro that can be
+                            called from within WinDBG.
+                        </li>
+                    </ul>
+                    <br>
+                    Let's assemble each of these three pieces separately before then combining them into one functioning
+                    piece of code:
+                    The WinDbgExtensionDllInit function:
                     </p>
                     <pre class="language-cpp"><code>
 VOID WDBGAPI WinDbgExtensionDllInit(PWINDBG_EXTENSION_APIS lpExtensionApis, USHORT usMajorVersion, USHORT usMinorVersion) {
     // More code here later
 }</code></pre><br>
-                    <p>The ExtensionApiVersion function with the required Major and Minor version as well as the Revision and Reserved fields:</p>
+                    <p>The ExtensionApiVersion function with the required Major and Minor version as well as the
+                        Revision and Reserved fields:</p>
                     <pre class="language-cpp"><code>
 EXT_API_VERSION g_ExtApiVersion = { 1, 1, EXT_API_VERSION_NUMBER, 0 };
                 
 LPEXT_API_VERSION WDBGAPI ExtensionApiVersion(void) {
     return &g_ExtApiVersion;
 }</code></pre><br>
-                    <p>A simple API function called <span id="inline-code">demo_ext</span> which we can later call from within our WinDBG session:</p>
+                    <p>A simple API function called <span id="inline-code">demo_ext</span> which we can later call from
+                        within our WinDBG session:</p>
                     <pre class="language-cpp"><code>
 DECLARE_API(demo_ext) {
     // More code here later
@@ -212,29 +269,45 @@ DECLARE_API(demo_ext) {
 
                     <h3>Building our "Hello World" WinDBG extension</h3>
                     <p>
-                        Now that we have incorporated the first pieces of code, it is time to chain them and make them into a usable WinDBG extension. For this,
-                        we first need to have a look at the libraries that need to be included. We will leave <span id="inline-code">windows.h</span> for what it
-                        is, this include should be clear. Additionally, we require the WinDBG debugger extension interface, which is defined in the header file:
-                        <span id="inline-code">wdbgexts.h</span> for, amongst others, the <span id="inline-code">EXT_API_VERSION</span> structure.
-                        Correspondingly we also require the debugger engine interface <span id="inline-code">dbgeng.h</span> which provides us with a valuable
+                        Now that we have incorporated the first pieces of code, it is time to chain them and make them
+                        into a usable WinDBG extension. For this,
+                        we first need to have a look at the libraries that need to be included. We will leave <span
+                            id="inline-code">windows.h</span> for what it
+                        is, this include should be clear. Additionally, we require the WinDBG debugger extension
+                        interface, which is defined in the header file:
+                        <span id="inline-code">wdbgexts.h</span> for, amongst others, the <span
+                            id="inline-code">EXT_API_VERSION</span> structure.
+                        Correspondingly we also require the debugger engine interface <span
+                            id="inline-code">dbgeng.h</span> which provides us with a valuable
                         interface to perform all kinds of tasks.
                         <br><br>
-                        Our first task will focus on around obtaining the correct interfaces and handles to print a simple "Hello World" within the WinDBG session.
-                        For this, we need to call the <span id="inline-code">DebugCreate()</span> function that will return an interface pointer to the client object.
-                        In our case, we will always need to obtain an interface pointer to the main <span id="inline-code">IDebugClient</span> interface.
-                        With the obtained interface pointer to the Debug Client, we can obtain further handles to other IDebugClient, IDebugControls and more interfaces.
-                        Each interface, listed <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/dbgeng/">here</a>, contains one or more functions
+                        Our first task will focus on around obtaining the correct interfaces and handles to print a
+                        simple "Hello World" within the WinDBG session.
+                        For this, we need to call the <span id="inline-code">DebugCreate()</span> function that will
+                        return an interface pointer to the client object.
+                        In our case, we will always need to obtain an interface pointer to the main <span
+                            id="inline-code">IDebugClient</span> interface.
+                        With the obtained interface pointer to the Debug Client, we can obtain further handles to other
+                        IDebugClient, IDebugControls and more interfaces.
+                        Each interface, listed <a
+                            href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/dbgeng/">here</a>,
+                        contains one or more functions
                         that may come in handy during the automation process.
                         <br><br>
-                        Using the <span id="inline-code">IDebugClient QueryInterface</span> function, we can obtain a handle to the <span id="inline-code">IDebugControl</span>
-                        interface. This interface has a member function named <span id="inline-code">ControlledOutput</span> which allows us to print strings to the
-                        WinDBG Command interface. View the code sample below which demonstrates the full code to achieve our goal of printing "Hello World" to said
+                        Using the <span id="inline-code">IDebugClient QueryInterface</span> function, we can obtain a
+                        handle to the <span id="inline-code">IDebugControl</span>
+                        interface. This interface has a member function named <span
+                            id="inline-code">ControlledOutput</span> which allows us to print strings to the
+                        WinDBG Command interface. View the code sample below which demonstrates the full code to achieve
+                        our goal of printing "Hello World" to said
                         command interface.
                     </p>
                     <pre><code id="code-block" class="language-cpp line-numbers"></code></pre><br>
                     <p>
-                        Before we can compile the DLL into a working extension, we need to create and include one more file: the definition file which will be used
-                        in the linker process. Create a definition file like: <span id="inline-code">demo_ext.def</span> and include the following text:
+                        Before we can compile the DLL into a working extension, we need to create and include one more
+                        file: the definition file which will be used
+                        in the linker process. Create a definition file like: <span id="inline-code">demo_ext.def</span>
+                        and include the following text:
                     </p>
                     <pre><code class="language-none">
 LIBRARY "WINDBG.DLL"
@@ -244,91 +317,136 @@ EXPORTS
     ExtensionApiVersion
     demo_ext</code></pre><br>
                     <p>
-                        Then, include the relative path to this file in the Model Definition File field within your linker. See the example below for including it in the
+                        Then, include the relative path to this file in the Model Definition File field within your
+                        linker. See the example below for including it in the
                         linker process for Visual Studio 2022.
                         <br><br>
                         <img class="lazy" data-src="/img/mod_def_file.png" alt="Linker Model Definition File">
                         <br>
-                        Now, we can compile our extension, load it into the WinDBG session and execute our custom API <span id="inline-code">demo_ext</span>. Note,
-                        that we load the extension DLL from the default folder that Visual Studio will put the compiled binary in, as such requiring us to include
-                        the full path as opposed to first copying the compiled DLL to a <span id="inline-code">winext</span> folder and then including it directly
-                        from that specific folder. Additionally, we need to call the API using the name of the DLL and adding the API function to it.
+                        Now, we can compile our extension, load it into the WinDBG session and execute our custom API
+                        <span id="inline-code">demo_ext</span>. Note,
+                        that we load the extension DLL from the default folder that Visual Studio will put the compiled
+                        binary in, as such requiring us to include
+                        the full path as opposed to first copying the compiled DLL to a <span
+                            id="inline-code">winext</span> folder and then including it directly
+                        from that specific folder. Additionally, we need to call the API using the name of the DLL and
+                        adding the API function to it.
                         <br><br>
                         <img class="lazy" data-src="/img/load_call_ext.png" alt="Load and call extension in WinDBG">
                     </p>
 
                     <h3 id="post__content__title">Handling EventCallbacks</h3>
                     <p>
-                        WinDBG allows you to subscribe to events that are fired by the debugging engine and take over these events by adding additional code that will
-                        be executed whenever an event to which you have subscribed is fired. An example: you are using the Time Travel Debugging feature to parse
-                        the execution flow of a capture debugging session. Once you have hit the end of the time travel trace, you would want to automatically start
-                        from the beginning again. To do this, you can subscribe to the <span id="inline-code">ChangeEngineState</span> EventCallback, and listen for
-                        the combination of the <span id="inline-code">DEBUG_CES_EXECUTION_STATUS</span> Flag and <span id="inline-code">DEBUG_STATUS_BREAK</span> Argument
-                        which signal the end of the time travel trace has been reached. Subsequently you can then use the <span id="inline-code">Execute</span> function,
-                        through the <span id="inline-code">IDebugControl</span> interface to restart the trace from the beginning.
+                        WinDBG allows you to subscribe to events that are fired by the debugging engine and take over
+                        these events by adding additional code that will
+                        be executed whenever an event to which you have subscribed is fired. An example: you are using
+                        the Time Travel Debugging feature to parse
+                        the execution flow of a capture debugging session. Once you have hit the end of the time travel
+                        trace, you would want to automatically start
+                        from the beginning again. To do this, you can subscribe to the <span
+                            id="inline-code">ChangeEngineState</span> EventCallback, and listen for
+                        the combination of the <span id="inline-code">DEBUG_CES_EXECUTION_STATUS</span> Flag and <span
+                            id="inline-code">DEBUG_STATUS_BREAK</span> Argument
+                        which signal the end of the time travel trace has been reached. Subsequently you can then use
+                        the <span id="inline-code">Execute</span> function,
+                        through the <span id="inline-code">IDebugControl</span> interface to restart the trace from the
+                        beginning.
                         <br><br>
-                        These callbacks interfaces function like COM which requires default functions like <span id="inline-code">AddRef</span> and <span id="inline-code">Release</span>.
-                        Additionally, we need to register our "interests" for specific debug events using the <span id="inline-code">GetInterestMask</span> function.
+                        These callbacks interfaces function like COM which requires default functions like <span
+                            id="inline-code">AddRef</span> and <span id="inline-code">Release</span>.
+                        Additionally, we need to register our "interests" for specific debug events using the <span
+                            id="inline-code">GetInterestMask</span> function.
                         <br><br>
-                        Once we have laid this foundation, we can implement the 4 main EventCallbacks: Breakpoint, LoadModule, ChangeEngineState and Exception. For this
-                        example, we are only interested in the Exception EventCallback. As such, we implement the other callbacks only to return a status code signaling
-                        the debugging engine that no change has been implemented and control is given back to the debugging engine. First we require a header file to
+                        Once we have laid this foundation, we can implement the 4 main EventCallbacks: Breakpoint,
+                        LoadModule, ChangeEngineState and Exception. For this
+                        example, we are only interested in the Exception EventCallback. As such, we implement the other
+                        callbacks only to return a status code signaling
+                        the debugging engine that no change has been implemented and control is given back to the
+                        debugging engine. First we require a header file to
                         define the EventCallbacks class and the functions within the class:
                     </p>
                     <pre><code id="code-block2" class="language-cpp line-numbers"></code></pre><br>
                     <p>
-                        Now that the header file has been constructed, we can implement each of the functions within the main cpp file. For demonstration purposes,
-                        we will work within one dedicated header and one dedicated cpp file. In real world settings, I recommend splitting functionality and keeping
+                        Now that the header file has been constructed, we can implement each of the functions within the
+                        main cpp file. For demonstration purposes,
+                        we will work within one dedicated header and one dedicated cpp file. In real world settings, I
+                        recommend splitting functionality and keeping
                         your files clean as much as possible. Our main cpp will now look like:
                     </p>
                     <pre><code id="code-block3" class="language-cpp line-numbers"></code></pre><br>
                     <p>
-                        Note how on line 48, we are checking for the Flags and Argument to ensure that the end of the time travel debugging trace has been reached.
-                        If both of the conditions meet our criteria, we call the <span id="inline-code">Execute</span> function, which will execute a command within
-                        the command panel of WinDBG. In this case we execute <span id="inline-code">!tt0</span> which will reset our time travel pointer to the start
+                        Note how on line 48, we are checking for the Flags and Argument to ensure that the end of the
+                        time travel debugging trace has been reached.
+                        If both of the conditions meet our criteria, we call the <span id="inline-code">Execute</span>
+                        function, which will execute a command within
+                        the command panel of WinDBG. In this case we execute <span id="inline-code">!tt0</span> which
+                        will reset our time travel pointer to the start
                         of the trace file ensuring we can start from the beginning once again.
                     </p>
 
                     <h3 id="post__content__title">Including additional functionality - Creating Breakpoints</h3>
                     <p>
-                        Breakpoints are vital in terms of debugging applications and understanding what data is in the registers and other memory locations at any given
-                        time whilst allowing a more fine-grained control over the application's execution flow. Therefore, being able to set breakpoints is imperative.
-                        In order to set breakpoints, we require an interface pointer to <span id="inline-code">IDebugControl</span>. Additionally, we need to know on
+                        Breakpoints are vital in terms of debugging applications and understanding what data is in the
+                        registers and other memory locations at any given
+                        time whilst allowing a more fine-grained control over the application's execution flow.
+                        Therefore, being able to set breakpoints is imperative.
+                        In order to set breakpoints, we require an interface pointer to <span
+                            id="inline-code">IDebugControl</span>. Additionally, we need to know on
                         what we want to break, as well as any potential commands we automatically want to execute.
                         <br>
-                        For this example, we want to gain an overview of all the modules that are loaded during runtime and print these. Therefore, we are going to create
-                        a breakpoint on any call to <span id="inline-code">LoadLibraryW</span>. We add a breakpoint command that will be executed once the breakpoint is
-                        hit. The goal of the command is to display the value stored in the <span id="inline-code">rcx</span> register, which holds the module name. To add
-                        to that, we also want execution to resume, so that we don't have to manually resume execution after each time the value in the <span id="inline-code">rcx</span>
-                        register is printed to the command console. Thus, we will be using is: <span id="inline-code">dW rcx; g;</span>. Now, we can build the code to
+                        For this example, we want to gain an overview of all the modules that are loaded during runtime
+                        and print these. Therefore, we are going to create
+                        a breakpoint on any call to <span id="inline-code">LoadLibraryW</span>. We add a breakpoint
+                        command that will be executed once the breakpoint is
+                        hit. The goal of the command is to display the value stored in the <span
+                            id="inline-code">rcx</span> register, which holds the module name. To add
+                        to that, we also want execution to resume, so that we don't have to manually resume execution
+                        after each time the value in the <span id="inline-code">rcx</span>
+                        register is printed to the command console. Thus, we will be using is: <span id="inline-code">dW
+                            rcx; g;</span>. Now, we can build the code to
                         create our breakpoint:
                     </p>
                     <pre><code id="code-block4" class="language-cpp line-numbers"></code></pre><br>
                     <p>
-                        Note that any breakpoint created has no attributes, which you will have to set yourself using <span id="inline-code">SetCommand</span>,
-                        <span id="inline-code">SetOffsetExpression</span> and other features not covered in this example. Furthermore, each newly created breakpoint
-                        is disabled by default. This requires you to add a flag to your breakpoint, flagging it as enabled. This will ensure that when you actually
+                        Note that any breakpoint created has no attributes, which you will have to set yourself using
+                        <span id="inline-code">SetCommand</span>,
+                        <span id="inline-code">SetOffsetExpression</span> and other features not covered in this
+                        example. Furthermore, each newly created breakpoint
+                        is disabled by default. This requires you to add a flag to your breakpoint, flagging it as
+                        enabled. This will ensure that when you actually
                         run the debugging session, the breakpoint gets hit and performs any actions you have defined.
                         <br><br>
-                        To demonstrate the success of our extension, we load a new debug session and launch Notepad.exe. Subsequently, before we run the program, we
-                        import our extension and call the <span id="inline-code">demo_ext</span> function that we expose. Notice how in the breakpoint window, a new software
-                        breakpoint has appeared with the location at the entrypoint of the <span id="inline-code">kernelbase!loadlibraryw</span> function. Now that our
-                        extension has been loaded, we can run the program by executing the command <span id="inline-code">r</span> and we will see that the breakpoint
-                        gets hit automatically. Based on the output we can determine that one of the DLLs loaded by Notepad.exe during the startup of the program is
+                        To demonstrate the success of our extension, we load a new debug session and launch Notepad.exe.
+                        Subsequently, before we run the program, we
+                        import our extension and call the <span id="inline-code">demo_ext</span> function that we
+                        expose. Notice how in the breakpoint window, a new software
+                        breakpoint has appeared with the location at the entrypoint of the <span
+                            id="inline-code">kernelbase!loadlibraryw</span> function. Now that our
+                        extension has been loaded, we can run the program by executing the command <span
+                            id="inline-code">r</span> and we will see that the breakpoint
+                        gets hit automatically. Based on the output we can determine that one of the DLLs loaded by
+                        Notepad.exe during the startup of the program is
                         <span id="inline-code">comctl32.dll</span>.
                         <img class="lazy" data-src="/img/windbg_ext_demo.png" alt="Load and call extension in WinDBG">
                     </p>
 
                     <h3 id="post__content__title">Including additional functionality - Creating a Stacktrace</h3>
                     <p>
-                        Stacktraces provide useful insights into the call stack of the application and allow us to gain an insight into the execution flow based of off
-                        function calls. We can use our interface pointer to <span id="inline-code">IDebugControl</span> to call <span id="inline-code">GetStackTrace</span>
-                        to obtain a stacktrace at any given moment. For example, if we want to obtain a stacktrace when the execution flow reaches a specific function. We
-                        could set a breakpoint on that function, create a EventCallback handler for the Breakpoint event, in which we handle the creation of a stacktrace.
+                        Stacktraces provide useful insights into the call stack of the application and allow us to gain
+                        an insight into the execution flow based of off
+                        function calls. We can use our interface pointer to <span id="inline-code">IDebugControl</span>
+                        to call <span id="inline-code">GetStackTrace</span>
+                        to obtain a stacktrace at any given moment. For example, if we want to obtain a stacktrace when
+                        the execution flow reaches a specific function. We
+                        could set a breakpoint on that function, create a EventCallback handler for the Breakpoint
+                        event, in which we handle the creation of a stacktrace.
                         <br>
-                        In the code example shown below, we build upon the previous code blobs and add functionality to the <span id="inline-code">EventCallbacks::Breakpoint</span>
-                        EventCallback. Subsequently, using the <span id="inline-code">framesSize</span> variable, we can decide how many frames within the stacktrace we
-                        want to receive. By requesting 2 frames, we will get the current frame and one previous frame, allowing us to determine the caller of function we
+                        In the code example shown below, we build upon the previous code blobs and add functionality to
+                        the <span id="inline-code">EventCallbacks::Breakpoint</span>
+                        EventCallback. Subsequently, using the <span id="inline-code">framesSize</span> variable, we can
+                        decide how many frames within the stacktrace we
+                        want to receive. By requesting 2 frames, we will get the current frame and one previous frame,
+                        allowing us to determine the caller of function we
                         are currently at.
                     </p>
                     <pre><code class="language-cpp line-numbers">
@@ -349,20 +467,31 @@ STDMETHODIMP EventCallbacks::Breakpoint(IN PDEBUG_BREAKPOINT Bp) {
 	}
 }</code></pre><br>
 
-                    <h3 id="post__content__title">Including additional functionality - Getting all symbol entries in a library</h3>
+                    <h3 id="post__content__title">Including additional functionality - Getting all symbol entries in a
+                        library</h3>
                     <p>
-                        In the case where we are analyzing a third-party library imported by the application we are debugging, it could occur that we would like to obtain
-                        a list of functions which are imported. For example, we could iteratively get a list of all functions that are imported by kernel32.dll. To do so,
-                        we would require an interface point to the IDebugSymbols3 interface in order to call <span id="inline-code">GetSymbolEntriesByName</span> and
-                        subsequently loop over the returned entries and get the name by calling <span id="inline-code">GetSymbolEntryString</span>. For this, we are
-                        once again relying on the Breakpoint EventCallback assuming that we have set a breakpoint on <span id="inline-code">kernelbase!</span>, however we
+                        In the case where we are analyzing a third-party library imported by the application we are
+                        debugging, it could occur that we would like to obtain
+                        a list of functions which are imported. For example, we could iteratively get a list of all
+                        functions that are imported by kernel32.dll. To do so,
+                        we would require an interface point to the IDebugSymbols3 interface in order to call <span
+                            id="inline-code">GetSymbolEntriesByName</span> and
+                        subsequently loop over the returned entries and get the name by calling <span
+                            id="inline-code">GetSymbolEntryString</span>. For this, we are
+                        once again relying on the Breakpoint EventCallback assuming that we have set a breakpoint on
+                        <span id="inline-code">kernelbase!</span>, however we
                         could also rely on the LoadModule callback.
                         <br><br>
-                        In the code snippet below, note that we need to request the interface pointer to IDebugSymbols3 before we can call its functions. Additionally,
-                        we have to allocated our own buffers using the correct buffer types, such as <span id="inline-code">DEBUG_MODULE_AND_ID</span>. In this example,
-                        I have hardcoded both <span id="inline-code">sImageNameWildCard</span> and <span id="inline-code">sImageNameExt</span> for which there are
-                        undoubtedly neater ways to solve this in a dynamic fashion when handling more than one DLL import. Lastly, in this example, we just print each
-                        identified symbol in the command panel of WinDBG. Obviously, we could also perform other interactions now that we have obtained this name, such
+                        In the code snippet below, note that we need to request the interface pointer to IDebugSymbols3
+                        before we can call its functions. Additionally,
+                        we have to allocated our own buffers using the correct buffer types, such as <span
+                            id="inline-code">DEBUG_MODULE_AND_ID</span>. In this example,
+                        I have hardcoded both <span id="inline-code">sImageNameWildCard</span> and <span
+                            id="inline-code">sImageNameExt</span> for which there are
+                        undoubtedly neater ways to solve this in a dynamic fashion when handling more than one DLL
+                        import. Lastly, in this example, we just print each
+                        identified symbol in the command panel of WinDBG. Obviously, we could also perform other
+                        interactions now that we have obtained this name, such
                         as setting a breakpoint.
                     </p>
                     <pre><code class="language-cpp line-numbers">
@@ -428,10 +557,12 @@ STDMETHODIMP EventCallbacks::LoadModule(IN ULONG64 ImageFileHandle, IN ULONG64 B
 
                     <h3 id="post__content__title">Small bonus - Creating 'help' command</h3>
                     <p>
-                        In any case where we want others to be able to work with our created extension, we can add another API to our code, which allows the end user to
+                        In any case where we want others to be able to work with our created extension, we can add
+                        another API to our code, which allows the end user to
                         call "help" on our extension and get an overview of what input is expected.
                         <br>
-                        <b>Important: </b>Don't forget to add the "help" function to your <span id="inline-code">*.def</span> Module Definition File, otherwise
+                        <b>Important: </b>Don't forget to add the "help" function to your <span
+                            id="inline-code">*.def</span> Module Definition File, otherwise
                         this API won't be exposed and your end users won't be able to call it.
                     </p>
                     <pre><code class="language-cpp line-numbers">
@@ -445,11 +576,16 @@ DECLARE_API(help) {
 
                     <h3 id="post__content__title">Small bonus - Simplifying ControlledOutput</h3>
                     <p>
-                        The attentive viewer will have noticed the prevalent amount of <span id="inline-code">g_Control->ControlledOutput</span> calls in the previous
-                        code samples. One could write a small wrapper around this function and ease the usage of the output function as demonstrated in the sample below.
-                        By implementing this feature, one could simplify the call to, for example: <span id="inline-code">Output("Sample output with less complexity")</span>.
-                        If multiple colors should be supported, which can be changed by changing the <span id="inline-code">DEBUG_OUTCTL_AMBIENT_DML</span> parameter,
-                        one could either create multiple functions for each color, or supply it as an argument to <span id="inline-code">Output()</span> instead.
+                        The attentive viewer will have noticed the prevalent amount of <span
+                            id="inline-code">g_Control->ControlledOutput</span> calls in the previous
+                        code samples. One could write a small wrapper around this function and ease the usage of the
+                        output function as demonstrated in the sample below.
+                        By implementing this feature, one could simplify the call to, for example: <span
+                            id="inline-code">Output("Sample output with less complexity")</span>.
+                        If multiple colors should be supported, which can be changed by changing the <span
+                            id="inline-code">DEBUG_OUTCTL_AMBIENT_DML</span> parameter,
+                        one could either create multiple functions for each color, or supply it as an argument to <span
+                            id="inline-code">Output()</span> instead.
                     </p>
                     <pre><code class="language-cpp line-numbers">
 void __cdecl Output(PCSTR Format, ...)

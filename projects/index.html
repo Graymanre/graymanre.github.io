@@ -2,6 +2,65 @@
 <html lang="en">
 
 <head>
+    <title>GraymanRe - Projects</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Projects" />
+
+    <meta property="og:title" content="GraymanRe - Projects" />
+    <meta property="og:description" content="Projects" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://graymanre.github.io/img/logo.webp" />
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/logo.webp" />
+    <meta property="og:image:width" content="300" />
+    <meta property="og:image:height" content="300" />
+    <meta property="og:image:alt" content="logo" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/index.html" />
+    <meta property="og:updated_time" content="2025-11-09T15:35:00+00:00" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/logo.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://graymanre.github.io/projects/index.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<head>
     <meta property="og:title" content="GraymanRe - Projects" />
     <meta property="og:description" content="Projects" />
     <meta property="og:image" content="https://graymanre.github.io" />
@@ -63,7 +122,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -103,14 +163,18 @@
                                     <div class="article__content">
                                         <div class="article__meta">
                                             <span class="article__minutes">5 min read</span>
-                                            <time class="article__date" datetime="2025-10-09T00:00:00+02:00">09 October 2025</time>
+                                            <time class="article__date" datetime="2025-10-09T00:00:00+02:00">09 October
+                                                2025</time>
                                         </div>
-                                        <h2 class="article__title">Deploying a VLAN on a Proxmox VM using pfSense and Netgear</h2>
-                                        <p class="article__excerpt">Learn how to set up VLANs for Proxmox VMs using pfSense and a Netgear switch...</p>
+                                        <h2 class="article__title">Deploying a VLAN on a Proxmox VM using pfSense and
+                                            Netgear</h2>
+                                        <p class="article__excerpt">Learn how to set up VLANs for Proxmox VMs using
+                                            pfSense and a Netgear switch...</p>
                                         <div class="article__bottom">
                                             <div class="article__author">
                                                 <a href="/contact/" aria-label="GraymanRe">
-                                                    <img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture">
+                                                    <img class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture">
                                                 </a>
                                             </div>
                                             <div class="article__bottom-meta">
@@ -129,11 +193,13 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/projects/ldap_pfsense_vpn.html">
-                                        <img class="lazy" data-src="/img/openvpn.webp" alt="Deploying OpenVPN on pfSense using LDAP">
+                                        <img class="lazy" data-src="/img/openvpn.webp"
+                                            alt="Deploying OpenVPN on pfSense using LDAP">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
-                                            <span class="article__minutes">9 min read <time class="article__date" datetime="2024-12-29T00:00:00+02:00">29 December 2024</time></span>
+                                            <span class="article__minutes">9 min read <time class="article__date"
+                                                    datetime="2024-12-29T00:00:00+02:00">29 December 2024</time></span>
                                         </div>
                                         <h2 class="article__title">Deploying OpenVPN on pfSense using LDAP</h2>
                                         <p class="article__excerpt">
@@ -142,7 +208,9 @@
                                         </p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
@@ -160,51 +228,25 @@
                             <div class="article col col-6 col-t-12 grid__post animate article--big">
                                 <div class="article__inner">
                                     <a class="article__image" href="/projects/windbg_dev_extension.html">
-                                        <img class="lazy" data-src="/img/windbg.webp" alt="Developing a WinDBG Extension in C++">
+                                        <img class="lazy" data-src="/img/windbg.webp"
+                                            alt="Developing a WinDBG Extension in C++">
                                     </a>
                                     <div class="article__content">
                                         <div class="article__meta">
-                                            <span class="article__minutes">17 min read <time class="article__date" datetime="2024-07-12T00:00:00+02:00">12 July 2024</time></span>
+                                            <span class="article__minutes">17 min read <time class="article__date"
+                                                    datetime="2024-07-12T00:00:00+02:00">12 July 2024</time></span>
                                         </div>
                                         <h2 class="article__title">Developing a WinDBG Extension in C++</h2>
                                         <p class="article__excerpt">
                                             WinDBG supports custom extensions, which you can build yourself,
-                                            using the published header files to add helpful functions to your debug session...
+                                            using the published header files to add helpful functions to your debug
+                                            session...
                                         </p>
                                         <div class="article__bottom">
                                             <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
-                                            </div>
-                                            <div class="article__bottom-meta">
-                                                <a href="/contact/" class="article__author-link">GraymanRe</a>
-                                                <span>in</span>
-                                                <span class="article-tags">
-                                                    <a href="/projects" class="article__tag">Projects</a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Article End -->
-                            <!-- Article Begin -->
-                            <div class="article col col-6 col-t-12 grid__post animate article--big">
-                                <div class="article__inner">
-                                    <a class="article__image" href="/projects/automating_tenant_assessments.html">
-                                        <img class="lazy" data-src="/img/entra_tenant_assessment.webp" alt="Automating a M365 Tenant Security Maturity Assessment">
-                                    </a>
-                                    <div class="article__content">
-                                        <div class="article__meta">
-                                            <span class="article__minutes">7 min read <time class="article__date" datetime="2023-09-10T00:00:00+02:00">25 September 2023</time></span>
-                                        </div>
-                                        <h2 class="article__title">Automating M365 Tenant Security Maturity Assessments</h2>
-                                        <p class="article__excerpt">
-                                            The Microsoft Graph API is the ideal candidate to use for automating the
-                                            assessment of the security maturity ...
-                                        </p>
-                                        <div class="article__bottom">
-                                            <div class="article__author">
-                                                <a href="/contact/" aria-label="GraymanRe"><img class="article__author-image lazy" data-src="/img/logo.webp" alt="GraymanRe's Picture"></a>
+                                                <a href="/contact/" aria-label="GraymanRe"><img
+                                                        class="article__author-image lazy" data-src="/img/logo.webp"
+                                                        alt="GraymanRe's Picture"></a>
                                             </div>
                                             <div class="article__bottom-meta">
                                                 <a href="/contact/" class="article__author-link">GraymanRe</a>
