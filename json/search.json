@@ -6,7 +6,7 @@
     "url": "ctf/flareon22_pixelpoker.html",
     "date": "11 December 2022",
     "content": "This writeup focusses on solving the second challenge \"Pixel Poker\" of the Flare-On 9 contest, hosted by Mandiant in 2022."
-  },  
+  },
   {
     "title": "Blue Team Labs Online - Countdown Writeup",
     "category": "CTF",
@@ -48,14 +48,6 @@
     "content": "Join me as we walk through solving the Blue Team Labs Online forensic challenge \"The Key\"."
   },
   {
-    "title": "Automating M365 Security Assessments",
-    "category": "Projects",
-    "tags": "Microsoft, Azure, Defender, Intune, Graph API, PowerShell",
-    "url": "projects/automating_tenant_assessments.html",
-    "date": "25 September 2023",
-    "content": "Dive into the world of automation through the Windows Graph API and automate your M365 Security Assessment."
-  },
-  {
     "title": "Developing a WinDBG Extension in C++",
     "category": "Projects",
     "tags": "C++, WinDBG, Time Travel Debugging, DebugCreate, IDebugClient, Debugging, Reverse Engineering",
@@ -83,7 +75,7 @@
     "title": "Simda Botnet MalOps Challenge",
     "category": "CTF",
     "tags": "Simda, Botnet, Malware, Reverse Engineering",
-    "url": "ctf/simda_analysis.html",
+    "url": "ctf/malops_simda.html",
     "date": "08 October 2025",
     "content": "Reverse engineering the Simda Botnet malware sample and solving the MalOps challenge."
   },
@@ -94,5 +86,13 @@
     "url": "projects/vlans_proxmox_pfsense.html",
     "date": "09 October 2025",
     "content": "Learn how to set up VLANs for Proxmox VMs using pfSense and a Netgear switch."
+  },
+  {
+    "title": "Shiny Spider Ransomware MalOps Challenge",
+    "category": "CTF",
+    "tags": "ShinySpider, Ransomware, Go Malware, Reverse Engineering",
+    "url": "ctf/malops_shinyspider.html",
+    "date": "14 January 2026",
+    "content": "everse engineering the Shiny Spider Ransomware sample and solving the MalOps challenge."
   }
 ]

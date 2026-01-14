@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>GraymanRe - ShinySpider Ransomware</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Analyzing the ShinySpider Ransomware - MalOps Challenge" />
+
+    <meta property="og:title" content="GraymanRe - ShinySpider Ransomware MalOps Challenge" />
+    <meta property="og:description" content="Analyzing the ShinySpider Ransomware - MalOps Challenge" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://graymanre.github.io/img/malops_shinyspider.webp" />
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/malops_shinyspider.webp" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="malops shinyspider" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/ctf/malops_shinyspider.html" />
+    <meta property="og:updated_time" content="2025-01-14T15:15:00+00:00" />
+    <meta property="article:published_time" content="2026-01-14T15:15:00+00:00" />
+    <meta property="article:modified_time" content="2026-01-14T15:15:00+00:00" />
+    <meta property="article:section" content="ctf" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/malops_shinyspider.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://graymanre.github.io/ctf/malops_shinyspider.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2026-01-14T00:00:00+02:00">14 January 2026</time>
+                            </div>
+                            <h2 class="post__title">Analyzing Shiny Spider Ransomware - MalOps Challenge</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="../contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image" src="../img/logo.webp"
+                                            alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="../contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="../ctf/" class="post__tag">CTF Writeups</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Introduction</h3>
+                    <p>
+                        In this challenge we are working on reverse engineering a Go ransomware sample to uncover its
+                        evasion techniques, encryption implementation, lateral movement capabilities, and anti-forensics
+                        methods. Loads to do, so let's dive in!
+                    </p>
+
+                    <h3 id="post__content__title">Q1) Which version of the Go compiler was used to build this binary?
+                    </h3>
+                    <p>
+                        Normally we would use tools like Detect-It-Easy or PEStudio to identify compiler versions and
+                        other related information. However, with go binaries, we can use the go executable itself.
+                        For example <span id="inline-code">go version -m shinyspider.exe</span> already is enough to
+                        identify the Go Compiler version: <span id="inline-code">go1.24.5</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_1.png" alt="Go" onclick="window.open(this.src, '_blank');"
+                            width="650" , height="650" onmouseover="this.style.cursor='zoom-in'"
+                            onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q2) What is the Relative Virtual Address (RVA) of the program's main
+                        function?</h3>
+                    <p>
+                        The Relative Virtual Address can be obtained by using IDA (Pro) and enabling Line Prefixes.
+                        To do so, open IDA (Pro) and navigate to Options -> General. In the Disassembly tab, you
+                        should see a checkbox at the top of the right-hand window saying 'Line Prefixes'. When you
+                        enable this and then subsequently go to the <span id="inline-code">main_main</span> function,
+                        we can easily derive the RVA, which is <span id="inline-code">0xDAE980</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_2.png" alt="RVA" onclick="window.open(this.src, '_blank');"
+                            width="650" , height="650" onmouseover="this.style.cursor='zoom-in'"
+                            onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q3) In the isRunningAsAdmin function, which Windows API is the first
+                        to be resolved via the HCWin/apihash package?</h3>
+                    <p>
+                        Using IDA (Pro), we can use the functions search option to look for the <span
+                            id="inline-code">isRunningAsAdmin</span> function and navigate to it in our IDA View window.
+                        As IDA has automatically resolved string names, function names and other valuable information
+                        for us, we only have to read through the function to identify the answer to the question.
+                        <br><br>
+                        At line <span id="inline-code">0xDA716C</span> we see a reference to <span
+                            id="inline-code">_ptr_apihash_APIHash</span> and subsequently a call to the function called
+                        <span id="inline-code">HCWin_apihash__ptr_APIHash_GetCurrentProcess</span>.
+                        <br>
+                        <img src="../img/malops_shinyspider_3_1.png" alt="APIHash"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                        <br><br>
+                        Furthermore, when we dive into this function, we see that the string <span
+                            id="inline-code">GetCurrentProcess</span> is obtained and used as a parameter for a call to
+                        the function <span id="inline-code">HCWin_apihash__ptr_APIHash_CallAPI</span>
+                        <br>
+                        This allows us to conclude that the Windows API that is being resolved is <span
+                            id="inline-code">GetCurrentProcess</span>.
+                        <br>
+                        <img src="../img/malops_shinyspider_3_2.png" alt="APIHash2"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q4) The binary calls GetTokenInformation. What specific token class
+                        (by name) is being requested to verify privileges?</h3>
+                    <p>
+                        Within the <span id="inline-code">isRunningAsAdmin</span> function, a syscall to <span
+                            id="inline-code">GetTokenInformation</span> can be identified. The function takes
+                        a total of 5 parameters, with the second parameter containing the <span
+                            id="inline-code">TOKEN_INFORMATION_CLASS</span>. In the case of this malware sample,
+                        that value is passed through <span id="inline-code">ebx</span> which is set to the value <span
+                            id="inline-code">0x14</span> and corresponds to <span id="inline-code">TokenElevation</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_4.png" alt="APIHash"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q5) Which package is responsible for configuring and executing the
+                        evasion of Event Tracing for Windows?</h3>
+                    <p>
+                        Based on the information in the question, we have a few starting points that could lead us to
+                        identifying the function in question. The most straightforward way is to use the functions
+                        search option and use any of the keywords (such as "evade" or "etw") to identify corresponding
+                        functions in the binary. To our luck, one package contains functions responsible for configuring
+                        and executing the evasion of Event Tracing for Windows: <span
+                            id="inline-code">HCWin/etwevasion</span>.
+                        <br>
+                        <img src="../img/malops_shinyspider_5.png" alt="ETWEvasion"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q6) If the malware fails to retrieve the computer name via the Windows
+                        API, which environment variable does it read as a fallback to generate the system seed?</h3>
+                    <p>
+                        Before we start our quest down a rabbit hole in search of a function calling <span
+                            id="inline-code">GetComputerName*</span>, we have to remind ourselves that the malware uses
+                        API hashing, so we will not be able to find it searching for strings and any function that uses
+                        <span id="inline-code">GetComputerName*</span> might be a false flag.
+                        <br>
+                        As such, we have to rely on the last part of the question, to actually search for a function
+                        that generates the system seed. Within the <span id="inline-code">main</span> package, the
+                        function <span id="inline-code">getSystemSeed</span> seems the prime candidate.
+                        <br>
+                        Within the function, we see the hardcoded values for the DLL and GetComputerName function and at
+                        the end of the block, we see that if the result is zero, a call to <span
+                            id="inline-code">Getenv</span> takes place and the specific environment variable that the
+                        value is request for corresponds to <span id="inline-code">USERNAME</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_6.png" alt="env" onclick="window.open(this.src, '_blank');"
+                            width="650" , height="650" onmouseover="this.style.cursor='zoom-in'"
+                            onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q7) The function getSystemSeed dynamically loads a DLL to access
+                        GetComputerNameW. What is the name of this DLL?</h3>
+                    <p>
+                        We stay within the <span id="inline-code">getSystemSeed</span> function. We previously already
+                        identify the operation which loads the string <span id="inline-code">GetComputerNameW</span>.
+                        Shortly before this operation we identify that the string <span
+                            id="inline-code">kernel32.dll</span> is loaded.
+                        <br>
+                        <img src="../img/malops_shinyspider_7.png" alt="DLLLoad"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q8) The malware prepends a specific string to the generated Mutex name
+                        to ensure the synchronization object is visible across all user sessions. What is this prefix?
+                    </h3>
+                    <p>
+                        Within the <span id="inline-code">main</span> package, a function called <span
+                            id="inline-code">generateMutexName</span>
+                        can be identified. At the end of the function, at and after <span
+                            id="inline-code">0xDA70FA</span>, we see the concatenation of the generated mutex
+                        with a hardcoded string of the value <span id="inline-code">Global\</span>. By reading the
+                        <a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.mutex?view=net-10.0">Microsoft
+                            Documentation</a>, we learn that the <span id="inline-code">Global\</span> prefix should be
+                        used to ensure the mutex is visible across all terminal server sessions.
+                        <br>
+                        <img src="../img/malops_shinyspider_8.png" alt="Mutex"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q9) Which specific Windows error code does the checkSingleInstance
+                        function check to see if the Mutex already exists?</h3>
+                    <p>
+                        By analyzing the <span id="inline-code">main_checkSingleInstance</span> function, we should be
+                        able to identify the specific Windows error code. At the bottom of the function, we see three
+                        specific nodes which all contain a specific string that will be send to <span
+                            id="inline-code">fmt_Errorf</span>, which handles formatting error messages. The message
+                        <span id="inline-code">another instance is running</span> is highly likely indicating that
+                        the mutex already exists and therefore another instance of this malware is already running.
+                        <br><br>
+                        Just before this error block, we see that a check against the value <span
+                            id="inline-code">0xB7</span> takes place. By analyzing the <a
+                            href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-">System
+                            error codes</a>, we learn that <span id="inline-code">0xB7</span> denotes that the mutex
+                        already exists.
+                        <br>
+                        <img src="../img/malops_shinyspider_9.png" alt="WinError"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q10) The Hook Shield module starts a monitoring routine to check for
+                        hooks periodically. What is the time interval (in milliseconds) defined in this check?</h3>
+                    <p>
+                        The <span id="inline-code">HCWin/hookshield</span> module contains multiple functions, amongst
+                        which the <span id="inline-code">performScan</span> function. During analysis, we can't find any
+                        integer that matches a time interval. This function is called from <span
+                            id="inline-code">monitoringLoop</span>. Within this function, we neither can find any time
+                        interval variable. The caller of <span id="inline-code">monitoringLoop</span> is <span
+                            id="inline-code">StartMonitoring_deferwrap2</span> which is invoked by <span
+                            id="inline-code">StartMonitoring</span>. In neither of these functions do we find any
+                        variable which clearly stands out as matching a time interval. However, <span
+                            id="inline-code">StartMonitoring</span> is invoked from main_main with one argument:
+                        <span id="inline-code">0x1DCD6500</span> or in decimal: <span id="inline-code">500000000</span>.
+                        <br><br>
+                        Taking the answer format into account, it appeared to me that the given value is in nanoseconds.
+                        Therefore, the interval in milliseconds is <span id="inline-code">500</span>.
+                        <br>
+                        <img src="../img/malops_shinyspider_10.png" alt="HookShield"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q11) To prevent victims from restoring files, the malware executes a
+                        specific function to remove Windows Volume Shadow Copies. What is the name of this function?
+                    </h3>
+                    <p>
+                        By now, we know that all malware functionality is part of the <span
+                            id="inline-code">HCWin</span> package. Therefore, we can iterate through the modules in this
+                        package, to identify any functions that perform operations on Volume Shadow Copies.
+                        <br><br>
+                        We see that there's a specific module named <span id="inline-code">shadow</span>, which contains
+                        amongst others the function <span id="inline-code">DeleteShadowCopies</span>.
+                        <br>
+                        <img src="../img/malops_shinyspider_11.png" alt="VSS" onclick="window.open(this.src, '_blank');"
+                            width="650" , height="650" onmouseover="this.style.cursor='zoom-in'"
+                            onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q12) How many distinct services or processes is the malware configured
+                        to terminate (kill)?</h3>
+                    <p>
+                        When analyzing the <span id="inline-code">killBlacklistedServices</span> function, we see at
+                        location <span id="inline-code">0xDAB7CD</span> a pointer to a hardcoded offset is loaded into
+                        <span id="inline-code">rax</span>. Subsequently, that is stored in <span
+                            id="inline-code">[rsp+240h+var_190]</span> which is in a loop block and gets increased for
+                        each iteration at location <span id="inline-code">0xDAB7EC</span>.
+                        <br>
+                        Now, by analyzing what is at <span id="inline-code">off_1066D00</span>, we identify that it
+                        contains pointers to hardcoded strings elsewhere within the <span id="inline-code">.rdata</span>
+                        section. All of the strings contain a service or process name, therefore, we can count all
+                        values in this list and obtain the total number of distinct services or processes to kill.
+                        <br>
+                        In total, the list contains <span id="inline-code">31</span> distinct services or processes.
+                        <br>
+                        <img src="../img/malops_shinyspider_12.png" alt="killnums"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q13) What is the memory address of the string data for the first
+                        service in the kill list?</h3>
+                    <p>
+                        By answering question 12, we have identified the location of the list to be at <span
+                            id="inline-code">0x1066D08</span>.
+                        Furthermore, we know that the list contains pointers to data, so we will have to follow the
+                        pointer of the first entry in the list to actually identify the memory address of the string.
+                        Do note, that each pointer contains an additional offset. So for the first entry, the data
+                        starts at <span id="inline-code">0xE4BF45</span>, and we need to add the offset of <span
+                            id="inline-code">0x155</span> to it.
+                        <br>
+                        The final answer in this case is that the first service is located at: <span
+                            id="inline-code">0xE4C09A</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_13.png" alt="killlist"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q14) The malware uses multiple methods to propagate to other systems.
+                        According to the string at 0xe4c09d, what is the first protocol it attempts to use for remote
+                        execution?</h3>
+                    <p>
+                        We can navigate to the memory location by using the shortcut <span id="inline-code">G</span> in
+                        IDA. We end up in the <span id="inline-code">.rdata</span> section and see a bunch of bytes.
+                        <br>
+                        However, we know from the question that there must be a string here, so we can use the shortcut
+                        <span id="inline-code">A</span> to directly convert the bytes to a string. The first three
+                        letters
+                        at this location correspond to <span id="inline-code">WMI</span>.
+                        <br><br>
+                        WMI stands for Windows Management Instrumentation and is a popular method to <a
+                            href="https://www.cybertriage.com/blog/wmi-malware/">remotely execute commands</a>
+                        <br>
+                        <img src="../img/malops_shinyspider_14.png" alt="remoteexec"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+                    <h3 id="post__content__title">Q15) To identify vulnerable file shares for lateral movement, the
+                        malware checks for a specific open port number. What is this port?</h3>
+                    <p>
+                        Within the <span id="inline-code">HCWin/shares</span> package, we identify the existence of a
+                        function named <span id="inline-code">isSMBPortOpen</span>. Within this function we identify the
+                        static value of <span id="inline-code">445</span> which is used to join the host and port.
+                        <br>
+                        <img src="../img/malops_shinyspider_15.png" alt="openport"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q16) The malware contains a hardcoded list of files to skip to ensure
+                        the OS remains bootable. Which hidden system directory related to deleted files is explicitly
+                        excluded?</h3>
+                    <p>
+                        This took some manual effort of going through the <span id="inline-code">.rdata</span> section
+                        and converting all individual bytes to strings. Furthermore, based off of "directory related to
+                        deleted files", it seemed apparent we would be searching for the hidden directory name for the
+                        recycle bin. Ultimately, we end up finding a string referring to <span
+                            id="inline-code">$recycle.bin</span>
+                        <br>
+                        Ultimately, it is likely that during analysis we missed the iterator over one of the variables
+                        within <span id="inline-code">.rdata</span> that would have corraborated our initial hunch.
+                        <br>
+                        <img src="../img/malops_shinyspider_16.png" alt="skipFiles"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q17) To avoid encrypting its own instructions, the malware excludes a
+                        specific filename from the encryption list. What is the name of this note file?</h3>
+                    <p>
+                        Previously, we identified two functions responsible for identifying files <span
+                            id="inline-code">findFiles</span> and <span id="inline-code">findFiles_func1</span>.
+                        Within the latter, we identify a hardcoded string being loaded at <span
+                            id="inline-code">0xDAB3D8</span> with a value of <span
+                            id="inline-code">R3ADME_1Vks5fYe.txt</span>. Now, most often, ransomware operators drop a
+                        file with a name along the lines of "README" on infected systems containing instructions on how
+                        to contact and more importantly pay the operators to remove the ransomware. It is likely that
+                        this
+                        file is being excluded.
+                        <br><br>
+                        To further corraborate our finding, we look at the function <span
+                            id="inline-code">encryptFile</span>,
+                        which also incorporates a check to ensure that the README file is not encrypted, as the function
+                        will return without encrypting the file if the current filename matches the hardcoded README
+                        file name. Therefore, we can conclude that this file contains the instructions and is excluded.
+                        <img src="../img/malops_shinyspider_17.png" alt="README"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q18) The malware uses a checksum algorithm to identify files it has
+                        already encrypted. What is the expected total length (including the dot) of the extension
+                        validated in 'isValidExtension'?</h3>
+                    <p>
+                        To answer this question, we dive into the <span id="inline-code">isValidExtension</span>
+                        function. This function resides in the <span id="inline-code">main</span> package, and another
+                        function containing the word <span id="inline-code">Extension</span> exists, by the name of
+                        <span id="inline-code">generateExtension</span>. By analyzing the latter function, we identify
+                        that including the dot, an extension of length 9 is generated.
+                        <br><br>
+                        Now we can go back to <span id="inline-code">isValidExtension</span> and identify that the first
+                        check in this function is to see if the length is equal to 9.
+                        <br>
+                        <img src="../img/malops_shinyspider_18.png" alt="Extension"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q19) The malware generates a random symmetric key for each file. Based
+                        on the buffer size passed to crypto/rand.Read, what is the bit length of this key?</h3>
+                    <p>
+                        By cross-referencing all calls to <span id="inline-code">crypto/rand.Read</span> we identify
+                        that it is called from <span id="inline-code">encryptFile</span>. The buffer size passed to the
+                        <span id="inline-code">Read</span> function is of size 32 bytes.
+                        <br>
+                        Therefore, by calculating the bit size, we know that the key is of size: 256 bits.
+                        <img src="../img/malops_shinyspider_19.png" alt="KeySize"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q20) To secure the per-file symmetric keys, the malware encrypts them
+                        using a public key algorithm. Which specific padding scheme is used with RSA?</h3>
+                    <p>
+                        We stay within the <span id="inline-code">encryptFile</span> function from the previous question
+                        and continue analyzing the code. At location <span id="inline-code">0xDA8C99</span> we see a
+                        call to a function that will load the Public Key from the Modulus. Subsequently a new SHA256
+                        value
+                        is created and at <span id="inline-code">crypto_rsa_EncryptOAEP</span> is called.
+                        <br><br>
+                        Now, RSA uses OAEP, which stands for <a
+                            href="https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding">Optimal
+                            Asymmetric Encryption Padding</a> to enhance the security of the RSA algorithm.
+                        <br>
+                        <img src="../img/malops_shinyspider_20.png" alt="RSA Padding"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q21) The malware creates a header for encrypted files. What 4-byte
+                        ASCII string (Magic Marker) is written at the very end of the file header?</h3>
+                    <p>
+                        Within the <span id="inline-code">encryptFile</span> function, starting at <span
+                            id="inline-code">0xDA8D20</span>, a string is trimmed and subsequently lowered.
+                        Then, the length of the string is compared to 7 and subsequently the contents of the string
+                        is compared. Afterwards, there are two main paths that lead to <span
+                            id="inline-code">0xDA8D7F</span>
+                        and in both a string ("partial" and "automatic") are compared. Whichever comes out, at <span
+                            id="inline-code">0xDA8D7F</span>, the string "SPDRENDS" is placed into the buffer <span
+                            id="inline-code">[rsp+3F0h+var_374.ptr]</span>.
+                        This buffer is then used at <span id="inline-code">0xDA903B</span> to load the value into <span
+                            id="inline-code">rbx</span>
+                        which is subsequently passed to the <span id="inline-code">Write</span> function after
+                        encryption has completed.
+                        <br><br>
+                        Based on this analysis, we can conclude that the 4-byte ASCII string that is written to the end
+                        of the file is: <span id="inline-code">ENDS</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_21.png" alt="magicmarker"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q22) For large files, the malware does not encrypt the entire content
+                        to save time. What single character does it write to the file footer to indicate this mode?</h3>
+                    <p>
+                        Within the <span id="inline-code">encryptFile</span> function, starting at <span
+                            id="inline-code">0xDA8D20</span>, a string is trimmed and subsequently lowered.
+                        Then, the length of the string is compared to 7 and subsequently the contents of the string
+                        is compared. When we follow the blocks from <span id="inline-code">0xDA8D30</span> to <span
+                            id="inline-code">0xDA8D42</span> the individual characters spell "partial", upon which the
+                        value <span id="inline-code">0x50</span> is loaded into eax.
+                        <br><br>
+                        Then at <span id="inline-code">0xDA8DB0</span> a compare of <span id="inline-code">al</span>
+                        against <span id="inline-code">0x50</span>. If the values are equal, we enter <span
+                            id="inline-code">0xDA8D8F</span> which, based on some hardcoded strings appears to be the
+                        partial encryption routine.
+                        <br><br>
+                        Now, when this routine ends successfully, we see at <span id="inline-code">0xDA8FF6</span> the
+                        value of <span id="inline-code">0x50</span> is moved back into <span
+                            id="inline-code">eax</span>.
+                        <br>
+                        At <span id="inline-code">0xDA901B</span> the value gets moved to <span
+                            id="inline-code">[rsp+3F0h+var_395]</span>, which later on gets moved into <span
+                            id="inline-code">ecx</span> and is subsequently moved into <span
+                            id="inline-code">[rsp+3F0h+var_374.cap+6]</span> which is passed to the <span
+                            id="inline-code">Write</span> function and written to the end of the file.
+                        Therefore, we can conclude that the value <span id="inline-code">0x50</span> or <span
+                            id="inline-code">P</span> is the single character it writes to the file footer to indicate
+                        partial encryption for large files.
+                        <br>
+                        <img src="../img/malops_shinyspider_22.png" alt="singlechar"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q23) The malware uses a specific Windows API function from user32.dll
+                        to apply the new wallpaper. What is the name of this function?</h3>
+                    <p>
+                        Within the <span id="inline-code">main</span> package, we identify a function called <span
+                            id="inline-code">changeWallpaper</span>. By analyzing this function, we identify the loading
+                        of the static string <span id="inline-code">user32.dll</span>, after which the static string
+                        <span id="inline-code">SystemParametersInfoW</span> is loaded. By reading the <a
+                            href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow">docs</a>,
+                        we can conclude that this function can be used to change the wallpaper.
+                        <br>
+                        <img src="../img/malops_shinyspider_23.png" alt="wallpaper"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q24) The malware uses above mentioned API to change the desktop
+                        wallpaper. What specific SPI constant (by name) is passed as the 'uiAction' argument to trigger
+                        this behavior?</h3>
+                    <p>
+                        By further analyzing the actions around the API call, we identify that the value <span
+                            id="inline-code">0x14</span> is stored in <span id="inline-code">[rsp+60h+var_20]</span>
+                        which is later loaded into <span id="inline-code">r8</span> and passed to the
+                        SystemParametersInfoW call.
+                        <br><br>
+                        This value denotes the SPI constant and using the <a
+                            href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow">Windows
+                            docs</a>, we learn that this value corresponds to the SPI string: <span
+                            id="inline-code">SPI_SETDESKWALLPAPER</span>
+                        <br>
+                        <img src="../img/malops_shinyspider_24.png" alt="uiAction"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+                    <h3 id="post__content__title">Q25) In the fallback self-destruct mechanism, the malware drops a
+                        VBScript to disk. Which Windows executable is explicitly invoked to run this script silently?
+                    </h3>
+                    <p>
+                        The <span id="inline-code">main</span> package contains a function called <span
+                            id="inline-code">selfDestruct</span>. The main mechanism for self-destruction is initiated
+                        through the <span id="inline-code">deleteSelfViaReopenFlag</span>. If the result of this
+                        function is negative, we resort to the method which is defined in <span
+                            id="inline-code">deleteSelfOnReboot</span>.
+                        Ultimately, if this also fails, we fallback to <span id="inline-code">deleteSelfViaWMI</span>.
+                        <br><br>
+                        Within this function, we identify the vbscript name at <span id="inline-code">0xDAE287</span>
+                        and subsequently see the hardcoded Windows executable <span id="inline-code">wscript.exe</span>
+                        being passed to <span id="inline-code">CreateProcessW</span> to execute the script silently (the
+                        <span id="inline-code">/b</span> parameter specifies batch mode, which doesn't display alerts,
+                        scripting errors or input prompts.).
+                        <br>
+                        <img src="../img/malops_shinyspider_25.png" alt="self-destruct"
+                            onclick="window.open(this.src, '_blank');" width="650" , height="650"
+                            onmouseover="this.style.cursor='zoom-in'" onmouseout="this.style.cursor='default'">
+                    </p>
+
+
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="../re" class="set-1">Reverse Engineering</a>
+                            <a href="../projects" class="set-1">Projects</a>
+                            <a href="../ctf/" class="set-5">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="../js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="../js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="../js/vendors/jquery.fitvids.js"></script>
+    <script src="../js/vendors/lazyload.min.js"></script>
+    <script src="../js/vendors/transition.js"></script>
+    <script src="../js/vendors/zoom.min.js"></script>
+    <script src="../js/vendors/prism.js"></script>
+    <script src="../js/readingtime.js"></script>
+</body>
+
+</html>
