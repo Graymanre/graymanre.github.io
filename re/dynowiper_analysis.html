@@ -217,11 +217,10 @@
                         <br><br>
                         Subsequently, it will call <span id="inline-code">sub_402500</span> which iterates over each
                         file. If the file is once again a directory, it will first check that the directory name is
-                        equal to <span id="inline-code">system32</span> and <span id="inline-code">windows</span>
-                        and <span id="inline-code">program files</span> and not equal to any of: <span
-                            id="inline-code">program files(x86), temp, recycle.bin, $recycle.bin, boot, perflogs,
-                            appdata, documents and settings</span>. It will then call itself again using the newly
-                        obtained subdirectory and continue looping until a file has been found.
+                        not equal to <span id="inline-code">system32, windows, program files, program files(x86), temp,
+                            recycle.bin, $recycle.bin, boot, perflogs, appdata, documents and settings</span>. It will
+                        then call itself again using the newly obtained subdirectory and continue looping until a file
+                        has been found.
                         <br><img class="lazy" data-src="/img/dynowiper_fileident.png"
                             alt="DynoWiper File Identification">
                         <br><br>
