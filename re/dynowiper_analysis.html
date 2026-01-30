@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>GraymanRe - ShinySpider Ransomware</title>
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <meta name="description" content="Analyzing DynoWiper - Sandworm's Polish Power Grid Wiper" />
+
+    <meta property="og:title" content="GraymanRe - Sandworm's Polish Power Grid DynoWiper" />
+    <meta property="og:description" content="Analyzing DynoWiper - Sandworm's Polish Power Grid Wiper" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://graymanre.github.io/img/sandworm_dynowiper.webp" />
+    <meta property="og:image:secure_url" content="https://graymanre.github.io/img/sandworm_dynowiper.webp" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="sandworm dynowiper" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:url" content="https://graymanre.github.io/re/dynowiper_analysis.html" />
+    <meta property="og:updated_time" content="2025-01-30T15:35:00+00:00" />
+    <meta property="article:published_time" content="2026-01-30T15:35:00+00:00" />
+    <meta property="article:modified_time" content="2026-01-30T15:35:00+00:00" />
+    <meta property="article:section" content="re" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://graymanre.github.io/img/sandworm_dynowiper.webp" />
+    <meta name="twitter:creator" content="@grayman_re" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="GraymanRE" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://graymanre.github.io/ctf/sandworm_dynowiper.html">
+    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2026-01-30T15:35:00+02:00">30 January 2026</time>
+                            </div>
+                            <h2 class="post__title">Analyzing DynoWiper - Sandworm's Polish Power Grid Wiper</h2>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRe">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRe</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/re/" class="post__tag">Reverse Engineering</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h3 id="post__content__title">Introduction</h3>
+                    <p>
+                        On it's 10th anniversary of the destructive attacks on Ukraine's power grid, Sandworm gained
+                        access to OT systems at energy plants in Poland at the end of December 2025. Using a wiper
+                        dubbed DynoWiper by <a
+                            href="https://www.welivesecurity.com/en/eset-research/eset-research-sandworm-cyberattack-poland-power-grid-late-2025/">Eset</a>,
+                        it was not successful in causing electrical outages.
+                        Nonetheless, <a
+                            href="https://www.dragos.com/blog/poland-power-grid-attack-electrum-targets-distributed-energy-2025">Dragos</a>
+                        reported that some OT equipment was bricked on affected sites in what has been described as the
+                        largest cyberattack targeting the country in years.
+                        <br><br>
+                        We have obtained the specific DynoWiper sample that was used in this attack and we will dive
+                        into reversing the wiper in this blog post.
+                        <br><br>
+                        <b>DynoWiper has the following features and behaviours:</b>
+                    <ul>
+                        <li>Initializes a pseudorandom number generator using the Mersenne Twister with a seed of
+                            <span id="inline-code">0x1571</span>
+                        </li>
+                        <li>Uses the PRNG to generate 16 pseudorandom bytes for file overwrite operations</li>
+                        <li>Identify all removable and fixed media drives on the system</li>
+                        <li>Identify all folders, subfolders and files which it selectively overwrites</li>
+                        <li>Removal of crucial operating system files</li>
+                        <li>Obtaining of token privileges to force a system shutdown</li>
+                    </ul>
+                    <table>
+                        <tr>
+                            <th>Hash Type</th>
+                            <th>Hash Value</th>
+                        </tr>
+                        <tr>
+                            <td>SHA1</td>
+                            <td>4EC3C90846AF6B79EE1A5188EEFA3FD21F6D4CF6</td>
+                        </tr>
+                        <tr>
+                            <td>SHA256</td>
+                            <td>835b0d87ed2d49899ab6f9479cddb8b4e03f5aeb2365c50a51f9088dcede68d5</td>
+                        </tr>
+                    </table>
+
+                    <h3 id="post__content__title">Table of Contents</h3>
+                    <div class="nav">
+                        <a href="#section1" class="btn">1. Initializing Mersenne Twister PRNG</a><br>
+                        <a href="#section2" class="btn">2. Identifying all drives and root paths</a><br>
+                        <a href="#section3" class="btn">3. Identifying, overwriting and removing files</a><br>
+                        <a href="#section4" class="btn">4. Obtain token privileges to force a system shutdown</a><br>
+                        <br>
+                    </div>
+
+                    <h3 id="section1">Initializing Mersenne Twister PRNG</h3>
+                    <p>
+                        Directly at the start of <span id="inline-code">WinMain</span>, <span
+                            id="inline-code">sub_403A90</span> is called, which initializes the internal state
+                        of a pseudorandom number generator, specifically using the Mersenne Twister MT19937 (or a very
+                        close variant). Distinct to Mersenne Twister in this operation is the usage of static value
+                        <span id="inline-code">0x6c078965</span> and the length of <span id="inline-code">0x270</span>
+                        (624).
+                        <br><br>
+                        Next, from <span id="inline-code">WinMain</span>, <span id="inline-code">sub_401F40</span> uses
+                        the pseudorandom number generator to calculate blocks of 16-bytes which are stored at <span
+                            id="inline-code">[esi+edi+5000]</span>.
+                        <br><img class="lazy" data-src="/img/dynowiper_mersenne.png"
+                            alt="DynoWiper Mersenne Twister Init">
+                    </p>
+
+                    <h3 id="section2">Identifying all drives and root paths</h3>
+                    <p>
+                        In <span id="inline-code">sub_402CE0</span>, all logical drives are obtained after which the
+                        malware loops over each drive. For each drive, it will obtain the <span
+                            id="inline-code">lpRootPathName</span> and the corresponding drivetype using <span
+                            id="inline-code">GetDriveTypeW</span>. When the drive is either a removable media or a
+                        fixed media, it will store the <span id="inline-code">lpRootPathName</span>.
+                    </p>
+
+                    <h3 id="section3">Identifying, overwriting and removing files</h3>
+                    <p>
+                        In <span id="inline-code">sub_402290</span>, the wiper will iterate over each identified drive
+                        and enumerates every file in each drive using the iterator provided by <span
+                            id="inline-code">FindFirstFileW</span> and <span id="inline-code">FindNextFileW</span>. It
+                        first ensures that the obtained file is not equal to <span id="inline-code">.</span> or <span
+                            id="inline-code">..</span>, which by default are references to the current and top level
+                        directory. Next, it checks if the obtained file is of type directory. If the file is a
+                        directory, it will set the file attributes to <span
+                            id="inline-code">FILE_ATTRIBUTE_NORMAL</span> (</span>0x80</span>).
+                        <br><br>
+                        Subsequently, it will call <span id="inline-code">sub_402500</span> which iterates over each
+                        file. If the file is once again a directory, it will first check that the directory name is
+                        equal to <span id="inline-code">system32</span> and <span id="inline-code">windows</span>
+                        and <span id="inline-code">program files</span> and not equal to any of: <span
+                            id="inline-code">program files(x86), temp, recycle.bin, $recycle.bin, boot, perflogs,
+                            appdata, documents and settings</span>. It will then call itself again using the newly
+                        obtained subdirectory and continue looping until a file has been found.
+                        <br><img class="lazy" data-src="/img/dynowiper_fileident.png"
+                            alt="DynoWiper File Identification">
+                        <br><br>
+                        In case the file is actually a file, it will call <span id="inline-code">sub_402B30</span> which
+                        sets the file's attributes to and then attempts to open the file with generic read/write access.
+                        If it has obtained access, it will overwrite the first 16 bytes with the value stored in <span
+                            id="inline-code">[esi+edi+5000]</span> which holds a 16-byte buffer of bytes which were
+                        generated using the Mersenne Twister initialized PRNG. If the size of the file is larger than 16
+                        bytes, it will continuously overwrite blocks of 16 bytes. Once this operation completes, the
+                        function returns to <span id="inline-code">sub_402290</span>.
+                        <br><br>
+                        Back in <span id="inline-code">sub_402290</span>, the obtained file is then removed using <span
+                            id="inline-code">DeleteFileW</span>
+                        <br><img class="lazy" data-src="/img/dynowiper_overwritefile.png" alt="Mersenne Twister Init">
+                    </p>
+
+                    <h3 id="section4">Obtain token privileges to force a system shutdown</h3>
+                    <p>
+                        Back in the main function, the wiper obtains the current process token and checks if the
+                        <span id="inline-code">SeShutdownPrivilege</span> is part of the current token privileges. If it
+                        isn't the privilege is attempted to be obtained through a call to <span
+                            id="inline-code">AdjustTokenPrivileges</span>.
+                        Lastly, it will call <span id="inline-code">ExitWindowsEx</span> with a reason of <span
+                            id="inline-code">SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_UPGRADE</span> or
+                        <span id="inline-code">SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_INSTALLATION |
+                            SHTDN_REASON_MINOR_MAINTENANCE</span>
+                        <br><img class="lazy" data-src="/img/dynowiper_shutdown.png" alt="DynoWiper Shutdown">
+                    </p>
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/re" class="set-1">Reverse Engineering</a>
+                            <a href="/projects" class="set-1">Projects</a>
+                            <a href="/ctf/" class="set-5">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/vendors/prism.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
+</body>
+
+</html>

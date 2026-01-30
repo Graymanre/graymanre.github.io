@@ -93,6 +93,14 @@
     "tags": "ShinySpider, Ransomware, Go Malware, Reverse Engineering",
     "url": "ctf/malops_shinyspider.html",
     "date": "14 January 2026",
-    "content": "everse engineering the Shiny Spider Ransomware sample and solving the MalOps challenge."
+    "content": "Reverse engineering the Shiny Spider Ransomware sample and solving the MalOps challenge."
+  },
+  {
+    "title": "Analyzing DynoWiper - Sandworm's Polish Power Grid Wiper",
+    "category": "RE",
+    "tags": "Sandworm, Russia, Wiper, DynoWiper, OT, Electric Grid, Reverse Engineering",
+    "url": "re/dynowiper_analysis.html",
+    "date": "30 January 2026",
+    "content": "Reverse engineering a destructive wiper used by Sandworm in December 2025 when attacking Polish Power Grids"
   }
 ]
