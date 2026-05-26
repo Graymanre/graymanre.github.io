@@ -4200,48 +4200,51 @@ textarea {
   resize: vertical
 }
 
-  /* Add vertical separators */
+/* Add vertical separators */
 .col-vsep::after {
   content: "";
   display: block;
-  border-right: 2px solid #3e8094; /* Customize the color as needed */
+  border-right: 2px solid #3e8094;
+  /* Customize the color as needed */
   height: 100%;
   position: absolute;
   right: 0;
   top: 0;
 }
-  
-  /* Adjust the last column to not have a separator */
-.row > .col-vsep:last-child::after {
+
+/* Adjust the last column to not have a separator */
+.row>.col-vsep:last-child::after {
   border-right: none;
 }
-  
-  /* Ensure columns are positioned relatively for absolute positioning of separators */
+
+/* Ensure columns are positioned relatively for absolute positioning of separators */
 .col-vsep {
   position: relative;
 }
+
 .col-hsep::after {
   content: "";
   display: block;
-  border-bottom: 2px solid #3e8094; /* Customize the color as needed */
+  border-bottom: 2px solid #3e8094;
+  /* Customize the color as needed */
   width: 100%;
   position: relative;
   top: 100%;
   left: 0;
 }
-  
-  /* Adjust the last row to not have a separator if desired */
-.container > .col-hsep:last-child::after {
+
+/* Adjust the last row to not have a separator if desired */
+.container>.col-hsep:last-child::after {
   border-bottom: none;
 }
 
-#inline-code {
-    color: #ffffff;
-    background-color: #3e8094;
-    padding: 2px 8px 2px;
-    border-radius: 3px;
-    font-size: 10pt;
-    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+.inline-code {
+  color: #ffffff;
+  background-color: #3e8094;
+  padding: 2px 8px 2px;
+  border-radius: 3px;
+  font-size: 10pt;
+  font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
 }
 
 /* Style the collapsible content. Note: hidden by default */
@@ -4258,7 +4261,8 @@ textarea {
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .collapsible:hover {
+.active,
+.collapsible:hover {
   background-color: #3a394d;
 }
 
@@ -4278,7 +4282,7 @@ textarea {
 }
 
 .search-result h3 {
-  text-align: left; 
+  text-align: left;
   margin-bottom: 0px;
 }
 

@@ -101,6 +101,14 @@
     "tags": "Sandworm, Russia, Wiper, DynoWiper, OT, Electric Grid, Reverse Engineering",
     "url": "re/dynowiper_analysis.html",
     "date": "30 January 2026",
-    "content": "Reverse engineering a destructive wiper used by Sandworm in December 2025 when attacking Polish Power Grids"
+    "content": "Reverse engineering a destructive wiper used by Sandworm in December 2025 when attacking Polish Power Grids."
+  },
+  {
+    "title": "PE Headers for Malware Analysts: From File Structure to Suspicious Indicators",
+    "category": "Projects",
+    "tags": "Reverse Engineering, Static Analysis, PE Headers, PE COFF",
+    "url": "projects/pe_headers_for_malware_analysts.html",
+    "date": "26 May 2026",
+    "content": "Learn how PE headers work by building PEDetect, a C++ PE parser for examining DOS headers, Rich headers, COFF headers, optional headers, data directories, and sections from a malware analysis perspective."
   }
 ]

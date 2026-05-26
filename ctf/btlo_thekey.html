@@ -6,23 +6,23 @@
     <meta property="og:description" content="Blue Team Labs The Key Forensics Challenge Writeup" />
     <meta property="og:image" content="https://graymanre.github.io/img/btlo_thekey.webp" />
     <meta property="og:url" content="https://graymanre.github.io/" />
-    <meta name="description" content="Writeup for the The Key challenge by Blue Team Labs Online"/>
+    <meta name="description" content="Writeup for the The Key challenge by Blue Team Labs Online" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://graymanre.github.io/img/btlo_thekey.webp" />
     <meta name="twitter:creator" content="@grayman_re" />
-    
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <title>GraymanRe - BTLO The Key</title>
-    
+
     <link rel="canonical" href="https://graymanre.github.io/">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe" href="/feed.xml">
+
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
+
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
@@ -37,14 +37,14 @@
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-    
+
         gtag('config', 'G-4VZEKGVZPK');
     </script>
 </head>
@@ -66,7 +66,8 @@
                                 <i class="ion ion-md-close"></i>
                             </div>
                             <label for="js-search-input" class="screen-reader-text">Search for Post</label>
-                            <input type="text" id="js-search-input" class="search__text" autocomplete="off" placeholder="Type to search...">
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
                         </div>
                     </div>
                 </div>
@@ -86,14 +87,14 @@
                     <div class="col col-8 col-t-12">
                         <div class="post-head__box">
                             <div class="post__meta">
-                                <span id="time"></span> min read <time class="post__date" datetime="2024-07-03T00:00:00+02:00">3 July 2024</time>
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2024-07-03T00:00:00+02:00">3 July 2024</time>
                             </div>
                             <h2 class="post__title">Blue Team Labs Online - The Key</h2>
                             <div class="post__bottom">
                                 <div class="post__author">
                                     <a href="/contact/" aria-label="GraymanRe">
-                                        <img class="post__author-image"
-                                             src="/img/logo.webp" alt="GraymanRe's Picture">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRe's Picture">
                                     </a>
                                 </div>
                                 <div class="post__bottom-meta">
@@ -116,267 +117,383 @@
                 <div class="post__content">
                     <h2 id="post__content__title">Introduction</h2>
                     <p>
-                        Today we will be walking through one of the Blue Team Labs Online Investigations: The Key. The Investigation is
-                        rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to answer 18 questions in regard to
+                        Today we will be walking through one of the Blue Team Labs Online Investigations: The Key. The
+                        Investigation is
+                        rated as <b>"Hard"</b> and will earn you <b>100 points</b>. To earn full points, you have to
+                        answer 18 questions in regard to
                         the following scenario:
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Peter, a programmer by profession, was always fascinated by Superhero movies from his childhood. He started a secret project at work without informing his Boss. Peter stored all the project files in his cloud account. His Boss came to know about Peter's secret project and asked the security team to investigate Peter's laptop. But, here comes the real headache, Peter's secret drive is encrypted!<br><br>Investigate the Disk, Help Boss in finding the Decryption Key and the Cloud Credentials of Peter.<br><br>Note: This investigation involves both Technical and Content Analysis. We suggest players immerse themselves in the scenario.</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Peter, a programmer by profession, was always fascinated by Superhero movies from his childhood. He started a secret project at work without informing his Boss. Peter stored all the project files in his cloud account. His Boss came to know about Peter's secret project and asked the security team to investigate Peter's laptop. But, here comes the real headache, Peter's secret drive is encrypted!<br><br>Investigate the Disk, Help Boss in finding the Decryption Key and the Cloud Credentials of Peter.<br><br>Note: This investigation involves both Technical and Content Analysis. We suggest players immerse themselves in the scenario.</pre>
                         </div>
+                    </div>
                     </p>
                     <h2 id="post__content__title">Timezone information</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q1) What is the TimeZone of Peter's Machine? [Hint: Find The Registry Key] (3 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q1) What is the TimeZone of Peter's Machine? [Hint: Find The Registry Key] (3 points)</pre>
                         </div>
-                        The Windows Registry contains a wealth of information in regards to the operating system and numerous of its settings and locales. One of the datapoints
-                        stored in the registry is information on the timezone that was set on the computer in question. To extract this value from the registry, we first have
-                        to download the SYSTEM hive from the forensic image. Using FTK Imager, load the <span id="inline-code">E01</span> image. The SYSTEM hive by default is
-                        located in <span id="inline-code">C:\Windows\System32\Config</span>. Download the hive and proceed to open the Forensic Registry EDitor (FRED) supplied
-                        as a tool on the host. Next load the hive, and browse to the location <span id="inline-code">ControlSet001\Control\TimeZoneInformation</span>.
-                        Identify the key <span id="inline-code">TimeZoneKeyName</span> which contains the value value <span id="inline-code">Pacific Standard Time</span>.
-                        <img class="lazy" data-src="/img/btlo_thekey_q1.png" alt="q1_answer">
+                    </div>
+                    The Windows Registry contains a wealth of information in regards to the operating system and
+                    numerous of its settings and locales. One of the datapoints
+                    stored in the registry is information on the timezone that was set on the computer in question. To
+                    extract this value from the registry, we first have
+                    to download the SYSTEM hive from the forensic image. Using FTK Imager, load the <span
+                        class="inline-code">E01</span> image. The SYSTEM hive by default is
+                    located in <span class="inline-code">C:\Windows\System32\Config</span>. Download the hive and
+                    proceed to open the Forensic Registry EDitor (FRED) supplied
+                    as a tool on the host. Next load the hive, and browse to the location <span
+                        class="inline-code">ControlSet001\Control\TimeZoneInformation</span>.
+                    Identify the key <span class="inline-code">TimeZoneKeyName</span> which contains the value value
+                    <span class="inline-code">Pacific Standard Time</span>.
+                    <img class="lazy" data-src="/img/btlo_thekey_q1.png" alt="q1_answer">
                     </p>
                     <h2 id="post__content__title">Superhero Stories</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q2) Superhero stories were introduced to Peter at his school. What is the name of the Peter's School? (10 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q2) Superhero stories were introduced to Peter at his school. What is the name of the Peter's School? (10 points)</pre>
                         </div>
-                        The attentive reader will focus their attention on "Peter's School" rather than on the "Superhero stories" part of the question. Those who have previously
-                        setup a local-only account on a Windows system, might be familiar with <a href="https://support.microsoft.com/en-us/account-billing/set-up-security-questions-as-your-verification-method-3d74aedd-88a5-4932-a211-9f0bfbab5de8">security questions</a>.
-                        These security questions can be used to recover a lost account or a forgotten password. Windows requires users to submit at least three security questions with
-                        corresponding answers. Additionally, Windows only allows a default set of questions, one of which asks for "What was the name of the first school you attended".
-                        <br><br>
-                        There are two ways in which the answers to the security questions can be retrieved. For both methods, we will need to access the SAM file. The SAM file is
-                        a database file that stores user account details and is located at <span id="inline-code">C:\Windows\system32\config\SAM</span>.
-                        <br>
-                        The first method will use the NirLauncher. This is a utility-packed toolsuite that can be used in a whole host of scenarios and cases. Familiarize yourself
-                        with the list of utilities and description as can be found on the <a href="https://launcher.nirsoft.net/utilities_list.html">NirLauncher website</a>. You
-                        will identify a specific tool called <span id="inline-code">SecurityQuestionsView</span> which provides an interface to view the security questions and
-                        their answers stored in the registry by the Windows 10 operating system. Loading the SAM file into the application, will show us that Peter went to
-                        <span id="inline-code">The Cambridge School of West Coast</span>.
-                        <br>
-                        The second method will utilize the previously used FRED. Load the SAM database and go to Domains -> Account -> Users -> Names -> PeterDProgrammer ->
-                        ResetData Key. Then decode the data from hex and discover the school Peter used to go to.
-                        <img class="lazy" data-src="/img/btlo_thekey_q2.png" alt="q2_answer">
+                    </div>
+                    The attentive reader will focus their attention on "Peter's School" rather than on the "Superhero
+                    stories" part of the question. Those who have previously
+                    setup a local-only account on a Windows system, might be familiar with <a
+                        href="https://support.microsoft.com/en-us/account-billing/set-up-security-questions-as-your-verification-method-3d74aedd-88a5-4932-a211-9f0bfbab5de8">security
+                        questions</a>.
+                    These security questions can be used to recover a lost account or a forgotten password. Windows
+                    requires users to submit at least three security questions with
+                    corresponding answers. Additionally, Windows only allows a default set of questions, one of which
+                    asks for "What was the name of the first school you attended".
+                    <br><br>
+                    There are two ways in which the answers to the security questions can be retrieved. For both
+                    methods, we will need to access the SAM file. The SAM file is
+                    a database file that stores user account details and is located at <span
+                        class="inline-code">C:\Windows\system32\config\SAM</span>.
+                    <br>
+                    The first method will use the NirLauncher. This is a utility-packed toolsuite that can be used in a
+                    whole host of scenarios and cases. Familiarize yourself
+                    with the list of utilities and description as can be found on the <a
+                        href="https://launcher.nirsoft.net/utilities_list.html">NirLauncher website</a>. You
+                    will identify a specific tool called <span class="inline-code">SecurityQuestionsView</span> which
+                    provides an interface to view the security questions and
+                    their answers stored in the registry by the Windows 10 operating system. Loading the SAM file into
+                    the application, will show us that Peter went to
+                    <span class="inline-code">The Cambridge School of West Coast</span>.
+                    <br>
+                    The second method will utilize the previously used FRED. Load the SAM database and go to Domains ->
+                    Account -> Users -> Names -> PeterDProgrammer ->
+                    ResetData Key. Then decode the data from hex and discover the school Peter used to go to.
+                    <img class="lazy" data-src="/img/btlo_thekey_q2.png" alt="q2_answer">
                     </p>
                     <h2 id="post__content__title">Favourite Quote</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q3) What is Peter's Favourite Quote? (10 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q3) What is Peter's Favourite Quote? (10 points)</pre>
                         </div>
-                        As opposed to question 2, this question doesn't leave us any clues and a hunt for something tangible that could lead the way to the answer begins.
-                        In previous challenges that I have solved, sticky notes were used for similar questions. However, the sticky notes did not contain anything valuable.
-                        After some painstaking time, I thought about the background image since people tend to use motivational or inspirational backgrounds. According to
-                        multiple <a href="https://answers.microsoft.com/en-us/windows/forum/all/windows-10-where-is-the-background-photo-kept/4562c205-7af0-4a1c-b88f-ff94b847ed7d">sources</a>,
-                        Windows stores the background image in the location <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming\Microsoft\Windows\Themes\CachedFiles</span>.
-                        As expected in the CachedFiles we discover an image and exporting it and opening it in an image viewer (e.g. Paint) will supply us with the quote:
-                        <span id="inline-code">Empty Vessels Make The Most Noise</span>.
-                        <img class="lazy" data-src="/img/btlo_thekey_q3.png" alt="q3_answer">
+                    </div>
+                    As opposed to question 2, this question doesn't leave us any clues and a hunt for something tangible
+                    that could lead the way to the answer begins.
+                    In previous challenges that I have solved, sticky notes were used for similar questions. However,
+                    the sticky notes did not contain anything valuable.
+                    After some painstaking time, I thought about the background image since people tend to use
+                    motivational or inspirational backgrounds. According to
+                    multiple <a
+                        href="https://answers.microsoft.com/en-us/windows/forum/all/windows-10-where-is-the-background-photo-kept/4562c205-7af0-4a1c-b88f-ff94b847ed7d">sources</a>,
+                    Windows stores the background image in the location <span
+                        class="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming\Microsoft\Windows\Themes\CachedFiles</span>.
+                    As expected in the CachedFiles we discover an image and exporting it and opening it in an image
+                    viewer (e.g. Paint) will supply us with the quote:
+                    <span class="inline-code">Empty Vessels Make The Most Noise</span>.
+                    <img class="lazy" data-src="/img/btlo_thekey_q3.png" alt="q3_answer">
                     </p>
                     <h2 id="post__content__title">Computer Name and IP info</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q4) What is Peter's IP Address and Computer Name? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q4) What is Peter's IP Address and Computer Name? (5 points)</pre>
                         </div>
-                        As discussed during question 1, the registry stores a lot of information on the operating system. We once again rely upon the SYSTEM hive to supply
-                        us with the two answers for this question. Using FRED, we can locate the computername under <span id="inline-code">ControlSet001\Control\ComputerName\ComputerName</span>
-                        and the IP address can be found be going through each interfaces under <span id="inline-code">ControlSet001\Services\Tcpip\Parameters\Interfaces\{365e6613-b9c3-420f-86e0-c00cd3602733}</span>
-                        <img class="lazy" data-src="/img/btlo_thekey_q4_0.png" alt="q4_answer0">
-                        <img class="lazy" data-src="/img/btlo_thekey_q4_1.png" alt="q4_answer1">
+                    </div>
+                    As discussed during question 1, the registry stores a lot of information on the operating system. We
+                    once again rely upon the SYSTEM hive to supply
+                    us with the two answers for this question. Using FRED, we can locate the computername under <span
+                        class="inline-code">ControlSet001\Control\ComputerName\ComputerName</span>
+                    and the IP address can be found be going through each interfaces under <span
+                        class="inline-code">ControlSet001\Services\Tcpip\Parameters\Interfaces\{365e6613-b9c3-420f-86e0-c00cd3602733}</span>
+                    <img class="lazy" data-src="/img/btlo_thekey_q4_0.png" alt="q4_answer0">
+                    <img class="lazy" data-src="/img/btlo_thekey_q4_1.png" alt="q4_answer1">
                     </p>
                     <h2 id="post__content__title">Programming Language</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q5) What is the name of the programming language peter is learning? (2 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q5) What is the name of the programming language peter is learning? (2 points)</pre>
                         </div>
-                        By browsing through the local folders in Peter's user folder, we identify the executable <span id="inline-code">python-3.9.4-amd64.exe</span> in the
-                        Downloads folder. Additionally, in the Documents folder, a subfolder called "Programs" exists which hosts multiple python files. Furthermore, we
-                        identify in <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming</span> that Peter uses Notepad++. Notepad++ keeps a backup folder where
-                        sessions are stored. Within this folder, we identify one Notepad++ session which we can extract and view with a text editor. This session contains the
-                        text: <span id="inline-code">starting my python journey</span>. As such, we can conclude that Peter is learning the Python programming language.
-                        <img class="lazy" data-src="/img/btlo_thekey_q5.png" alt="q5_answer">
+                    </div>
+                    By browsing through the local folders in Peter's user folder, we identify the executable <span
+                        class="inline-code">python-3.9.4-amd64.exe</span> in the
+                    Downloads folder. Additionally, in the Documents folder, a subfolder called "Programs" exists which
+                    hosts multiple python files. Furthermore, we
+                    identify in <span class="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming</span> that Peter
+                    uses Notepad++. Notepad++ keeps a backup folder where
+                    sessions are stored. Within this folder, we identify one Notepad++ session which we can extract and
+                    view with a text editor. This session contains the
+                    text: <span class="inline-code">starting my python journey</span>. As such, we can conclude that
+                    Peter is learning the Python programming language.
+                    <img class="lazy" data-src="/img/btlo_thekey_q5.png" alt="q5_answer">
                     </p>
                     <h2 id="post__content__title">Peter's Day Plan</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q6) According to Peter's Day Plan, Which task is "In Progress"? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q6) According to Peter's Day Plan, Which task is "In Progress"? (5 points)</pre>
                         </div>
-                        Based on question 5, we also identified a reference to creating a dayplan in the Notepad++ backup. However, no other notes can be found within Notepad++.
-                        Simultaneously we see though, the Peter makes use of Sublime Text 3, which, much like Notepad++, is a text editor as well. So, the next logical step was
-                        to look at the stored Sublime session(s) in <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming\Sublime Text 3\Local\</span>. Within this
-                        folder, we identify the existence of the file: <span id="inline-code">Session.sublime_session</span>. This file contains the tasks in Peter's Day Plan,
-                        of which <span id="inline-code">Code to Save the world</span> is still in progress.
-                        <img class="lazy" data-src="/img/btlo_thekey_q6.png" alt="q6_answer">
+                    </div>
+                    Based on question 5, we also identified a reference to creating a dayplan in the Notepad++ backup.
+                    However, no other notes can be found within Notepad++.
+                    Simultaneously we see though, the Peter makes use of Sublime Text 3, which, much like Notepad++, is
+                    a text editor as well. So, the next logical step was
+                    to look at the stored Sublime session(s) in <span
+                        class="inline-code">C:\Users\PeterDProgrammer\AppData\Roaming\Sublime Text 3\Local\</span>.
+                    Within this
+                    folder, we identify the existence of the file: <span
+                        class="inline-code">Session.sublime_session</span>. This file contains the tasks in Peter's Day
+                    Plan,
+                    of which <span class="inline-code">Code to Save the world</span> is still in progress.
+                    <img class="lazy" data-src="/img/btlo_thekey_q6.png" alt="q6_answer">
                     </p>
                     <h2 id="post__content__title">TeamViewer Partner information</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q7) Peter connected with his partner using TeamViewer. What is the Peter partner's Teamviewer ID and Display Name? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q7) Peter connected with his partner using TeamViewer. What is the Peter partner's Teamviewer ID and Display Name? (5 points)</pre>
                         </div>
-                        The TeamViewer application stores incoming connections in a file called <span id="inline-code">Connections_incoming.txt</span>, most often located in
-                        the installation directory of TeamViewer at <span id="inline-code">C:\Program Files\TeamViewer</span>. The actual log message ends with 2 fields if
-                        the log message starts with <span id="inline-code">New Participant added</span>. The first field represents the partner's TeamViewer ID and the
-                        second field contains the DisplayName.
-                        <br>
-                        Instead of using the <span id="inline-code">Connections_incoming.txt</span> file, it is also possible to check the <span id="inline-code">TeamViewer15_Logfile</span>
-                        located in the same folder and search for log entries containing <span id="inline-code">New Participant added</span> messages. The corresponding ID and DisplayName are:
-                        989029790, IE11WIN8_1
-                        <img class="lazy" data-src="/img/btlo_thekey_q7.png" alt="q7_answer">
+                    </div>
+                    The TeamViewer application stores incoming connections in a file called <span
+                        class="inline-code">Connections_incoming.txt</span>, most often located in
+                    the installation directory of TeamViewer at <span class="inline-code">C:\Program
+                        Files\TeamViewer</span>. The actual log message ends with 2 fields if
+                    the log message starts with <span class="inline-code">New Participant added</span>. The first field
+                    represents the partner's TeamViewer ID and the
+                    second field contains the DisplayName.
+                    <br>
+                    Instead of using the <span class="inline-code">Connections_incoming.txt</span> file, it is also
+                    possible to check the <span class="inline-code">TeamViewer15_Logfile</span>
+                    located in the same folder and search for log entries containing <span class="inline-code">New
+                        Participant added</span> messages. The corresponding ID and DisplayName are:
+                    989029790, IE11WIN8_1
+                    <img class="lazy" data-src="/img/btlo_thekey_q7.png" alt="q7_answer">
                     </p>
                     <h2 id="post__content__title">Peter's TeamViewer Information</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q8) What is Peter's TeamViewer ID and Display Name? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q8) What is Peter's TeamViewer ID and Display Name? (5 points)</pre>
                         </div>
-                        Since we already know the computername of Peter's computer, we can search for that value in the same logs we used to answer question 7.
-                        With this information we discover that Peter's TeamViewer ID is: <span id="inline-code">984033617</span>
-                        <img class="lazy" data-src="/img/btlo_thekey_q7.png" alt="q8_answer">
+                    </div>
+                    Since we already know the computername of Peter's computer, we can search for that value in the same
+                    logs we used to answer question 7.
+                    With this information we discover that Peter's TeamViewer ID is: <span
+                        class="inline-code">984033617</span>
+                    <img class="lazy" data-src="/img/btlo_thekey_q7.png" alt="q8_answer">
                     </p>
                     <h2 id="post__content__title">Password Manager</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q9) What is the Password Manager used by Peter? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q9) What is the Password Manager used by Peter? (5 points)</pre>
                         </div>
-                        The first step to answering this question, is identifying where said Password Manager is installed. In order, I investigated the <span id="inline-code">Program Files</span>
-                        and <span id="inline-code">Program Files (x86)</span> folders, alongside Peter's <span id="inline-code">AppData</span> folder. When no indications of
-                        Password Managers were found, I looked into the Prefetch files to identify if a Password Manager was executed and if that was done from outside one of
-                        the previously mentioned locations. However no indications could be identified. Next, I decided to look for browser/internet-based Password Managers.
-                        Working with the assumption that since no additional browsers are installed, the default browser on Windows, Edge, was used, I retrieved the browsing history.
-                        It's history location file is stored at <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User Data\Default\History.sqlite</span>.
-                        Extracting this SQLite database and opening it in DB Browser for SQLite, we browse to the urls table and find an entry for <span id="inline-code">https://lastpass.com/automatic-login</span>.
-                        With this trivial piece of information in hand, we can conclude that Peter uses LastPass as a password manager.
-                        <img class="lazy" data-src="/img/btlo_thekey_q9.png" alt="q9_answer">
+                    </div>
+                    The first step to answering this question, is identifying where said Password Manager is installed.
+                    In order, I investigated the <span class="inline-code">Program Files</span>
+                    and <span class="inline-code">Program Files (x86)</span> folders, alongside Peter's <span
+                        class="inline-code">AppData</span> folder. When no indications of
+                    Password Managers were found, I looked into the Prefetch files to identify if a Password Manager was
+                    executed and if that was done from outside one of
+                    the previously mentioned locations. However no indications could be identified. Next, I decided to
+                    look for browser/internet-based Password Managers.
+                    Working with the assumption that since no additional browsers are installed, the default browser on
+                    Windows, Edge, was used, I retrieved the browsing history.
+                    It's history location file is stored at <span
+                        class="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User
+                        Data\Default\History.sqlite</span>.
+                    Extracting this SQLite database and opening it in DB Browser for SQLite, we browse to the urls table
+                    and find an entry for <span class="inline-code">https://lastpass.com/automatic-login</span>.
+                    With this trivial piece of information in hand, we can conclude that Peter uses LastPass as a
+                    password manager.
+                    <img class="lazy" data-src="/img/btlo_thekey_q9.png" alt="q9_answer">
                     </p>
                     <h2 id="post__content__title">VPN Service</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q10) What is the VPN service used by Peter? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q10) What is the VPN service used by Peter? (5 points)</pre>
                         </div>
-                        Whilst searching for the Password Manager software on the local system as mentioned whilst answering question 9, I kept an eye out for VPN software
-                        installed in any of the same researched folders or logged in the Prefetch files. Once again, no local installation of a VPN service could be identified.
-                        Therefore, we stay with our scope focussing on Edge. Since no history could be found, I decided to also peruse the WebCacheV01.dat file, stored in
-                        <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Windows\WebCache</span> which can be analyzed with the BrowsingHistoryView tool
-                        provided by NirSoft. No such luck however, and that's when I got reminded of Browser Extensions. These extensions are stored on the local system as well
-                        in the folder <span id="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User Data\Default\Extensions</span>. The folder names are all
-                        obfuscated and the quickest way to retrieve information on the installed extensions is by going into the <span id="inline-code">_locales</span> folder and
-                        opening the <span id="inline-code">messages.json</span> file. By doing this, we discover that Prime VPN is used by Peter.
-                        <img class="lazy" data-src="/img/btlo_thekey_q10.png" alt="q10_answer">
+                    </div>
+                    Whilst searching for the Password Manager software on the local system as mentioned whilst answering
+                    question 9, I kept an eye out for VPN software
+                    installed in any of the same researched folders or logged in the Prefetch files. Once again, no
+                    local installation of a VPN service could be identified.
+                    Therefore, we stay with our scope focussing on Edge. Since no history could be found, I decided to
+                    also peruse the WebCacheV01.dat file, stored in
+                    <span class="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Windows\WebCache</span>
+                    which can be analyzed with the BrowsingHistoryView tool
+                    provided by NirSoft. No such luck however, and that's when I got reminded of Browser Extensions.
+                    These extensions are stored on the local system as well
+                    in the folder <span class="inline-code">C:\Users\PeterDProgrammer\AppData\Local\Microsoft\Edge\User
+                        Data\Default\Extensions</span>. The folder names are all
+                    obfuscated and the quickest way to retrieve information on the installed extensions is by going into
+                    the <span class="inline-code">_locales</span> folder and
+                    opening the <span class="inline-code">messages.json</span> file. By doing this, we discover that
+                    Prime VPN is used by Peter.
+                    <img class="lazy" data-src="/img/btlo_thekey_q10.png" alt="q10_answer">
                     </p>
                     <h2 id="post__content__title">Peter's Secret Project</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q11) What is the name of the Peter's 'Secret Project'? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q11) What is the name of the Peter's 'Secret Project'? (5 points)</pre>
                         </div>
-                        Figuring out the answer to this question proofed to be quite the challenge and you will need multiple puzzle pieces to solve it. First of all, refer
-                        back to question 10, where we used the BrowsingHistoryView tool to analyze the WebCacheV01.dat file. Attentive people will have noticed that there were
-                        references to files stored on the <span id="inline-code">D:\</span> drive as well as two files stored in Peter's Documents folder referring to BitLocker.
-                        <img class="lazy" data-src="/img/btlo_thekey_q11_0.png" alt="q11_answer">
-                        <br>
-                        Additionally, from the challenge description we know that there is a secret drive that is encrypted. I was under the assumption that the secret drive
-                        was attached in the E01 image as partition 4. However, I also noticed that the host OS has drives D, E, F and G which in other investigations has not
-                        been the case. That's when I dived into the tools that are to our disposal and noticed that I hadn't used Arsenal Image Mounter so far, and in general
-                        never used that piece of software before. I <a href="https://arsenalrecon.com/products/arsenal-image-mounter">read up</a> on it, and then figured out
-                        that you can mount images to your location system. If we mount the disk image using the online mode, we see that all volumes are already mounted to
-                        the four previous drives (D, E, F and G) that we had noticed earlier. Additionally, we identify that the second volume has a volume shadow copy.
-                        <img class="lazy" data-src="/img/btlo_thekey_q11_1.png" alt="q11_answer">
-                        <br>
-                        A <a href="https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service">Volume Shadow Copy</a> are snapshots
-                        captured by the operating system and store copies of files and volumes at specific points in time, enabling users to restore previous versions of
-                        files or entire volumes. As such, playing a vital role in covering data that we need to solve this and likely the next questions. We can assume that
-                        the volume containing the volume shadow copy is likely mounted to the <span id="inline-code">E:</span> drive, since the D and G drive are empty and F
-                        is an encrypted volume.
-                        <br>
-                        We can use the command <span id="inline-code">vssadmin list shadows /for=E:</span> to obtain a list of shadow copies for the <span id="inline-code">E:</span>
-                        drive drive. One copy is identified, which we would be able to restore using the make link command in Windows: <span id="inline-code">mklink /D C:\vssrestore \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\</span>.
-                        Since we executed these commands in an administrator CMD session, we will use the terminal to dive into the contents, with the focus on the Documents folder.
-                        In said folder, we identify the <span id="inline-code">Bit.TXT</span> file, which holds the Bitlocker Recovery Key.
-                        <img class="lazy" data-src="/img/btlo_thekey_q11_2.png" alt="q11_answer">
-                        <br>
-                        We can use that key, to unlock BitLocker encrypted drive <span id="inline-code">F:</span> drive, by selecting to use the BitLocker Recovery Key. With the
-                        access we have obtained, we can browse through the drive and identify Peter's project to be "Save Data Save World".
-                        <img class="lazy" data-src="/img/btlo_thekey_q11_3.png" alt="q12_answer">
+                    </div>
+                    Figuring out the answer to this question proofed to be quite the challenge and you will need
+                    multiple puzzle pieces to solve it. First of all, refer
+                    back to question 10, where we used the BrowsingHistoryView tool to analyze the WebCacheV01.dat file.
+                    Attentive people will have noticed that there were
+                    references to files stored on the <span class="inline-code">D:\</span> drive as well as two files
+                    stored in Peter's Documents folder referring to BitLocker.
+                    <img class="lazy" data-src="/img/btlo_thekey_q11_0.png" alt="q11_answer">
+                    <br>
+                    Additionally, from the challenge description we know that there is a secret drive that is encrypted.
+                    I was under the assumption that the secret drive
+                    was attached in the E01 image as partition 4. However, I also noticed that the host OS has drives D,
+                    E, F and G which in other investigations has not
+                    been the case. That's when I dived into the tools that are to our disposal and noticed that I hadn't
+                    used Arsenal Image Mounter so far, and in general
+                    never used that piece of software before. I <a
+                        href="https://arsenalrecon.com/products/arsenal-image-mounter">read up</a> on it, and then
+                    figured out
+                    that you can mount images to your location system. If we mount the disk image using the online mode,
+                    we see that all volumes are already mounted to
+                    the four previous drives (D, E, F and G) that we had noticed earlier. Additionally, we identify that
+                    the second volume has a volume shadow copy.
+                    <img class="lazy" data-src="/img/btlo_thekey_q11_1.png" alt="q11_answer">
+                    <br>
+                    A <a
+                        href="https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service">Volume
+                        Shadow Copy</a> are snapshots
+                    captured by the operating system and store copies of files and volumes at specific points in time,
+                    enabling users to restore previous versions of
+                    files or entire volumes. As such, playing a vital role in covering data that we need to solve this
+                    and likely the next questions. We can assume that
+                    the volume containing the volume shadow copy is likely mounted to the <span
+                        class="inline-code">E:</span> drive, since the D and G drive are empty and F
+                    is an encrypted volume.
+                    <br>
+                    We can use the command <span class="inline-code">vssadmin list shadows /for=E:</span> to obtain a
+                    list of shadow copies for the <span class="inline-code">E:</span>
+                    drive drive. One copy is identified, which we would be able to restore using the make link command
+                    in Windows: <span class="inline-code">mklink /D C:\vssrestore
+                        \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\</span>.
+                    Since we executed these commands in an administrator CMD session, we will use the terminal to dive
+                    into the contents, with the focus on the Documents folder.
+                    In said folder, we identify the <span class="inline-code">Bit.TXT</span> file, which holds the
+                    Bitlocker Recovery Key.
+                    <img class="lazy" data-src="/img/btlo_thekey_q11_2.png" alt="q11_answer">
+                    <br>
+                    We can use that key, to unlock BitLocker encrypted drive <span class="inline-code">F:</span> drive,
+                    by selecting to use the BitLocker Recovery Key. With the
+                    access we have obtained, we can browse through the drive and identify Peter's project to be "Save
+                    Data Save World".
+                    <img class="lazy" data-src="/img/btlo_thekey_q11_3.png" alt="q12_answer">
                     </p>
                     <h2 id="post__content__title">Peter's Project Theme</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q12) According to the Peter's documentation, What is the theme of the project? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q12) According to the Peter's documentation, What is the theme of the project? (5 points)</pre>
                         </div>
-                        We can use the same document we used to answer question 11 and discover that the theme is "Revolution"
-                        <img class="lazy" data-src="/img/btlo_thekey_q11_3.png" alt="q12_answer">
+                    </div>
+                    We can use the same document we used to answer question 11 and discover that the theme is
+                    "Revolution"
+                    <img class="lazy" data-src="/img/btlo_thekey_q11_3.png" alt="q12_answer">
                     </p>
                     <h2 id="post__content__title">Cloud Credentials</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q13) What are Peter's Cloud Credentials? (10 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q13) What are Peter's Cloud Credentials? (10 points)</pre>
                         </div>
-                        Inside the decrypted <span id="inline-code">F:</span> drive, we identify a file called CID (Client identifying Information) which initially
-                        seemed to only contain his username, but if we use "select all", we identify white-colored text containing his password.
-                        <img class="lazy" data-src="/img/btlo_thekey_q13.png" alt="q13_answer">
+                    </div>
+                    Inside the decrypted <span class="inline-code">F:</span> drive, we identify a file called CID
+                    (Client identifying Information) which initially
+                    seemed to only contain his username, but if we use "select all", we identify white-colored text
+                    containing his password.
+                    <img class="lazy" data-src="/img/btlo_thekey_q13.png" alt="q13_answer">
                     </p>
                     <h2 id="post__content__title">Discord Malware Name</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q14) Peter accessed some files from a remote machine using a file transfer service. What is the login name and IP address of the remote machine? (5 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q14) Peter accessed some files from a remote machine using a file transfer service. What is the login name and IP address of the remote machine? (5 points)</pre>
                         </div>
-                        There are multiple file transfer services that work on Windows, however, from our research on both the VPN service and Password Manager, we should remember that we
-                        saw that WinSCP was present in the <span id="inline-code">C:\Program Files (x86)</span> folder. WinSCP is the Windows-based secure copy program that can be used
-                        as a network-based file transfer service. WinSCP stores some configuration and session details in the Windows registry for each user. Therefore, we acquire Peter's
-                        <span id="inline-code">NTUSER.dat></span> file and examine it with FRED. Since it's a software package, we can search under the SOFTWARE key. Note that WinSCP
-                        is developed by Martin Prikryl, which is the main key the WinSCP configuration and session data is stored under. We identify a Sessions key which contains
-                        one object containing the username and hostname that were connected to: <span id="inline-code">ubuntu@172.16.0.16</span>
-                        <img class="lazy" data-src="/img/btlo_thekey_q14.png" alt="q14_answer">
+                    </div>
+                    There are multiple file transfer services that work on Windows, however, from our research on both
+                    the VPN service and Password Manager, we should remember that we
+                    saw that WinSCP was present in the <span class="inline-code">C:\Program Files (x86)</span> folder.
+                    WinSCP is the Windows-based secure copy program that can be used
+                    as a network-based file transfer service. WinSCP stores some configuration and session details in
+                    the Windows registry for each user. Therefore, we acquire Peter's
+                    <span class="inline-code">NTUSER.dat></span> file and examine it with FRED. Since it's a software
+                    package, we can search under the SOFTWARE key. Note that WinSCP
+                    is developed by Martin Prikryl, which is the main key the WinSCP configuration and session data is
+                    stored under. We identify a Sessions key which contains
+                    one object containing the username and hostname that were connected to: <span
+                        class="inline-code">ubuntu@172.16.0.16</span>
+                    <img class="lazy" data-src="/img/btlo_thekey_q14.png" alt="q14_answer">
                     </p>
                     <h2 id="post__content__title">BitLocker Recovery Key</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q15) What is the Bitlocker Recovery Key? (10 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q15) What is the Bitlocker Recovery Key? (10 points)</pre>
                         </div>
-                        In order to answer this question, refer back to the writeup for question 11. Here, we had already identified the BitLocker Recovery Key.
-                        <img class="lazy" data-src="/img/btlo_thekey_q11_2.png" alt="q15_answer">
+                    </div>
+                    In order to answer this question, refer back to the writeup for question 11. Here, we had already
+                    identified the BitLocker Recovery Key.
+                    <img class="lazy" data-src="/img/btlo_thekey_q11_2.png" alt="q15_answer">
                     </p>
                     <h2 id="post__content__title">BitLocker Password</h2>
                     <p>
-                        <div class="language-plaintext highlighter-rouge">
-                            <div class="highlight">
-                                <pre class="highlight" style="padding-left: 20px; padding-right: 20px;">Q16) What is the Bitlocker Password? [Hint: Question 2] (10 points)</pre>
-                            </div>
+                    <div class="language-plaintext highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"
+                                style="padding-left: 20px; padding-right: 20px;">Q16) What is the Bitlocker Password? [Hint: Question 2] (10 points)</pre>
                         </div>
-                        Figuring out the BitLocker Password required some brute-forcing but we were given a valuable hint to refer back to the answer for question 2.
-                        In that light, I figured it must be either one specific answer to one of the three security questions or a combination of them. Eventually, the latter
-                        appeared to be true with the password being a combination of the first and second question: <span id="inline-code">ChichulaTokyo-LoveTheLife</span>
-                        <img class="lazy" data-src="/img/btlo_thekey_q2.png" alt="q16_answer">
+                    </div>
+                    Figuring out the BitLocker Password required some brute-forcing but we were given a valuable hint to
+                    refer back to the answer for question 2.
+                    In that light, I figured it must be either one specific answer to one of the three security
+                    questions or a combination of them. Eventually, the latter
+                    appeared to be true with the password being a combination of the first and second question: <span
+                        class="inline-code">ChichulaTokyo-LoveTheLife</span>
+                    <img class="lazy" data-src="/img/btlo_thekey_q2.png" alt="q16_answer">
                     </p>
                 </div>
             </article>

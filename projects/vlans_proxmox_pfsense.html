@@ -33,7 +33,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="canonical" href="https://graymanre.github.io/projects/vlans_proxmox_pfsense.html">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
+
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -252,7 +252,7 @@
                     <p>
                         We want to ensure that devices connecting to the assigned VLAN are also obtaining a valid IP
                         address in the VLAN-defined
-                        IP address range. In our example, this is <span id="inline-code">192.168.40.1/24</span>.
+                        IP address range. In our example, this is <span class="inline-code">192.168.40.1/24</span>.
                     <ol>
                         <li>Go to "Services" > "DHCP Server" and select the interface corresponding to your new VLAN.
                         </li>
@@ -280,7 +280,7 @@
                         pfSense. In that case,
                         it is likely that your devices will obtain a valid IP address and they can ping other (external)
                         IP addresses but resolving
-                        hostnames fails (e.g. <span id="inline-code">nslookup</span>). If this is the case, you will
+                        hostnames fails (e.g. <span class="inline-code">nslookup</span>). If this is the case, you will
                         need to enable DNS Query Forwarding:
                     <ul>
                         <li>Go to "Services" > "DNS Resolver" > "DNS Query Forwarding" and enable the checkbox.</li>
@@ -292,7 +292,8 @@
                     <p>
                         Finally, we arrive at the Proxmox host. Here, we need to update the network configuration which
                         can be found at
-                        <span id="inline-code">/etc/network/interfaces</span>. On the main network interface, we need to
+                        <span class="inline-code">/etc/network/interfaces</span>. On the main network interface, we need
+                        to
                         make it VLAN-aware,
                         and we need to add another network interface specific to the VLAN.
                         <br>
@@ -300,7 +301,7 @@
                         <br><br>
                         After making this change, you will need to either restart the Proxmox host or restart the
                         network interface using
-                        the command <span id="inline-code">systemctl restart networking</span>.
+                        the command <span class="inline-code">systemctl restart networking</span>.
                         <br>
                         Now, specific to the Virtual Machine we are targeting, we need to set the VLAN Tag to be used.
                         <img class="lazy" data-src="/img/vlans_11.png" alt="VLAN-Creation">

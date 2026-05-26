@@ -33,7 +33,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="canonical" href="https://graymanre.github.io/ctf/sandworm_dynowiper.html">
-    <link rel="alternate" type="application/rss+xml" title="GraymanRe Feed" href="https://graymanre.github.io/feed.xml">
+
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -147,7 +147,7 @@
                         <b>DynoWiper has the following features and behaviours:</b>
                     <ul>
                         <li>Initializes a pseudorandom number generator using the Mersenne Twister with a seed of
-                            <span id="inline-code">0x1571</span>
+                            <span class="inline-code">0x1571</span>
                         </li>
                         <li>Uses the PRNG to generate 16 pseudorandom bytes for file overwrite operations</li>
                         <li>Identify all removable and fixed media drives on the system</li>
@@ -181,71 +181,79 @@
 
                     <h3 id="section1">Initializing Mersenne Twister PRNG</h3>
                     <p>
-                        Directly at the start of <span id="inline-code">WinMain</span>, <span
-                            id="inline-code">sub_403A90</span> is called, which initializes the internal state
+                        Directly at the start of <span class="inline-code">WinMain</span>, <span
+                            class="inline-code">sub_403A90</span> is called, which initializes the internal state
                         of a pseudorandom number generator, specifically using the Mersenne Twister MT19937 (or a very
                         close variant). Distinct to Mersenne Twister in this operation is the usage of static value
-                        <span id="inline-code">0x6c078965</span> and the length of <span id="inline-code">0x270</span>
+                        <span class="inline-code">0x6c078965</span> and the length of <span
+                            class="inline-code">0x270</span>
                         (624).
                         <br><br>
-                        Next, from <span id="inline-code">WinMain</span>, <span id="inline-code">sub_401F40</span> uses
+                        Next, from <span class="inline-code">WinMain</span>, <span class="inline-code">sub_401F40</span>
+                        uses
                         the pseudorandom number generator to calculate blocks of 16-bytes which are stored at <span
-                            id="inline-code">[esi+edi+5000]</span>.
+                            class="inline-code">[esi+edi+5000]</span>.
                         <br><img class="lazy" data-src="/img/dynowiper_mersenne.png"
                             alt="DynoWiper Mersenne Twister Init">
                     </p>
 
                     <h3 id="section2">Identifying all drives and root paths</h3>
                     <p>
-                        In <span id="inline-code">sub_402CE0</span>, all logical drives are obtained after which the
+                        In <span class="inline-code">sub_402CE0</span>, all logical drives are obtained after which the
                         malware loops over each drive. For each drive, it will obtain the <span
-                            id="inline-code">lpRootPathName</span> and the corresponding drivetype using <span
-                            id="inline-code">GetDriveTypeW</span>. When the drive is either a removable media or a
-                        fixed media, it will store the <span id="inline-code">lpRootPathName</span>.
+                            class="inline-code">lpRootPathName</span> and the corresponding drivetype using <span
+                            class="inline-code">GetDriveTypeW</span>. When the drive is either a removable media or a
+                        fixed media, it will store the <span class="inline-code">lpRootPathName</span>.
                     </p>
 
                     <h3 id="section3">Identifying, overwriting and removing files</h3>
                     <p>
-                        In <span id="inline-code">sub_402290</span>, the wiper will iterate over each identified drive
+                        In <span class="inline-code">sub_402290</span>, the wiper will iterate over each identified
+                        drive
                         and enumerates every file in each drive using the iterator provided by <span
-                            id="inline-code">FindFirstFileW</span> and <span id="inline-code">FindNextFileW</span>. It
-                        first ensures that the obtained file is not equal to <span id="inline-code">.</span> or <span
-                            id="inline-code">..</span>, which by default are references to the current and top level
+                            class="inline-code">FindFirstFileW</span> and <span
+                            class="inline-code">FindNextFileW</span>. It
+                        first ensures that the obtained file is not equal to <span class="inline-code">.</span> or <span
+                            class="inline-code">..</span>, which by default are references to the current and top level
                         directory. Next, it checks if the obtained file is of type directory. If the file is a
                         directory, it will set the file attributes to <span
-                            id="inline-code">FILE_ATTRIBUTE_NORMAL</span> (</span>0x80</span>).
+                            class="inline-code">FILE_ATTRIBUTE_NORMAL</span> (</span>0x80</span>).
                         <br><br>
-                        Subsequently, it will call <span id="inline-code">sub_402500</span> which iterates over each
+                        Subsequently, it will call <span class="inline-code">sub_402500</span> which iterates over each
                         file. If the file is once again a directory, it will first check that the directory name is
-                        not equal to <span id="inline-code">system32, windows, program files, program files(x86), temp,
+                        not equal to <span class="inline-code">system32, windows, program files, program files(x86),
+                            temp,
                             recycle.bin, $recycle.bin, boot, perflogs, appdata, documents and settings</span>. It will
                         then call itself again using the newly obtained subdirectory and continue looping until a file
                         has been found.
                         <br><img class="lazy" data-src="/img/dynowiper_fileident.png"
                             alt="DynoWiper File Identification">
                         <br><br>
-                        In case the file is actually a file, it will call <span id="inline-code">sub_402B30</span> which
+                        In case the file is actually a file, it will call <span class="inline-code">sub_402B30</span>
+                        which
                         sets the file's attributes to and then attempts to open the file with generic read/write access.
                         If it has obtained access, it will overwrite the first 16 bytes with the value stored in <span
-                            id="inline-code">[esi+edi+5000]</span> which holds a 16-byte buffer of bytes which were
+                            class="inline-code">[esi+edi+5000]</span> which holds a 16-byte buffer of bytes which were
                         generated using the Mersenne Twister initialized PRNG. If the size of the file is larger than 16
                         bytes, it will continuously overwrite blocks of 16 bytes. Once this operation completes, the
-                        function returns to <span id="inline-code">sub_402290</span>.
+                        function returns to <span class="inline-code">sub_402290</span>.
                         <br><br>
-                        Back in <span id="inline-code">sub_402290</span>, the obtained file is then removed using <span
-                            id="inline-code">DeleteFileW</span>
+                        Back in <span class="inline-code">sub_402290</span>, the obtained file is then removed using
+                        <span class="inline-code">DeleteFileW</span>
                         <br><img class="lazy" data-src="/img/dynowiper_overwritefile.png" alt="Mersenne Twister Init">
                     </p>
 
                     <h3 id="section4">Obtain token privileges to force a system shutdown</h3>
                     <p>
                         Back in the main function, the wiper obtains the current process token and checks if the
-                        <span id="inline-code">SeShutdownPrivilege</span> is part of the current token privileges. If it
+                        <span class="inline-code">SeShutdownPrivilege</span> is part of the current token privileges. If
+                        it
                         isn't the privilege is attempted to be obtained through a call to <span
-                            id="inline-code">AdjustTokenPrivileges</span>.
-                        Lastly, it will call <span id="inline-code">ExitWindowsEx</span> with a reason of <span
-                            id="inline-code">SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_UPGRADE</span> or
-                        <span id="inline-code">SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_INSTALLATION |
+                            class="inline-code">AdjustTokenPrivileges</span>.
+                        Lastly, it will call <span class="inline-code">ExitWindowsEx</span> with a reason of <span
+                            class="inline-code">SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_UPGRADE</span>
+                        or
+                        <span class="inline-code">SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_INSTALLATION |
                             SHTDN_REASON_MINOR_MAINTENANCE</span>
                         <br><img class="lazy" data-src="/img/dynowiper_shutdown.png" alt="DynoWiper Shutdown">
                     </p>
