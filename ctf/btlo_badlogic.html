@@ -40,6 +40,7 @@
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css" />
 
     <!-- Structured Data: BlogPosting -->
     <script type="application/ld+json">
@@ -198,7 +199,7 @@ some of the artefacts may have been deleted. A PCAP, memory dump, MFT & pre-fetc
 be of assistance. A full review of the compromised application may also be in order.</code></pre><br>
                     <h2 id="post__content__title">Victim Details</h2>
                     <pre><code class="language-markdown">Q1) Which application did the threat actor exploit, what port does this run on and which
-    CVE did the threat actor utilise? (10 points)</code></pre><br>
+    CVE did the threat actor utilise? (10 points)</code></pre>
                     <p>
                         I started this investigation of by looking through the MD-Artefacts folder and identifying which
                         files were to our disposal for investigation. Within the <span
@@ -247,12 +248,11 @@ be of assistance. A full review of the compromised application may also be in or
                         and
                         is exploited
                         using <span class="inline-code">CVE-2020-14882</span>.
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q1.png" alt="q1_answer">
                     </p>
                     <h2 id="post__content__title">Malicious Domain</h2>
                     <pre><code class="language-markdown">Q2) What is the malicious domain used by the threat actor? (10 points)</code></pre>
-                    <br>
                     <p>
                         Whilst finding the answers to question 1, we identfied that the threat actor performed multiple
                         requests against the Oracle WebLogic Server running on port 7001. If we closely
@@ -265,12 +265,11 @@ be of assistance. A full review of the compromised application may also be in or
                         <span class="inline-code">advertyzing.co.uk</span>. Therefore we can conclude that it
                         is highly likely that the malicious domain is <span
                             class="inline-code">advertyzing.co.uk</span>.
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q1.png" alt="q2_answer">
                     </p>
                     <h2 id="post__content__title">Threat Actor IP IOCs</h2>
                     <pre><code class="language-markdown">Q3) Confirm the two IP addresses utilized by the threat actor (10 points)</code></pre>
-                    <br>
                     <p>
                         We know already that the threat actor used IP address <span
                             class="inline-code">178.62.72.123</span> to exploit CVE-2020-14882. We are additionally
@@ -294,7 +293,7 @@ be of assistance. A full review of the compromised application may also be in or
                     </p>
                     <h2 id="post__content__title">Obtaining Persistence</h2>
                     <pre><code class="language-markdown">Q4) The threat actor has attempted an unusual way of persisting by editing a key file. 
-    Which configuration file have they altered? (10 points)</code></pre><br>
+    Which configuration file have they altered? (10 points)</code></pre>
                     <p>
                         By now, we have analyzed all exploit requests that were send to the victim. One of these events
                         contained the command <span
@@ -304,8 +303,7 @@ be of assistance. A full review of the compromised application may also be in or
                         folder.
                         If we browse to that location we don't see the binary anymore. However, it contained
                         both a bash and shell script named <span class="inline-code">startWebLogic</span> which piqued
-                        my
-                        interest. They seem to execute similarly named scripts from inside the <span
+                        my interest. They seem to execute similarly named scripts from inside the <span
                             class="inline-code">bin</span>
                         folder. Browsing into the <span class="inline-code">bin</span> folder, we see four files named
                         <span class="inline-code">startWebLogic</span>. By analyzing these files, we identify that the
@@ -319,117 +317,122 @@ be of assistance. A full review of the compromised application may also be in or
                             documentation</a>
                         it appeared that on Windows systems, normally only <span
                             class="inline-code">startWebLogic.cmd</span> is needed. There is no reference at all around
-                        the
-                        Windows Batch nor the Windows executable file.
+                        the Windows Batch nor the Windows executable file.
                         After obtaining the SHA256 hash and submitting it to VirusTotal, we discover that VirusTotal
                         classifies this binary to be <span class="inline-code">nc.exe</span> and closer review of the
                         <span class="inline-code">startWebLogic.bat</span> makes it seem like the commands one would
                         normally pass to netcat. Therefore, we can conclude that the threat actor modified key file:
                         <span class="inline-code">startweblogic.cmd</span>.
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q4_1.png" alt="q4_answer">
+                        <br><br>
                         <img class="lazy" data-src="/img/btlo_badlogic_q4_2.png" alt="q4_answer">
                     </p>
                     <h2 id="post__content__title">LOLBins</h2>
                     <pre><code class="language-markdown">Q5) The threat actor has made good use of 'Living off the land' binaries (LOLBins). Which
     Windows executable did they use to download a malicious file from their server? 
-    (10 points)</code></pre><br>
-                </div>
-                <p>
-                    If we refer back to question 2 we identified that the threat actor used the command execution
-                    vulnerability in Oracle to execute the <span class="inline-code">ping</span> command.
-                    However, we have identified that the threat actor performed multiple requests to the vulnerable
-                    endpoint. If we analyze the other commands that were executed, we discover that
-                    the threat actor used <span class="inline-code">certutil.exe</span> to download the <span
-                        class="inline-code">nc.exe</span> binary.
-                    <br>
-                    <img class="lazy" data-src="/img/btlo_badlogic_q5.png" alt="q5_answer">
-                </p>
-                <h2 id="post__content__title">Windows Executable</h2>
-                <pre><code class="language-markdown">Q6) What was the name of the malicious file they downloaded using this 
-    Windows executable? (10 points)</code></pre><br>
-                <p>
-                    By discovering the answer for question 2 and expanding upon our analysis by answer question 5, we
-                    also immediately discovered the answer for question 6. The threat actor downloaded
-                    the "malicious" file <span class="inline-code">nc.exe</span>. I put malicious inside of quotation
-                    marks
-                    since as I discussed in question 2, nc.exe is used both for legitimate and
-                    illegitimate purposes.
-                    <br>
-                    <img class="lazy" data-src="/img/btlo_badlogic_q5.png" alt="q6_answer">
-                </p>
-                <h2 id="post__content__title">Threat Actor Email IOC</h2>
-                <pre><code class="language-markdown">Q7) What email address is associated with the threat actor? (10 points)</code></pre>
-                <br>
-                <p>
-                    By now, I decided that the Wireshark Capture probably had served it's full purpose and it was time
-                    to dive into the memory dump to see if we could obtain more information. The size
-                    of the memory dump (8.25GB) had me already a bit worried since large sizes always take a lot of time
-                    to load. After trying several commands, it appeared that volatility just would
-                    not work for this memory dump. This is where I decided to peruse the <span
-                        class="inline-code">README.txt</span> left on the Desktop. There, we discover that the "security
-                    team", did
-                    performed a least-effort approach and was already hinting to the memory dump being unusable. As I
-                    had no starting points to gain an answer to this question I left it for later.
-                    I came back to this question after answering question 10, after browsing to the PowerShell log,
-                    since I discovered that the cryptominer of question 8 had created a user configuration
-                    data folder as well. When I browsed into that folder, I had a look at, amongst others, the <span
-                        class="inline-code">config.json</span> file and discovered the email address: <span
-                        class="inline-code">bzuyxpdpphthhbvxpz@niwghx.com</span>.
-                    <br>
-                    <img class="lazy" data-src="/img/btlo_badlogic_q7.png" alt="q7_answer">
-                </p>
-                <h2 id="post__content__title">Cryptominer usage</h2>
-                <pre><code class="language-markdown">Q8) The threat actor has used an off-the-shelf cryptominer, what is the name of the 
-    executable? (10 points)</code></pre><br>
-                <p>
-                    Refer back to question 1, where we identified multiple system information files in our artifacts
-                    folder. One of these files contained a CSV list of scheduled tasks that were
-                    present on the system. Immediatly on the very first few lines, we identify two scheduled tasks
-                    called <span class="inline-code">KryptexElevation</span> and
-                    <span class="inline-code">KryptexElevationFromStartup</span>. The application is stored in <span
-                        class="inline-code">C:\Users\Administrator\AppData\Local\Program\kryptex-app\</span>
-                    and has a comment of <span class="inline-code">[...] Kryptex uses admin privileges to configure
-                        system
-                        for better mining performance</span> Additionally, a quick Google search for
-                    Kryptex reveals it's <a href="https://www.kryptex.com/en/">website</a> promoting the tool as a
-                    cryptocurrency miner.
-                    <br>
-                    <img class="lazy" data-src="/img/btlo_badlogic_q8.png" alt="q8_answer">
-                </p>
-                <h2 id="post__content__title">Password Dumping Tool</h2>
-                <pre><code class="language-markdown">Q9) What is the name of the password dumping tool used by the threat actor? (10 points)</code></pre>
-                <br>
-                <p>
-                    I based myself on the assumption that this question was framed in such a way that it is likely that
-                    this tool was executed using either cmd or powershell. By default, PowerShell
-                    command logging is stored in the <a
-                        href="https://medium.com/@reallydontaskmetosignin/the-single-most-important-powershell-command-that-you-will-ever-learn-407daab0a18d">
-                        Roaming
-                        folder of individual users
-                    </a>. We know that the threat actor obtained Administrator privileges thanks to the CVE they
-                    exploited. As such, we start our hunt in
-                    <span
-                        class="inline-code">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt</span>.
-                    In the PowerShell command history, we identify multiple commands executing the <span
-                        class="inline-code">lazange.exe</span> binary. One of these commands redirects the output of the
-                    tool to the file <span class="inline-code">password_extract.txt</span>. Once again, a quick Google
-                    search helps us out. LaZagne is available on
-                    <a href="https://github.com/AlessandroZ/LaZagne">Github</a> and is desribed as an open source
-                    application used to retrieve lots of passwords stored on a local computer.
-                    <br>
-                    <img class="lazy" data-src="/img/btlo_badlogic_q9.png" alt="q9_answer">
-                </p>
-                <h2 id="post__content__title">Data Exfiltration</h2>
-                <pre><code class="language-markdown">Q10) What is the name of the text file the TA echo'ed out to? (10 points)</code></pre>
-                <br>
-                <p>
-                    To answer this question, we can refer back to our findings for question 9, where we identified that
-                    the output of lazange was redirected (echo'ed) to the file:
-                    <span class="inline-code">password_extract.txt</span>
-                    <br>
-                    <img class="lazy" data-src="/img/btlo_badlogic_q9.png" alt="q10_answer">
-                </p>
+    (10 points)</code></pre>
+                    <p>
+                        If we refer back to question 2 we identified that the threat actor used the command execution
+                        vulnerability in Oracle to execute the <span class="inline-code">ping</span> command.
+                        However, we have identified that the threat actor performed multiple requests to the vulnerable
+                        endpoint. If we analyze the other commands that were executed, we discover that
+                        the threat actor used <span class="inline-code">certutil.exe</span> to download the <span
+                            class="inline-code">nc.exe</span> binary.
+                        <br><br>
+                        <img class="lazy" data-src="/img/btlo_badlogic_q5.png" alt="q5_answer">
+                    </p>
+                    <h2 id="post__content__title">Windows Executable</h2>
+                    <pre><code class="language-markdown">Q6) What was the name of the malicious file they downloaded using this 
+    Windows executable? (10 points)</code></pre>
+                    <p>
+                        By discovering the answer for question 2 and expanding upon our analysis by answer question 5,
+                        we
+                        also immediately discovered the answer for question 6. The threat actor downloaded
+                        the "malicious" file <span class="inline-code">nc.exe</span>. I put malicious inside of
+                        quotation
+                        marks
+                        since as I discussed in question 2, nc.exe is used both for legitimate and
+                        illegitimate purposes.
+                        <br><br>
+                        <img class="lazy" data-src="/img/btlo_badlogic_q5.png" alt="q6_answer">
+                    </p>
+                    <h2 id="post__content__title">Threat Actor Email IOC</h2>
+                    <pre><code class="language-markdown">Q7) What email address is associated with the threat actor? (10 points)</code></pre>
+                    <p>
+                        By now, I decided that the Wireshark Capture probably had served it's full purpose and it was
+                        time
+                        to dive into the memory dump to see if we could obtain more information. The size
+                        of the memory dump (8.25GB) had me already a bit worried since large sizes always take a lot of
+                        time
+                        to load. After trying several commands, it appeared that volatility just would
+                        not work for this memory dump. This is where I decided to peruse the <span
+                            class="inline-code">README.txt</span> left on the Desktop. There, we discover that the
+                        "security
+                        team", did
+                        performed a least-effort approach and was already hinting to the memory dump being unusable. As
+                        I
+                        had no starting points to gain an answer to this question I left it for later.
+                        I came back to this question after answering question 10, after browsing to the PowerShell log,
+                        since I discovered that the cryptominer of question 8 had created a user configuration
+                        data folder as well. When I browsed into that folder, I had a look at, amongst others, the <span
+                            class="inline-code">config.json</span> file and discovered the email address: <span
+                            class="inline-code">bzuyxpdpphthhbvxpz@niwghx.com</span>.
+                        <br><br>
+                        <img class="lazy" data-src="/img/btlo_badlogic_q7.png" alt="q7_answer">
+                    </p>
+                    <h2 id="post__content__title">Cryptominer usage</h2>
+                    <pre><code class="language-markdown">Q8) The threat actor has used an off-the-shelf cryptominer, what is the name of the 
+    executable? (10 points)</code></pre>
+                    <p>
+                        Refer back to question 1, where we identified multiple system information files in our artifacts
+                        folder. One of these files contained a CSV list of scheduled tasks that were
+                        present on the system. Immediatly on the very first few lines, we identify two scheduled tasks
+                        called <span class="inline-code">KryptexElevation</span> and
+                        <span class="inline-code">KryptexElevationFromStartup</span>. The application is stored in <span
+                            class="inline-code">C:\Users\Administrator\AppData\Local\Program\kryptex-app\</span>
+                        and has a comment of <span class="inline-code">[...] Kryptex uses admin privileges to configure
+                            system
+                            for better mining performance</span> Additionally, a quick Google search for
+                        Kryptex reveals it's <a href="https://www.kryptex.com/en/">website</a> promoting the tool as a
+                        cryptocurrency miner.
+                        <br><br>
+                        <img class="lazy" data-src="/img/btlo_badlogic_q8.png" alt="q8_answer">
+                    </p>
+                    <h2 id="post__content__title">Password Dumping Tool</h2>
+                    <pre><code class="language-markdown">Q9) What is the name of the password dumping tool used by the threat actor? (10 points)</code></pre>
+                    <p>
+                        I based myself on the assumption that this question was framed in such a way that it is likely
+                        that
+                        this tool was executed using either cmd or powershell. By default, PowerShell
+                        command logging is stored in the <a
+                            href="https://medium.com/@reallydontaskmetosignin/the-single-most-important-powershell-command-that-you-will-ever-learn-407daab0a18d">
+                            Roaming
+                            folder of individual users
+                        </a>. We know that the threat actor obtained Administrator privileges thanks to the CVE they
+                        exploited. As such, we start our hunt in
+                        <span
+                            class="inline-code">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt</span>.
+                        In the PowerShell command history, we identify multiple commands executing the <span
+                            class="inline-code">lazange.exe</span> binary. One of these commands redirects the output of
+                        the
+                        tool to the file <span class="inline-code">password_extract.txt</span>. Once again, a quick
+                        Google
+                        search helps us out. LaZagne is available on
+                        <a href="https://github.com/AlessandroZ/LaZagne">Github</a> and is desribed as an open source
+                        application used to retrieve lots of passwords stored on a local computer.
+                        <br><br>
+                        <img class="lazy" data-src="/img/btlo_badlogic_q9.png" alt="q9_answer">
+                    </p>
+                    <h2 id="post__content__title">Data Exfiltration</h2>
+                    <pre><code class="language-markdown">Q10) What is the name of the text file the TA echo'ed out to? (10 points)</code></pre>
+                    <p>
+                        To answer this question, we can refer back to our findings for question 9, where we identified
+                        that the output of lazange was redirected (echo'ed) to the file:
+                        <span class="inline-code">password_extract.txt</span>
+                        <br>
+                        <img class="lazy" data-src="/img/btlo_badlogic_q9.png" alt="q10_answer">
+                    </p>
             </article>
         </div>
         <!-- end post -->
@@ -466,6 +469,7 @@ be of assistance. A full review of the compromised application may also be in or
     <script src="/js/vendors/lazyload.min.js"></script>
     <script src="/js/vendors/transition.js"></script>
     <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/vendors/prism.js"></script>
     <script src="/js/common.js"></script>
     <script src="/js/readingtime.js"></script>
 </body>

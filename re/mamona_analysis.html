@@ -34,13 +34,14 @@
 
     <link rel="canonical" href="https://graymanre.github.io/re/mamona_analysis.html">
 
-
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Ionicons -->
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -339,6 +340,7 @@
                         If the <span class="inline-code">.config</span> section exists the ransomware will read <span
                             class="inline-code">0x860</span> bytes into a predefined buffer and will decode the buffer
                         with the hardcoded XOR key <span class="inline-code">0x42</span>.
+                        <br><br>
                         <img class="lazy" data-src="/img/mamona_readmesection.png" alt="Config section retrieval">
                         <br><br>
                         By writing a simple section parser in C++, we can statically extract and decode the <span
@@ -346,7 +348,7 @@
                         contents of this section. As we discover, this specific section contains the information
                         ransomware victims will normally find in a README file
                         that states how to contact the ransomware operators and restore access to their lost data.
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/mamona_configsection_decrypted.png"
                             alt="Config section decrypted">
                     </p>
@@ -419,6 +421,7 @@
                         which is identical to the block at <span class="inline-code">0x405D90</span> where the output
                         value
                         is subsequently compared against the input buffer at <span class="inline-code">0x405A88</span>.
+                        <br><br>
                         <img class="lazy" data-src="/img/mamona_hardcodeddlls.png" alt="Hardcoded DLLs">
                         <br><br>
                         To close out, the final block at <span class="inline-code">0x405AB3</span> needs to be
@@ -465,7 +468,32 @@
                         often utilized by ransomware from all three DLLs, we can identify corresponding matches. In some
                         cases, we can also utilize the function signature
                         (type and count of arguments) passed to the global variable to identify potential matches.
-                    <pre><code id="code-block" class="language-cpp line-numbers"></code></pre><br>
+                    <pre><code class="language-cpp">#include <iostream>
+
+int main() {
+    const wchar_t* strings[] = {
+        L"kernel32.dll",
+        L"advapi32.dll",
+        L"shell32.dll",
+        nullptr
+    };
+
+    for (const wchar_t** p = strings; *p != nullptr; ++p) {
+        const wchar_t* str = *p;
+        unsigned int init = 0x42;
+        const wchar_t* ptr = str;
+
+        if (*ptr != L'\0') {
+            do {
+                wchar_t c = *ptr++;
+                unsigned int old_hash = init;
+                init = (init << 5) + c + old_hash;
+            } while (*ptr != L'\0');
+        }
+        std::wcout << L"Hash value: 0x" << std::hex << init << " -- " << str << std::endl;
+    }
+    return 0;
+}</code></pre><br>
                     Below is a list of the imported dlls and corresponding hashes as well as the imported functions and
                     corresponding hashes:
                     <table>
@@ -630,7 +658,7 @@
                         that this operation was potentially aimed at overwriting the event
                         log, but this would not succeed as the output file name is the literal string <span
                             class="inline-code">NUL</span>.
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/mamona_removeevtlogs.png" alt="Remove event logs">
                     </p>
 
@@ -648,7 +676,7 @@
                         privileges, the ransomware will check if it currently has obtained said privilege and if it
                         hasn't, it will try to delegate the privilege to itself using <span
                             class="inline-code">AdjustTokenPrivilege</span>
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/mamona_adjusttokenprivs.png" alt="Adjust token privileges">
                         <br><br>
                         Then, in <span class="inline-code">sub_405EC0</span>, the hardcoded string <span
@@ -709,7 +737,7 @@
                         After completing the iterator, the function ends by calling the Win32 API <span
                             class="inline-code">RevertToSelf</span> to undo the previous escalation of privileges and
                         returns to main.
-                        <br>
+                        <br><br>
                         <img class="lazy" data-src="/img/mamona_listofprocs.png" alt="Processes to kill">
                     </p>
 
@@ -1037,34 +1065,6 @@
         </div>
         <!-- end post -->
     </main>
-
-    <textarea id="code-data" style="display: none;">
-#include <iostream>
-
-int main() {
-    const wchar_t* strings[] = {
-        L"kernel32.dll",
-        L"advapi32.dll",
-        L"shell32.dll",
-        nullptr
-    };
-
-    for (const wchar_t** p = strings; *p != nullptr; ++p) {
-        const wchar_t* str = *p;
-        unsigned int init = 0x42;
-        const wchar_t* ptr = str;
-
-        if (*ptr != L'\0') {
-            do {
-                wchar_t c = *ptr++;
-                unsigned int old_hash = init;
-                init = (init << 5) + c + old_hash;
-            } while (*ptr != L'\0');
-        }
-        std::wcout << L"Hash value: 0x" << std::hex << init << " -- " << str << std::endl;
-    }
-    return 0;
-}</textarea>
 
     <script>
         // Extract the code content from the textarea
