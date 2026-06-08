@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   'use strict';
 
   var menuOpenIcon = $(".nav__icon-menu"),
@@ -58,9 +58,9 @@ $(document).ready(function() {
   /* =======================
   // Animation Load Page
   ======================= */
-  setTimeout(function(){
+  setTimeout(function () {
     $('body').addClass('is-in');
-  },150)
+  }, 150)
 
 
   // =====================
@@ -91,17 +91,17 @@ $(document).ready(function() {
   // =====================
   var $load_posts_button = $('.load-more-posts');
 
-  $load_posts_button.click(function(e) {
+  $load_posts_button.click(function (e) {
     e.preventDefault();
     var loadMore = $('.load-more-section');
     var request_next_link = pagination_next_url.split('/page')[0] + '/page/' + pagination_next_page_number + '/';
 
     $.ajax({
       url: request_next_link,
-      beforeSend: function() {
+      beforeSend: function () {
         $load_posts_button.text('Loading...');
       }
-    }).done(function(data) {
+    }).done(function (data) {
       var posts = $('.grid__post', data);
       $('.grid').append(posts);
 
@@ -137,12 +137,12 @@ $(document).ready(function() {
   /* =======================
   // Scroll Top Button
   ======================= */
-  $(".top").click(function() {
+  $(".top").click(function () {
     $("html, body")
       .stop()
       .animate({ scrollTop: 0 }, "slow", "swing");
   });
-  $(window).scroll(function() {
+  $(window).scroll(function () {
     if ($(this).scrollTop() > $(window).height()) {
       $(".top").addClass("is-active");
     } else {
@@ -150,7 +150,7 @@ $(document).ready(function() {
     }
   });
 
-  
+
   /* =======================
   // Collapsible
   ======================= */
@@ -158,7 +158,7 @@ $(document).ready(function() {
   var i;
 
   for (i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function() {
+    coll[i].addEventListener("click", function () {
       this.classList.toggle("active");
       var content = this.nextElementSibling;
       if (content.style.display === "block") {

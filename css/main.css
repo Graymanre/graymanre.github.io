@@ -145,8 +145,8 @@ h4 code {
   padding: 2px 8px;
   border-radius: 4px;
   font-size: .84em;
-  color: var(--accent, #00d4ff);
-  border: 1px solid var(--border);
+  color: var(--accent, #090);
+  border: 2px solid var(--border);
 }
 
 code,
@@ -2853,6 +2853,46 @@ table tr:hover {
   max-height: 40px
 }
 
+.toc {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  border-left: 3px solid #ddd;
+  font-family: system-ui, sans-serif;
+  font-size: 1.2rem;
+}
+
+.toc ol {
+  list-style: none;
+  margin: 0;
+  padding-left: 1.25rem;
+  counter-reset: toc;
+}
+
+.toc>.toc-list {
+  padding-left: 0;
+}
+
+.toc li {
+  counter-increment: toc;
+  margin: 0.35rem 0;
+}
+
+.toc li::before {
+  content: counters(toc, ".") ". ";
+  font-weight: 600;
+}
+
+.toc a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.toc a:hover,
+.toc a:focus {
+  text-decoration: underline;
+}
+
 .main-nav {
   width: 100%;
   max-width: 1300px;
@@ -4354,9 +4394,11 @@ textarea {
   color: #ffffff;
   background-color: #3e8094;
   padding: 2px 8px 2px;
-  border-radius: 3px;
-  font-size: 10pt;
+  border-radius: 2px;
+  font-size: 11pt;
   font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 /* Style the collapsible content. Note: hidden by default */

