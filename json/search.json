@@ -110,5 +110,13 @@
     "url": "projects/pe_headers_for_malware_analysts.html",
     "date": "26 May 2026",
     "content": "Learn how PE headers work by building PEDetect, a C++ PE parser for examining DOS headers, Rich headers, COFF headers, optional headers, data directories, and sections from a malware analysis perspective."
+  },
+  {
+    "title": "Multi-Stage LNK Malware Campaign Analysis",
+    "category": "Reverse Engineering",
+    "tags": "Reverse Engineering, Static Analysis, LNK malware, RAT, remote access trojan",
+    "url": "re/multistage_lnk_campaign",
+    "date": "08 June 2026",
+    "Content": "A technical analysis of a multi-stage LNK malware campaign delivering PowerShell stealers, DLL implants, and MeshCentral-based remote access."
   }
 ]
